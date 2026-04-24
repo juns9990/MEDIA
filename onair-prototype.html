@@ -612,7 +612,7 @@
     </div>
 
     <div class="tv-channels">
-      <div class="tv-channels-title">CHANNELS · 40</div>
+      <div class="tv-channels-title">CHANNELS · 24</div>
       <div class="tv-channels-list" id="tv-channels"></div>
     </div>
   </div>
@@ -623,7 +623,7 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.7.1</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.8.0</div>
   </div>
 </div>
 
@@ -644,7 +644,7 @@
     <section class="view" id="view-now">
       <div class="section-head">
         <h2 class="section-title">지금 방송중</h2>
-        <span class="section-meta" id="viewer-meta">40 CH</span>
+        <span class="section-meta" id="viewer-meta">24 CH</span>
       </div>
       <div class="filter" id="filter-live"></div>
       <ul class="channels" id="channels"></ul>
@@ -693,7 +693,7 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.7.1</span>
+        <span class="section-meta">v0.8.0</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
@@ -709,7 +709,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.7.1</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.8.0</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -758,8 +758,12 @@
    채널 30개 (한국 16 + 미국 4 + 유럽 5 + 아시아 3 + 중동 2)
    country: kr | us | eu | asia | mena
    ========================== */
+/* ==========================
+   채널 — v0.8.0 대대적 정리
+   type: youtube_video = 직접 비디오 ID (가장 확실) | link = 외부 이동
+   ========================== */
 const CHANNELS = [
-  /* ========== 한국 지상파 ========== */
+  /* ========== 한국 지상파 본채널 (link) ========== */
   { num:"01", code:"KBS1", name:"KBS 1TV", type:"link", country:"kr", flag:"🇰🇷",
     url:"https://onair.kbs.co.kr/", color:"#1E4FD6",
     program:"공영 교양·뉴스", desc:"KBS my K 공식 플레이어" },
@@ -779,123 +783,71 @@ const CHANNELS = [
     url:"https://www.ebs.co.kr/onair", color:"#059669",
     program:"교육·어린이", desc:"EBS 공식 플레이어" },
 
-  /* ========== 한국 뉴스 24시간 ========== */
-  { num:"11", code:"KBS-N", name:"KBS 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UCcQTRi69dsVYHN3exePtZ1A", color:"#1E4FD6",
+  /* ========== 한국 뉴스 24시간 라이브 (검증된 비디오 ID) ========== */
+  { num:"11", code:"KBS-N", name:"KBS 뉴스 24", type:"youtube_video", country:"kr", flag:"🇰🇷",
+    videoId:"M1WrMEUOBsU", color:"#1E4FD6",
     program:"KBS 뉴스 · 24시간", desc:"공영 뉴스 라이브" },
-  { num:"12", code:"MBC-N", name:"MBC 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UCF4Wxdo3inmxP-Y59wXDsFw", color:"#FF3355",
+  { num:"12", code:"MBC-N", name:"MBC 뉴스", type:"youtube_video", country:"kr", flag:"🇰🇷",
+    videoId:"q9bM12ucTIY", color:"#FF3355",
     program:"MBC 뉴스 · 24시간", desc:"MBC 뉴스 라이브" },
-  { num:"13", code:"SBS-N", name:"SBS 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UC2FW-PSQGcCCSNIDymKeB-A", color:"#FFBE2E",
-    program:"SBS 뉴스 · 24시간", desc:"SBS 뉴스 라이브" },
-  { num:"14", code:"YTN", name:"YTN", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UChlgI3UHCOnwUGzWzbJ3H5w", color:"#C71E1D",
-    program:"YTN 24 · 실시간", desc:"뉴스 전문채널" },
-  { num:"15", code:"YNA", name:"연합뉴스TV", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UCUZobs9QZaKGmES6zODvo8A", color:"#0A5FBF",
-    program:"연합뉴스TV · 실시간", desc:"뉴스 전문채널" },
-  { num:"16", code:"JTBC", name:"JTBC 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+  { num:"13", code:"YNA", name:"연합뉴스TV", type:"youtube_video", country:"kr", flag:"🇰🇷",
+    videoId:"6QZ_qc75ihU", color:"#0A5FBF",
+    program:"연합뉴스TV · 실시간", desc:"24시간 뉴스 전문" },
+
+  /* ========== 다시보기 방식 — 공식 채널 업로드 자동 재생 ========== */
+  { num:"21", code:"SBS-N", name:"SBS 뉴스", type:"playlist", country:"kr", flag:"🇰🇷",
+    ytId:"UCkinYTS9IHqOEwR1Sze2JTw", color:"#FFBE2E",
+    program:"SBS 뉴스 · 연속재생", desc:"공식 채널 최신 업로드" },
+  { num:"22", code:"JTBC", name:"JTBC 뉴스", type:"playlist", country:"kr", flag:"🇰🇷",
     ytId:"UCsvn_Po0SmunchJYOWpOxMg", color:"#B84F9B",
-    program:"JTBC 뉴스룸 · 실시간", desc:"종편 뉴스" },
-  { num:"17", code:"MBN", name:"MBN 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UCG9aFJTZ-lMCHAiO1KJsirg", color:"#DC2626",
-    program:"MBN 뉴스 · 실시간", desc:"종편 뉴스" },
-  { num:"18", code:"TVC", name:"TV조선 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UCWlV3Lz_55UaX4JsMj-z__Q", color:"#1E40AF",
-    program:"TV조선 뉴스 · 실시간", desc:"종편 뉴스" },
+    program:"JTBC 뉴스룸 · 연속재생", desc:"공식 채널 최신 업로드" },
 
-  /* ========== 한국 글로벌 ========== */
-  { num:"21", code:"KBSW", name:"KBS WORLD", type:"youtube", country:"kr", flag:"🇰🇷",
+  /* ========== K-엔터테인먼트 (연속재생) ========== */
+  { num:"31", code:"KBSW", name:"KBS WORLD", type:"playlist", country:"kr", flag:"🇰🇷",
     ytId:"UC5BMQOsAB8hKUyHu9KI6yig", color:"#0EA5E9",
-    program:"K-엔터 · 24시간", desc:"한류 콘텐츠 글로벌 채널" },
-  { num:"22", code:"AR", name:"Arirang TV", type:"youtube", country:"kr", flag:"🇰🇷",
-    ytId:"UC-PHIZjV-oX8H7zD1cCN2NQ", color:"#7FD4C9",
-    program:"Arirang World · 24/7", desc:"영문 국제방송" },
+    program:"K-엔터 · 연속재생", desc:"한류 콘텐츠 글로벌 채널" },
+  { num:"32", code:"MBCE", name:"MBC 엔터테인먼트", type:"playlist", country:"kr", flag:"🇰🇷",
+    ytId:"UCiBr0bK06imaMbLc8sAEz0A", color:"#FF3355",
+    program:"MBC 예능 · 연속재생", desc:"예능 클립·하이라이트" },
+  { num:"33", code:"SBSE", name:"SBS 예능", type:"playlist", country:"kr", flag:"🇰🇷",
+    ytId:"UCmjNKt6kITwaZTqvWuaSPLg", color:"#FFBE2E",
+    program:"SBS 예능 · 연속재생", desc:"예능 클립·하이라이트" },
 
-  /* ========== 미국 🇺🇸 ========== */
-  { num:"31", code:"CNN", name:"CNN", type:"youtube", country:"us", flag:"🇺🇸",
-    ytId:"UCupvZG-5ko_eiXAupbDfxWw", color:"#CC0000",
-    program:"CNN · 24시간 뉴스", desc:"미국 대표 뉴스 채널" },
-  { num:"32", code:"FOX", name:"Fox News", type:"youtube", country:"us", flag:"🇺🇸",
-    ytId:"UCXIJgqnII2ZOINSWNOGFThA", color:"#003366",
-    program:"Fox News · 실시간", desc:"보수 성향 뉴스 네트워크" },
-  { num:"33", code:"NBC", name:"NBC News NOW", type:"youtube", country:"us", flag:"🇺🇸",
-    ytId:"UCeY0bbntWzzVIaj2z3QigXg", color:"#6D2C91",
-    program:"NBC News · 스트리밍", desc:"NBC 24시간 뉴스" },
-  { num:"34", code:"BBG", name:"Bloomberg TV", type:"youtube", country:"us", flag:"🇺🇸",
-    ytId:"UCIALMKvObZNtJ6AmdCLP7Lg", color:"#000000",
-    program:"Bloomberg · 경제 24시간", desc:"글로벌 경제·금융 전문" },
-
-  /* ========== 유럽 ========== */
-  { num:"41", code:"BBC", name:"BBC News", type:"youtube", country:"eu", flag:"🇬🇧",
-    ytId:"UC16niRr50-MSBwiO3YDb3RA", color:"#BB1919",
-    program:"BBC News · 24/7", desc:"영국 공영방송" },
-  { num:"42", code:"SKY", name:"Sky News", type:"youtube", country:"eu", flag:"🇬🇧",
-    ytId:"UCoMdktPbSTixAyNGwb-UYkQ", color:"#0088CC",
-    program:"Sky News · Live", desc:"영국 24시간 뉴스" },
-  { num:"43", code:"DW", name:"DW News", type:"youtube", country:"eu", flag:"🇩🇪",
-    ytId:"UCknLrEdhRCp1aegoMqRaCZg", color:"#002D5B",
-    program:"DW News · English", desc:"독일 국제방송 (영어)" },
-  { num:"44", code:"F24", name:"France 24", type:"youtube", country:"eu", flag:"🇫🇷",
-    ytId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", color:"#0056A4",
-    program:"France 24 · English", desc:"프랑스 국제방송 (영어)" },
-  { num:"45", code:"EUR", name:"Euronews", type:"youtube", country:"eu", flag:"🇪🇺",
-    ytId:"UCSrZ3UV4jOidv8ppoVuvW9Q", color:"#1AA1DB",
-    program:"Euronews · English", desc:"유럽 통합 뉴스" },
-
-  /* ========== 아시아 ========== */
-  { num:"51", code:"NHK", name:"NHK WORLD", type:"youtube", country:"asia", flag:"🇯🇵",
-    ytId:"UCSPEjw8F2nQDtmUKPFNF7_A", color:"#E60000",
-    program:"NHK WORLD · English", desc:"일본 국제방송" },
-  { num:"52", code:"CGTN", name:"CGTN", type:"youtube", country:"asia", flag:"🇨🇳",
-    ytId:"UCgrNz-aDmcr2uuto8_DL2jg", color:"#CE1126",
-    program:"CGTN · Global", desc:"중국 국제방송 (영어)" },
-  { num:"53", code:"ABCA", name:"ABC News", type:"youtube", country:"asia", flag:"🇦🇺",
-    ytId:"UCVgO39Bk5sMo66-6o6Spn6Q", color:"#FFCC00",
-    program:"ABC News · Australia", desc:"호주 공영방송 뉴스" },
-
-  /* ========== 중동 ========== */
-  { num:"61", code:"AJE", name:"Al Jazeera English", type:"youtube", country:"mena", flag:"🇶🇦",
-    ytId:"UCNye-wNBqNL5ZzHSJj3l8Bg", color:"#F7A600",
-    program:"Al Jazeera · 24/7", desc:"카타르 국제 뉴스 (영어)" },
-  { num:"62", code:"TRT", name:"TRT World", type:"youtube", country:"mena", flag:"🇹🇷",
-    ytId:"UC7fWeaHhqgM4Ry-RMpM2YYw", color:"#C8102E",
-    program:"TRT World · English", desc:"터키 국제방송" },
-
-  /* ========== 애니메이션 · 어린이 🧸 (VOD 연속재생) ========== */
-  { num:"71", code:"PORORO", name:"뽀로로", type:"playlist", country:"anime", flag:"🐧",
+  /* ========== 애니메이션 (연속재생, 검증된 것만) ========== */
+  { num:"41", code:"PORORO", name:"뽀로로", type:"playlist", country:"anime", flag:"🐧",
     ytId:"UCPUeGC_AL-OnDQORKhRm6iA", color:"#60A5FA",
     program:"뽀롱뽀롱 뽀로로", desc:"공식 채널 · 연속재생" },
-  { num:"72", code:"PINK", name:"핑크퐁", type:"playlist", country:"anime", flag:"🦈",
+  { num:"42", code:"PINK", name:"핑크퐁", type:"playlist", country:"anime", flag:"🦈",
     ytId:"UCqXwKu6dKobXEQFhdKtiJLQ", color:"#EC4899",
     program:"핑크퐁 · 아기상어", desc:"공식 채널 · 연속재생" },
-  { num:"73", code:"TAYO", name:"꼬마버스 타요", type:"playlist", country:"anime", flag:"🚌",
-    ytId:"UCsEcR23ynGeg0S09t3hfu5A", color:"#3B82F6",
-    program:"꼬마버스 타요", desc:"공식 채널 · 연속재생" },
-  { num:"74", code:"ROBOCAR", name:"로보카 폴리", type:"playlist", country:"anime", flag:"🚓",
-    ytId:"UCfS7o_zIGA3bjbpAcCVWtyQ", color:"#EF4444",
-    program:"로보카 폴리", desc:"공식 채널 · 연속재생" },
-  { num:"75", code:"LARVA", name:"라바", type:"playlist", country:"anime", flag:"🐛",
-    ytId:"UCb9eVKZL33NT5CAiwyHHqRA", color:"#FBBF24",
-    program:"라바(Larva)", desc:"공식 채널 · 연속재생" },
-  { num:"76", code:"TITIPO", name:"띠띠뽀", type:"playlist", country:"anime", flag:"🚂",
-    ytId:"UCbsFHbDM0_W9cs-JPHjVc9w", color:"#22C55E",
-    program:"띠띠뽀 띠띠뽀", desc:"공식 채널 · 연속재생" },
 
-  /* ========== 애니메이션 · 성인 🎌 (VOD 연속재생) ========== */
-  { num:"81", code:"CRUN", name:"Crunchyroll", type:"playlist", country:"anime", flag:"🎌",
-    ytId:"UC6pGDc4bFGD1_36IKv3FnYg", color:"#F47521",
-    program:"Crunchyroll Collection", desc:"공식 · 연속재생" },
-  { num:"82", code:"CRDUB", name:"Crunchyroll Dubs", type:"playlist", country:"anime", flag:"🎌",
-    ytId:"UCvC4D8onUfXzvjTOM-dBfEA", color:"#F47521",
-    program:"Crunchyroll Dubs", desc:"영어 더빙 · 연속재생" },
-  { num:"83", code:"TOEI", name:"Toei Animation", type:"playlist", country:"anime", flag:"🇯🇵",
-    ytId:"UCHqGmfymjrNI3WQQs1bd_hw", color:"#1E40AF",
-    program:"Toei Animation 공식", desc:"드래곤볼·원피스 · 연속재생" },
-  { num:"84", code:"MUSE", name:"Muse Asia", type:"playlist", country:"anime", flag:"🎌",
-    ytId:"UCQ0X-VJamyIhKQZmtCHPeuQ", color:"#8B5CF6",
-    program:"Muse Asia", desc:"무료 정식 애니 · 연속재생" },
+  /* ========== 해외 뉴스 (연속재생으로 변경 — 라이브 불안정) ========== */
+  { num:"51", code:"CNN", name:"CNN", type:"playlist", country:"us", flag:"🇺🇸",
+    ytId:"UCupvZG-5ko_eiXAupbDfxWw", color:"#CC0000",
+    program:"CNN · 연속재생", desc:"미국 대표 뉴스" },
+  { num:"52", code:"NBC", name:"NBC News NOW", type:"playlist", country:"us", flag:"🇺🇸",
+    ytId:"UCeY0bbntWzzVIaj2z3QigXg", color:"#6D2C91",
+    program:"NBC News · 연속재생", desc:"NBC 뉴스" },
+  { num:"53", code:"BBG", name:"Bloomberg", type:"playlist", country:"us", flag:"🇺🇸",
+    ytId:"UCIALMKvObZNtJ6AmdCLP7Lg", color:"#000000",
+    program:"Bloomberg · 경제", desc:"글로벌 경제·금융" },
+
+  { num:"61", code:"DW", name:"DW News", type:"playlist", country:"eu", flag:"🇩🇪",
+    ytId:"UCknLrEdhRCp1aegoMqRaCZg", color:"#002D5B",
+    program:"DW News · English", desc:"독일 국제방송" },
+  { num:"62", code:"F24", name:"France 24", type:"playlist", country:"eu", flag:"🇫🇷",
+    ytId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", color:"#0056A4",
+    program:"France 24 · English", desc:"프랑스 국제방송" },
+
+  { num:"71", code:"AR", name:"Arirang TV", type:"playlist", country:"asia", flag:"🇰🇷",
+    ytId:"UC-PHIZjV-oX8H7zD1cCN2NQ", color:"#7FD4C9",
+    program:"Arirang · 영문", desc:"영문 국제방송" },
+  { num:"72", code:"NHK", name:"NHK WORLD", type:"playlist", country:"asia", flag:"🇯🇵",
+    ytId:"UCSPEjw8F2nQDtmUKPFNF7_A", color:"#E60000",
+    program:"NHK WORLD · English", desc:"일본 국제방송" },
+  { num:"73", code:"AJE", name:"Al Jazeera", type:"playlist", country:"asia", flag:"🇶🇦",
+    ytId:"UCNye-wNBqNL5ZzHSJj3l8Bg", color:"#F7A600",
+    program:"Al Jazeera English", desc:"카타르 국제 뉴스" },
 ];
 
 const COUNTRIES = [
@@ -913,46 +865,31 @@ const REPLAY_CATEGORIES = [
   { key:"all",   label:"전체" },
   { key:"news",  label:"뉴스" },
   { key:"enter", label:"예능·클립" },
-  { key:"anime", label:"애니·성인" },
   { key:"kids",  label:"어린이" },
-  { key:"doc",   label:"다큐·교양" },
   { key:"world", label:"해외" },
 ];
 
 const REPLAYS = [
-  // 한국 뉴스
+  // 뉴스 다시보기 (검증된 채널 ID만)
   { code:"R-KBS-N",  name:"KBS 뉴스",       ytChannelId:"UCcQTRi69dsVYHN3exePtZ1A", category:"news",  color:"#1E4FD6", desc:"최근 업로드" },
   { code:"R-MBC-N",  name:"MBC 뉴스",       ytChannelId:"UCF4Wxdo3inmxP-Y59wXDsFw", category:"news",  color:"#FF3355", desc:"최근 업로드" },
-  { code:"R-SBS-N",  name:"SBS 뉴스",       ytChannelId:"UC2FW-PSQGcCCSNIDymKeB-A", category:"news",  color:"#FFBE2E", desc:"최근 업로드" },
+  { code:"R-SBS-N",  name:"SBS 뉴스",       ytChannelId:"UCkinYTS9IHqOEwR1Sze2JTw", category:"news",  color:"#FFBE2E", desc:"최근 업로드" },
   { code:"R-JTBC",   name:"JTBC 뉴스룸",    ytChannelId:"UCsvn_Po0SmunchJYOWpOxMg", category:"news",  color:"#B84F9B", desc:"최근 업로드" },
-  { code:"R-YTN",    name:"YTN 뉴스 클립",  ytChannelId:"UChlgI3UHCOnwUGzWzbJ3H5w", category:"news",  color:"#C71E1D", desc:"최근 업로드" },
 
   // 한국 예능·클립
-  { code:"R-MBC-E",  name:"MBC 엔터테인먼트",  ytChannelId:"UCiBr0bK06imaMbLc8sAEz0A", category:"enter", color:"#FF3355", desc:"예능 클립·하이라이트" },
-  { code:"R-KBSW",   name:"KBS WORLD TV",      ytChannelId:"UC5BMQOsAB8hKUyHu9KI6yig", category:"enter", color:"#0EA5E9", desc:"K-엔터 · 공식 클립" },
+  { code:"R-MBC-E",  name:"MBC 엔터테인먼트",  ytChannelId:"UCiBr0bK06imaMbLc8sAEz0A", category:"enter", color:"#FF3355", desc:"예능 클립" },
+  { code:"R-SBS-E",  name:"SBS 예능",          ytChannelId:"UCmjNKt6kITwaZTqvWuaSPLg", category:"enter", color:"#FFBE2E", desc:"예능 클립" },
+  { code:"R-KBSW",   name:"KBS WORLD TV",      ytChannelId:"UC5BMQOsAB8hKUyHu9KI6yig", category:"enter", color:"#0EA5E9", desc:"K-엔터 공식" },
 
-  // 다큐
-  { code:"R-KBS-DOC", name:"KBS 다큐",        ytChannelId:"UCJVGAe6hMeI3_5Mx_1GCS0w", category:"doc",   color:"#10B981", desc:"KBS 다큐 아카이브" },
-  { code:"R-EBS-DOC", name:"EBS 다큐프라임",  ytChannelId:"UCzfT6j-VKJLMiqiLxuvVOSw", category:"doc",   color:"#059669", desc:"EBS 다큐" },
-
-  // 어린이 다시보기 (공식 유튜브)
-  { code:"R-PORORO", name:"뽀로로 다시보기",      ytChannelId:"UCPUeGC_AL-OnDQORKhRm6iA", category:"kids",  color:"#60A5FA", desc:"뽀통령 공식 채널" },
-  { code:"R-PINK",   name:"핑크퐁 다시보기",      ytChannelId:"UCqXwKu6dKobXEQFhdKtiJLQ", category:"kids",  color:"#EC4899", desc:"인기 동요·동화" },
-  { code:"R-TAYO",   name:"꼬마버스 타요",        ytChannelId:"UCsEcR23ynGeg0S09t3hfu5A", category:"kids",  color:"#3B82F6", desc:"EBS 공식" },
-  { code:"R-LARVA",  name:"라바 다시보기",        ytChannelId:"UCb9eVKZL33NT5CAiwyHHqRA", category:"kids",  color:"#FBBF24", desc:"유쾌한 코미디 애니" },
-
-  // 성인 애니 (공식 배포사)
-  { code:"R-CRUN",   name:"Crunchyroll Collection", ytChannelId:"UC6pGDc4bFGD1_36IKv3FnYg", category:"anime", color:"#F47521", desc:"자막 애니 공식" },
-  { code:"R-CRDUB",  name:"Crunchyroll Dubs",       ytChannelId:"UCvC4D8onUfXzvjTOM-dBfEA", category:"anime", color:"#F47521", desc:"영어 더빙 애니" },
-  { code:"R-MUSE",   name:"Muse Asia",              ytChannelId:"UCQ0X-VJamyIhKQZmtCHPeuQ", category:"anime", color:"#8B5CF6", desc:"무료 애니 정식 스트리밍" },
-  { code:"R-TOEI",   name:"Toei Animation",         ytChannelId:"UCHqGmfymjrNI3WQQs1bd_hw", category:"anime", color:"#1E40AF", desc:"드래곤볼·원피스 제작사" },
+  // 어린이 (검증 성공)
+  { code:"R-PORORO", name:"뽀로로",  ytChannelId:"UCPUeGC_AL-OnDQORKhRm6iA", category:"kids", color:"#60A5FA", desc:"공식 채널" },
+  { code:"R-PINK",   name:"핑크퐁",  ytChannelId:"UCqXwKu6dKobXEQFhdKtiJLQ", category:"kids", color:"#EC4899", desc:"공식 채널" },
 
   // 해외 뉴스 다시보기
-  { code:"R-CNN",    name:"CNN",             ytChannelId:"UCupvZG-5ko_eiXAupbDfxWw", category:"world", color:"#CC0000", desc:"미국 뉴스 · 최근 업로드" },
-  { code:"R-BBC",    name:"BBC News",        ytChannelId:"UC16niRr50-MSBwiO3YDb3RA", category:"world", color:"#BB1919", desc:"영국 뉴스 · 최근 업로드" },
-  { code:"R-AJE",    name:"Al Jazeera English", ytChannelId:"UCNye-wNBqNL5ZzHSJj3l8Bg", category:"world", color:"#F7A600", desc:"국제 뉴스 · 최근 업로드" },
-  { code:"R-DW",     name:"DW News",         ytChannelId:"UCknLrEdhRCp1aegoMqRaCZg", category:"world", color:"#002D5B", desc:"독일 뉴스 · 최근 업로드" },
-  { code:"R-F24",    name:"France 24",       ytChannelId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", category:"world", color:"#0056A4", desc:"프랑스 뉴스 · 최근 업로드" },
+  { code:"R-CNN",    name:"CNN",          ytChannelId:"UCupvZG-5ko_eiXAupbDfxWw", category:"world", color:"#CC0000", desc:"미국 뉴스" },
+  { code:"R-AJE",    name:"Al Jazeera",   ytChannelId:"UCNye-wNBqNL5ZzHSJj3l8Bg", category:"world", color:"#F7A600", desc:"국제 뉴스" },
+  { code:"R-DW",     name:"DW News",      ytChannelId:"UCknLrEdhRCp1aegoMqRaCZg", category:"world", color:"#002D5B", desc:"독일 뉴스" },
+  { code:"R-F24",    name:"France 24",    ytChannelId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", category:"world", color:"#0056A4", desc:"프랑스 뉴스" },
 ];
 
 const DEMO_SCHEDULE = {
@@ -993,7 +930,7 @@ const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 
 let currentCountry = "all";
 let currentReplayCat = "all";
-let currentIdx = CHANNELS.findIndex(c => c.type === "youtube");
+let currentIdx = CHANNELS.findIndex(c => c.type !== "link");
 
 /* ==========================
    라이브 렌더
@@ -1026,7 +963,7 @@ function renderChannels(){
   const items = filteredChannels();
   wrap.innerHTML = items.map(c => {
     let tag;
-    if (c.type === "youtube") {
+    if (c.type === "youtube" || c.type === "youtube_video") {
       tag = `<span class="live-tag"><span class="dot"></span>LIVE</span>`;
     } else if (c.type === "playlist") {
       tag = `<span class="replay-tag">▶ PLAY</span>`;
@@ -1142,6 +1079,10 @@ function findNowIndex(sched){
 function liveEmbedUrl(ytId){
   return `https://www.youtube.com/embed/live_stream?channel=${ytId}&autoplay=1`;
 }
+function videoEmbedUrl(videoId){
+  // 가장 확실한 방식 — 특정 비디오 ID로 직접 재생
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+}
 function uploadsPlaylistId(ytChannelId){
   return "UU" + ytChannelId.slice(2);
 }
@@ -1159,9 +1100,18 @@ function playChannel(idx){
   currentIdx = idx;
   $$(".card", $("#channels")).forEach(el => el.classList.toggle("is-playing", +el.dataset.idx === idx));
 
-  // 타입별 URL 결정: youtube=라이브, playlist=연속재생
-  const src = c.type === "playlist" ? replayEmbedUrl(c.ytId) : liveEmbedUrl(c.ytId);
-  const isLive = c.type === "youtube";
+  // 타입별 URL 결정
+  let src, isLive;
+  if (c.type === "youtube_video") {
+    src = videoEmbedUrl(c.videoId);
+    isLive = true;
+  } else if (c.type === "playlist") {
+    src = replayEmbedUrl(c.ytId);
+    isLive = false;
+  } else {
+    src = liveEmbedUrl(c.ytId);
+    isLive = true;
+  }
 
   if (isDesktop()){
     $("#stage-program").textContent = c.program;
@@ -1347,7 +1297,7 @@ function initTVMode() {
     for (var i = 0; i < CHANNELS.length; i++) {
       var c = CHANNELS[i];
       var tag;
-      if (c.type === "youtube") {
+      if (c.type === "youtube" || c.type === "youtube_video") {
         tag = '<span class="tv-card-live">LIVE</span>';
       } else if (c.type === "playlist") {
         tag = '<span class="tv-card-live" style="background:#8B5CF6">PLAY</span>';
@@ -1420,9 +1370,11 @@ function initTVMode() {
       return;
     }
 
-    // playlist 타입 = VOD 연속재생, youtube 타입 = 라이브
+    // 타입별 URL
     var src;
-    if (c.type === "playlist") {
+    if (c.type === "youtube_video") {
+      src = "https://www.youtube-nocookie.com/embed/" + c.videoId + "?autoplay=1&playsinline=1";
+    } else if (c.type === "playlist") {
       var pid = "UU" + c.ytId.slice(2);
       src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + pid + "&autoplay=1&playsinline=1";
     } else {
@@ -1513,14 +1465,14 @@ function initTVMode() {
 
   // 초기화
   renderTVChannels();
-  // 첫 번째 YouTube 채널 자동 재생
-  var firstYT = 0;
+  // 첫 번째 재생 가능한 채널 (link 아닌 것) 자동 재생
+  var firstPlayable = 0;
   for (var i = 0; i < CHANNELS.length; i++) {
-    if (CHANNELS[i].type === "youtube") { firstYT = i; break; }
+    if (CHANNELS[i].type !== "link") { firstPlayable = i; break; }
   }
-  focusedIdx = firstYT;
+  focusedIdx = firstPlayable;
   updateFocus();
-  tvPlay(firstYT);
+  tvPlay(firstPlayable);
 }
 </script>
 </body>
