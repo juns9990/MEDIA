@@ -612,7 +612,7 @@
     </div>
 
     <div class="tv-channels">
-      <div class="tv-channels-title">CHANNELS · 30</div>
+      <div class="tv-channels-title">CHANNELS · 40</div>
       <div class="tv-channels-list" id="tv-channels"></div>
     </div>
   </div>
@@ -623,7 +623,7 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.6.2</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.7.0</div>
   </div>
 </div>
 
@@ -644,7 +644,7 @@
     <section class="view" id="view-now">
       <div class="section-head">
         <h2 class="section-title">지금 방송중</h2>
-        <span class="section-meta" id="viewer-meta">30 CH</span>
+        <span class="section-meta" id="viewer-meta">40 CH</span>
       </div>
       <div class="filter" id="filter-live"></div>
       <ul class="channels" id="channels"></ul>
@@ -693,7 +693,7 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.6.2</span>
+        <span class="section-meta">v0.7.0</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
@@ -709,7 +709,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.6.2</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.7.0</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -862,11 +862,46 @@ const CHANNELS = [
   { num:"62", code:"TRT", name:"TRT World", type:"youtube", country:"mena", flag:"🇹🇷",
     ytId:"UC7fWeaHhqgM4Ry-RMpM2YYw", color:"#C8102E",
     program:"TRT World · English", desc:"터키 국제방송" },
+
+  /* ========== 애니메이션 · 어린이 🧸 ========== */
+  { num:"71", code:"PORORO", name:"뽀로로", type:"youtube", country:"anime", flag:"🐧",
+    ytId:"UCPUeGC_AL-OnDQORKhRm6iA", color:"#60A5FA",
+    program:"뽀롱뽀롱 뽀로로", desc:"뽀통령 공식 채널" },
+  { num:"72", code:"PINK", name:"핑크퐁", type:"youtube", country:"anime", flag:"🦈",
+    ytId:"UCqXwKu6dKobXEQFhdKtiJLQ", color:"#EC4899",
+    program:"핑크퐁 · 아기상어", desc:"인기 동요·동화" },
+  { num:"73", code:"TAYO", name:"꼬마버스 타요", type:"youtube", country:"anime", flag:"🚌",
+    ytId:"UCsEcR23ynGeg0S09t3hfu5A", color:"#3B82F6",
+    program:"꼬마버스 타요", desc:"EBS 인기 어린이 애니" },
+  { num:"74", code:"ROBOCAR", name:"로보카 폴리", type:"youtube", country:"anime", flag:"🚓",
+    ytId:"UCfS7o_zIGA3bjbpAcCVWtyQ", color:"#EF4444",
+    program:"로보카 폴리 공식", desc:"변신 로봇 구조대" },
+  { num:"75", code:"LARVA", name:"라바", type:"youtube", country:"anime", flag:"🐛",
+    ytId:"UCb9eVKZL33NT5CAiwyHHqRA", color:"#FBBF24",
+    program:"라바(Larva)", desc:"유쾌한 애벌레 코미디" },
+  { num:"76", code:"TITIPO", name:"띠띠뽀", type:"youtube", country:"anime", flag:"🚂",
+    ytId:"UCbsFHbDM0_W9cs-JPHjVc9w", color:"#22C55E",
+    program:"띠띠뽀 띠띠뽀", desc:"꼬마기차 공식 채널" },
+
+  /* ========== 애니메이션 · 성인 🎌 ========== */
+  { num:"81", code:"CRUN", name:"Crunchyroll", type:"youtube", country:"anime", flag:"🎌",
+    ytId:"UC6pGDc4bFGD1_36IKv3FnYg", color:"#F47521",
+    program:"Crunchyroll Collection", desc:"공식 애니 클립·트레일러" },
+  { num:"82", code:"CRDUB", name:"Crunchyroll Dubs", type:"youtube", country:"anime", flag:"🎌",
+    ytId:"UCvC4D8onUfXzvjTOM-dBfEA", color:"#F47521",
+    program:"Crunchyroll Dubs", desc:"영어 더빙 애니" },
+  { num:"83", code:"TOEI", name:"Toei Animation", type:"youtube", country:"anime", flag:"🇯🇵",
+    ytId:"UCHqGmfymjrNI3WQQs1bd_hw", color:"#1E40AF",
+    program:"Toei Animation 공식", desc:"드래곤볼·원피스 제작사" },
+  { num:"84", code:"MUSE", name:"Muse Asia", type:"youtube", country:"anime", flag:"🎌",
+    ytId:"UCQ0X-VJamyIhKQZmtCHPeuQ", color:"#8B5CF6",
+    program:"Muse Asia 공식", desc:"무료 애니 정식 스트리밍" },
 ];
 
 const COUNTRIES = [
   { key:"all",   label:"전체",   flag:"" },
   { key:"kr",    label:"한국",   flag:"🇰🇷" },
+  { key:"anime", label:"애니",   flag:"🎌" },
   { key:"us",    label:"미국",   flag:"🇺🇸" },
   { key:"eu",    label:"유럽",   flag:"🇪🇺" },
   { key:"asia",  label:"아시아", flag:"🌏" },
@@ -878,6 +913,8 @@ const REPLAY_CATEGORIES = [
   { key:"all",   label:"전체" },
   { key:"news",  label:"뉴스" },
   { key:"enter", label:"예능·클립" },
+  { key:"anime", label:"애니·성인" },
+  { key:"kids",  label:"어린이" },
   { key:"doc",   label:"다큐·교양" },
   { key:"world", label:"해외" },
 ];
@@ -897,6 +934,18 @@ const REPLAYS = [
   // 다큐
   { code:"R-KBS-DOC", name:"KBS 다큐",        ytChannelId:"UCJVGAe6hMeI3_5Mx_1GCS0w", category:"doc",   color:"#10B981", desc:"KBS 다큐 아카이브" },
   { code:"R-EBS-DOC", name:"EBS 다큐프라임",  ytChannelId:"UCzfT6j-VKJLMiqiLxuvVOSw", category:"doc",   color:"#059669", desc:"EBS 다큐" },
+
+  // 어린이 다시보기 (공식 유튜브)
+  { code:"R-PORORO", name:"뽀로로 다시보기",      ytChannelId:"UCPUeGC_AL-OnDQORKhRm6iA", category:"kids",  color:"#60A5FA", desc:"뽀통령 공식 채널" },
+  { code:"R-PINK",   name:"핑크퐁 다시보기",      ytChannelId:"UCqXwKu6dKobXEQFhdKtiJLQ", category:"kids",  color:"#EC4899", desc:"인기 동요·동화" },
+  { code:"R-TAYO",   name:"꼬마버스 타요",        ytChannelId:"UCsEcR23ynGeg0S09t3hfu5A", category:"kids",  color:"#3B82F6", desc:"EBS 공식" },
+  { code:"R-LARVA",  name:"라바 다시보기",        ytChannelId:"UCb9eVKZL33NT5CAiwyHHqRA", category:"kids",  color:"#FBBF24", desc:"유쾌한 코미디 애니" },
+
+  // 성인 애니 (공식 배포사)
+  { code:"R-CRUN",   name:"Crunchyroll Collection", ytChannelId:"UC6pGDc4bFGD1_36IKv3FnYg", category:"anime", color:"#F47521", desc:"자막 애니 공식" },
+  { code:"R-CRDUB",  name:"Crunchyroll Dubs",       ytChannelId:"UCvC4D8onUfXzvjTOM-dBfEA", category:"anime", color:"#F47521", desc:"영어 더빙 애니" },
+  { code:"R-MUSE",   name:"Muse Asia",              ytChannelId:"UCQ0X-VJamyIhKQZmtCHPeuQ", category:"anime", color:"#8B5CF6", desc:"무료 애니 정식 스트리밍" },
+  { code:"R-TOEI",   name:"Toei Animation",         ytChannelId:"UCHqGmfymjrNI3WQQs1bd_hw", category:"anime", color:"#1E40AF", desc:"드래곤볼·원피스 제작사" },
 
   // 해외 뉴스 다시보기
   { code:"R-CNN",    name:"CNN",             ytChannelId:"UCupvZG-5ko_eiXAupbDfxWw", category:"world", color:"#CC0000", desc:"미국 뉴스 · 최근 업로드" },
