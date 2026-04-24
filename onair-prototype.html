@@ -623,7 +623,7 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.8.1</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.9.0</div>
   </div>
 </div>
 
@@ -693,7 +693,7 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.8.1</span>
+        <span class="section-meta">v0.9.0</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
@@ -709,7 +709,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.8.1</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.9.0</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -963,6 +963,19 @@ const DEMO_SCHEDULE = {
 const $ = (s, el=document) => el.querySelector(s);
 const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 
+/* ==========================
+   공통 유틸리티 (v0.9.0)
+   ========================== */
+const pad2 = (n) => String(n).padStart(2, "0");
+const isTVMode = new URLSearchParams(location.search).get("tv") === "1";
+
+function updateClock(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const d = new Date();
+  el.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+}
+
 let currentCountry = "all";
 let currentReplayCat = "all";
 let currentIdx = CHANNELS.findIndex(c => c.type !== "link");
@@ -1023,10 +1036,15 @@ function renderChannels(){
       </li>`;
   }).join("");
 
-  $$(".card", wrap).forEach(card => {
-    card.addEventListener("click", () => playChannel(+card.dataset.idx));
-  });
+  // v0.9.0: 이벤트 위임으로 하단 단일 리스너가 처리 (renderChannels 실행마다 리스너 추가 안 함)
 }
+
+// 이벤트 위임: #channels 영역 전체에 한 번만 리스너 부착
+$("#channels").addEventListener("click", (e) => {
+  const card = e.target.closest(".card");
+  if (!card || !card.dataset.idx) return;
+  playChannel(Number(card.dataset.idx));
+});
 
 /* ==========================
    다시보기
@@ -1068,10 +1086,15 @@ function renderReplays(){
       </div>
     </li>`).join("");
 
-  $$(".card", wrap).forEach(card => {
-    card.addEventListener("click", () => playReplay(+card.dataset.replayIdx));
-  });
+  // v0.9.0: 이벤트 위임으로 하단 단일 리스너가 처리
 }
+
+// 이벤트 위임: #replays 영역
+$("#replays").addEventListener("click", (e) => {
+  const card = e.target.closest(".card");
+  if (!card || !card.dataset.replayIdx) return;
+  playReplay(Number(card.dataset.replayIdx));
+});
 
 function renderGuide(){
   const wrap = $("#guide-grid");
@@ -1221,13 +1244,12 @@ $$(".tab").forEach(tab => {
   });
 });
 
-function tickClock(){
-  const d = new Date();
-  const pad = n => String(n).padStart(2, "0");
-  $("#clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-tickClock();
-setInterval(tickClock, 1000);
+// v0.9.0: 공통 updateClock으로 통합
+updateClock("clock");
+setInterval(() => {
+  updateClock("clock");
+  if (isTVMode) updateClock("tv-clock");
+}, 1000);
 
 (function setToday(){
   const d = new Date();
@@ -1306,8 +1328,8 @@ if ("serviceWorker" in navigator) {
 /* ==========================
    TV 모드 — ?tv=1 파라미터 활성화
    리모컨 방향키 네비게이션 지원
+   (isTVMode는 상단 공통 유틸리티에서 선언)
    ========================== */
-const isTVMode = new URLSearchParams(location.search).get("tv") === "1";
 
 // 설정 탭 "TV 모드로 열기" 버튼
 const tvModeBtn = document.getElementById("tv-mode-row");
@@ -1323,15 +1345,13 @@ if (isTVMode) {
 }
 
 function initTVMode() {
-  var focusedIdx = 0;
-  var playingIdx = -1;
+  let focusedIdx = 0;
+  let playingIdx = -1;
 
-  // 채널 리스트 렌더
+  /* 채널 리스트 렌더 */
   function renderTVChannels() {
-    var html = "";
-    for (var i = 0; i < CHANNELS.length; i++) {
-      var c = CHANNELS[i];
-      var tag;
+    const html = CHANNELS.map((c, i) => {
+      let tag;
       if (c.type === "youtube" || c.type === "youtube_video") {
         tag = '<span class="tv-card-live">LIVE</span>';
       } else if (c.type === "playlist") {
@@ -1339,95 +1359,89 @@ function initTVMode() {
       } else {
         tag = '<span class="tv-card-link">↗</span>';
       }
-      html += '<div class="tv-card" data-idx="' + i + '" id="tv-card-' + i + '">';
-      html +=   '<div class="tv-card-thumb" style="background:linear-gradient(135deg,' + c.color + '38,' + c.color + '14)">';
-      html +=     '<span class="tv-card-flag">' + c.flag + '</span>';
-      html +=     c.code;
-      html +=   '</div>';
-      html +=   '<div class="tv-card-body">';
-      html +=     '<div class="tv-card-num">CH ' + c.num + '</div>';
-      html +=     '<div class="tv-card-name">' + c.name + '</div>';
-      html +=     '<div class="tv-card-program">' + c.program + '</div>';
-      html +=   '</div>';
-      html +=   tag;
-      html += '</div>';
-    }
-    document.getElementById("tv-channels").innerHTML = html;
-
-    // 클릭도 지원 (터치 TV용)
-    var cards = document.querySelectorAll(".tv-card");
-    for (var i = 0; i < cards.length; i++) {
-      cards[i].addEventListener("click", function() {
-        var idx = parseInt(this.getAttribute("data-idx"), 10);
-        focusedIdx = idx;
-        updateFocus();
-        tvPlay(idx);
-      });
-    }
+      return `
+        <div class="tv-card" data-idx="${i}" id="tv-card-${i}">
+          <div class="tv-card-thumb" style="background:linear-gradient(135deg,${c.color}38,${c.color}14)">
+            <span class="tv-card-flag">${c.flag}</span>
+            ${c.code}
+          </div>
+          <div class="tv-card-body">
+            <div class="tv-card-num">CH ${c.num}</div>
+            <div class="tv-card-name">${c.name}</div>
+            <div class="tv-card-program">${c.program}</div>
+          </div>
+          ${tag}
+        </div>`;
+    }).join("");
+    $("#tv-channels").innerHTML = html;
   }
 
-  // 포커스 갱신
+  /* v0.9.0: 이벤트 위임 — #tv-channels에 한 번만 걸고 자식 이벤트 위임 */
+  $("#tv-channels").addEventListener("click", (e) => {
+    const card = e.target.closest(".tv-card");
+    if (!card || !card.dataset.idx) return;
+    const idx = Number(card.dataset.idx);
+    focusedIdx = idx;
+    updateFocus();
+    tvPlay(idx);
+  });
+
+  /* 포커스 갱신 */
   function updateFocus() {
-    var cards = document.querySelectorAll(".tv-card");
-    for (var i = 0; i < cards.length; i++) {
+    const cards = $$(".tv-card");
+    cards.forEach((card, i) => {
       if (i === focusedIdx) {
-        cards[i].classList.add("focused");
-        // 스크롤
-        cards[i].scrollIntoView({ block: "nearest", behavior: "smooth" });
+        card.classList.add("focused");
+        card.scrollIntoView({ block: "nearest", behavior: "smooth" });
       } else {
-        cards[i].classList.remove("focused");
+        card.classList.remove("focused");
       }
-      if (i === playingIdx) {
-        cards[i].classList.add("playing");
-      } else {
-        cards[i].classList.remove("playing");
-      }
-    }
+      card.classList.toggle("playing", i === playingIdx);
+    });
   }
 
-  // 재생
+  /* 재생 */
   function tvPlay(idx) {
-    var c = CHANNELS[idx];
-    document.getElementById("tv-program").textContent = c.program;
-    document.getElementById("tv-chan-info").textContent =
-      c.flag + " CH " + c.num + " · " + c.name + " · " + c.desc;
+    const c = CHANNELS[idx];
+    $("#tv-program").textContent = c.program;
+    $("#tv-chan-info").textContent =
+      `${c.flag} CH ${c.num} · ${c.name} · ${c.desc}`;
 
-    var player = document.getElementById("tv-player");
+    const player = $("#tv-player");
 
     if (c.type === "link") {
-      // 지상파 본 채널은 임베드 불가 — 안내만
-      player.innerHTML =
-        '<div class="tv-player-fallback">' +
-          '<div class="tv-player-fallback-title">' + c.flag + ' ' + c.name + '</div>' +
-          '<div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>' +
-          '<div class="tv-player-fallback-link">' + c.url + '</div>' +
-        '</div>';
+      player.innerHTML = `
+        <div class="tv-player-fallback">
+          <div class="tv-player-fallback-title">${c.flag} ${c.name}</div>
+          <div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>
+          <div class="tv-player-fallback-link">${c.url}</div>
+        </div>`;
       return;
     }
 
-    // 타입별 URL
-    var src;
+    let src;
     if (c.type === "youtube_video") {
-      src = "https://www.youtube-nocookie.com/embed/" + c.videoId + "?autoplay=1&playsinline=1";
+      src = `https://www.youtube-nocookie.com/embed/${c.videoId}?autoplay=1&playsinline=1`;
     } else if (c.type === "playlist") {
-      var pid = "UU" + c.ytId.slice(2);
-      src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + pid + "&autoplay=1&playsinline=1";
+      const pid = "UU" + c.ytId.slice(2);
+      src = `https://www.youtube-nocookie.com/embed/videoseries?list=${pid}&autoplay=1&playsinline=1`;
     } else {
-      src = "https://www.youtube-nocookie.com/embed/live_stream?channel=" + c.ytId + "&autoplay=1&playsinline=1";
+      src = `https://www.youtube-nocookie.com/embed/live_stream?channel=${c.ytId}&autoplay=1&playsinline=1`;
     }
-    player.innerHTML = '<iframe src="' + src + '" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    player.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
 
     playingIdx = idx;
     updateFocus();
   }
 
-  // 리모컨 방향키
-  document.addEventListener("keydown", function(e) {
-    var key = e.keyCode || e.which;
+  /* 리모컨 방향키 — e.key(최신) + e.keyCode(구형 TV 호환) 병행 */
+  document.addEventListener("keydown", (e) => {
+    const code = e.keyCode || e.which;
+    const key = e.key;
 
-    // 숫자 키 (48-57 = 0-9)
-    if (key >= 48 && key <= 57) {
-      var num = key - 48;
+    /* 숫자 키: e.key로 먼저 확인 */
+    if (key && /^[0-9]$/.test(key)) {
+      let num = Number(key);
       if (num === 0) num = 10;
       if (num <= CHANNELS.length) {
         focusedIdx = num - 1;
@@ -1438,71 +1452,49 @@ function initTVMode() {
       return;
     }
 
-    switch (key) {
-      case 38: // ↑
-        if (focusedIdx > 0) {
-          focusedIdx--;
-          updateFocus();
-        }
-        e.preventDefault();
-        break;
-      case 40: // ↓
-        if (focusedIdx < CHANNELS.length - 1) {
-          focusedIdx++;
-          updateFocus();
-        }
-        e.preventDefault();
-        break;
-      case 37: // ←  (이전 재생 채널)
-        if (playingIdx > 0) {
-          focusedIdx = playingIdx - 1;
-          while (focusedIdx >= 0 && CHANNELS[focusedIdx].type === "link") focusedIdx--;
-          if (focusedIdx < 0) focusedIdx = 0;
-          updateFocus();
-          tvPlay(focusedIdx);
-        }
-        e.preventDefault();
-        break;
-      case 39: // → (다음 재생 채널)
-        if (playingIdx >= 0 && playingIdx < CHANNELS.length - 1) {
-          focusedIdx = playingIdx + 1;
-          while (focusedIdx < CHANNELS.length && CHANNELS[focusedIdx].type === "link") focusedIdx++;
-          if (focusedIdx >= CHANNELS.length) focusedIdx = CHANNELS.length - 1;
-          updateFocus();
-          tvPlay(focusedIdx);
-        }
-        e.preventDefault();
-        break;
-      case 13:  // Enter (OK)
-      case 32:  // Space
-        tvPlay(focusedIdx);
-        e.preventDefault();
-        break;
-      case 8:   // Backspace (뒤로)
-      case 10009: // 삼성 Tizen RETURN
-      case 461:   // LG webOS BACK
-        // 현재는 그냥 포커스만 채널 리스트로
+    /* 방향키 / 확인 / 뒤로가기 */
+    if (key === "ArrowUp" || code === 38) {
+      if (focusedIdx > 0) { focusedIdx--; updateFocus(); }
+      e.preventDefault();
+    } else if (key === "ArrowDown" || code === 40) {
+      if (focusedIdx < CHANNELS.length - 1) { focusedIdx++; updateFocus(); }
+      e.preventDefault();
+    } else if (key === "ArrowLeft" || code === 37) {
+      /* 이전 재생 가능 채널 */
+      if (playingIdx > 0) {
+        let i = playingIdx - 1;
+        while (i >= 0 && CHANNELS[i].type === "link") i--;
+        if (i < 0) i = 0;
+        focusedIdx = i;
         updateFocus();
-        e.preventDefault();
-        break;
+        tvPlay(focusedIdx);
+      }
+      e.preventDefault();
+    } else if (key === "ArrowRight" || code === 39) {
+      /* 다음 재생 가능 채널 */
+      if (playingIdx >= 0 && playingIdx < CHANNELS.length - 1) {
+        let i = playingIdx + 1;
+        while (i < CHANNELS.length && CHANNELS[i].type === "link") i++;
+        if (i >= CHANNELS.length) i = CHANNELS.length - 1;
+        focusedIdx = i;
+        updateFocus();
+        tvPlay(focusedIdx);
+      }
+      e.preventDefault();
+    } else if (key === "Enter" || key === " " || code === 13 || code === 32) {
+      tvPlay(focusedIdx);
+      e.preventDefault();
+    } else if (key === "Backspace" || code === 8 || code === 10009 || code === 461) {
+      /* Tizen(10009), webOS(461), 일반(8) 뒤로가기 */
+      updateFocus();
+      e.preventDefault();
     }
   });
 
-  // TV 시계
-  function tvTickClock() {
-    var d = new Date();
-    var pad = function(n) { return n < 10 ? "0" + n : "" + n; };
-    var el = document.getElementById("tv-clock");
-    if (el) el.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
-  }
-  tvTickClock();
-  setInterval(tvTickClock, 1000);
-
-  // 초기화
+  /* 초기화 */
   renderTVChannels();
-  // 첫 번째 재생 가능한 채널 (link 아닌 것) 자동 재생
-  var firstPlayable = 0;
-  for (var i = 0; i < CHANNELS.length; i++) {
+  let firstPlayable = 0;
+  for (let i = 0; i < CHANNELS.length; i++) {
     if (CHANNELS[i].type !== "link") { firstPlayable = i; break; }
   }
   focusedIdx = firstPlayable;
