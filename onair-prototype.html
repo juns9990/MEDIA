@@ -328,9 +328,301 @@
   .guide-ch-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border-soft);margin-bottom:8px}
   .guide-ch-name{font-size:14px;font-weight:600}
   .guide-ch-num{font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:0.06em}
+
+  /* ==========================
+     TV MODE — 리모컨 전용 레이아웃
+     body에 .tv 클래스가 붙으면 활성화
+     ========================== */
+  body.tv{
+    background:#0A0B0D;
+    color:#F5F3EE;
+    overflow:hidden;
+  }
+  body.tv::before{display:none} /* 그레인 제거 */
+
+  /* TV 모드에선 기존 앱 UI 숨김 */
+  body.tv .app{display:none}
+  body.tv .tv-app{display:flex}
+
+  /* TV 앱 레이아웃 */
+  .tv-app{
+    display:none;
+    flex-direction:column;
+    height:100dvh;
+    width:100vw;
+    background:#0A0B0D;
+    color:#F5F3EE;
+    font-family:var(--font-sans);
+    position:fixed;inset:0;
+  }
+
+  .tv-header{
+    padding:28px 60px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .tv-brand{
+    font-family:var(--font-serif);
+    font-size:44px;font-style:italic;
+    letter-spacing:0.01em;
+  }
+  .tv-brand-sub{
+    font-family:var(--font-mono);
+    font-size:14px;
+    color:#8A92A0;
+    letter-spacing:0.2em;
+    margin-left:16px;
+  }
+  .tv-clock{
+    font-family:var(--font-mono);
+    font-size:20px;
+    color:#8A92A0;
+    font-variant-numeric:tabular-nums;
+  }
+  .tv-on-air{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 16px;
+    border:1px solid rgba(229,62,88,0.4);
+    border-radius:999px;
+    background:rgba(229,62,88,0.12);
+    font-family:var(--font-mono);
+    font-size:14px;font-weight:700;
+    letter-spacing:0.18em;color:#FF6B82;
+    margin-right:20px;
+  }
+  .tv-on-air .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:#E53E58;
+    animation:pulse 1.8s ease-out infinite;
+  }
+
+  /* TV 플레이어 영역 */
+  .tv-stage{
+    flex:1;
+    display:flex;
+    padding:30px 60px;
+    gap:40px;
+    min-height:0;
+  }
+  .tv-player-wrap{
+    flex:2;
+    display:flex;flex-direction:column;
+  }
+  .tv-player-info{
+    margin-bottom:14px;
+  }
+  .tv-program{
+    font-family:var(--font-serif);
+    font-size:40px;font-style:italic;
+    line-height:1.1;
+    margin-bottom:4px;
+  }
+  .tv-chan-info{
+    font-family:var(--font-mono);
+    font-size:16px;
+    color:#8A92A0;
+    letter-spacing:0.1em;
+  }
+  .tv-player{
+    flex:1;
+    background:#000;
+    border:2px solid rgba(255,255,255,0.1);
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+  }
+  .tv-player iframe{
+    position:absolute;inset:0;
+    width:100%;height:100%;border:0;
+  }
+  .tv-player-fallback{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px;
+    color:#8A92A0;
+  }
+  .tv-player-fallback-title{
+    font-family:var(--font-serif);
+    font-style:italic;
+    font-size:32px;
+    color:#F5F3EE;
+    margin-bottom:12px;
+  }
+  .tv-player-fallback-link{
+    margin-top:20px;
+    padding:14px 28px;
+    background:#1F8F85;
+    color:#0A0B0D;
+    font-family:var(--font-mono);
+    font-size:16px;font-weight:700;
+    letter-spacing:0.1em;
+    border-radius:999px;
+  }
+
+  /* TV 채널 리스트 (오른쪽) */
+  .tv-channels{
+    flex:1;
+    display:flex;flex-direction:column;
+    min-width:380px;
+  }
+  .tv-channels-title{
+    font-family:var(--font-mono);
+    font-size:13px;font-weight:700;
+    color:#8A92A0;
+    letter-spacing:0.2em;
+    margin-bottom:14px;
+    padding-left:4px;
+  }
+  .tv-channels-list{
+    flex:1;
+    overflow-y:auto;
+    display:flex;flex-direction:column;
+    gap:6px;
+    padding-right:10px;
+    scrollbar-width:thin;
+    scrollbar-color:#1F242C transparent;
+  }
+  .tv-channels-list::-webkit-scrollbar{width:6px}
+  .tv-channels-list::-webkit-scrollbar-thumb{background:#1F242C;border-radius:3px}
+
+  .tv-card{
+    display:flex;align-items:center;gap:16px;
+    padding:14px 16px;
+    background:#101317;
+    border:2px solid transparent;
+    border-radius:10px;
+    transition:all .15s;
+  }
+  .tv-card.focused{
+    border-color:#2FB5A8;
+    background:linear-gradient(90deg, rgba(47,181,168,0.15), rgba(47,181,168,0.02));
+    transform:scale(1.02);
+    box-shadow:0 8px 24px rgba(47,181,168,0.2);
+  }
+  .tv-card.playing{
+    border-color:rgba(47,181,168,0.4);
+  }
+  .tv-card-thumb{
+    width:72px;height:48px;flex-shrink:0;
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    font-family:var(--font-mono);
+    font-size:11px;font-weight:700;letter-spacing:0.1em;
+    color:rgba(255,255,255,0.92);
+  }
+  .tv-card-flag{
+    position:absolute;top:4px;left:5px;
+    font-size:13px;
+  }
+  .tv-card-body{flex:1;min-width:0}
+  .tv-card-num{
+    font-family:var(--font-mono);
+    font-size:11px;color:#5B6370;
+    letter-spacing:0.08em;
+    margin-bottom:2px;
+  }
+  .tv-card-name{
+    font-size:17px;font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .tv-card-program{
+    font-size:12px;color:#8A92A0;
+    margin-top:3px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .tv-card-live{
+    padding:4px 8px;
+    background:#E53E58;
+    color:white;
+    font-family:var(--font-mono);
+    font-size:10px;font-weight:700;letter-spacing:0.1em;
+    border-radius:3px;
+    flex-shrink:0;
+  }
+  .tv-card-link{
+    font-family:var(--font-mono);
+    font-size:16px;color:#8A92A0;
+    flex-shrink:0;
+  }
+
+  /* 하단 힌트바 */
+  .tv-hint{
+    padding:16px 60px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:#5B6370;
+    letter-spacing:0.08em;
+  }
+  .tv-hint-group{display:flex;gap:28px;align-items:center}
+  .tv-hint-key{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:28px;height:28px;
+    padding:0 8px;
+    background:#161A20;
+    border:1px solid #1F242C;
+    border-radius:5px;
+    font-weight:700;color:#F5F3EE;
+    margin-right:8px;
+  }
+
+  /* TV 모드에서 잘 보이는 한글 폰트 크기 */
+  @media (min-width:1920px){
+    .tv-program{font-size:48px}
+    .tv-card-name{font-size:19px}
+    .tv-brand{font-size:52px}
+  }
 </style>
 </head>
 <body>
+
+<!-- ============================================
+     TV MODE UI — ?tv=1 파라미터 있으면 활성화
+     ============================================ -->
+<div class="tv-app" id="tv-app">
+  <header class="tv-header">
+    <div>
+      <span class="tv-brand">ON AIR</span>
+      <span class="tv-brand-sub">TV MODE</span>
+    </div>
+    <div style="display:flex;align-items:center">
+      <span class="tv-on-air"><span class="dot"></span>LIVE</span>
+      <span class="tv-clock" id="tv-clock">--:--:--</span>
+    </div>
+  </header>
+
+  <div class="tv-stage">
+    <div class="tv-player-wrap">
+      <div class="tv-player-info">
+        <div class="tv-program" id="tv-program">채널을 선택하세요</div>
+        <div class="tv-chan-info" id="tv-chan-info">← → ↑ ↓ 키로 채널 선택</div>
+      </div>
+      <div class="tv-player" id="tv-player">
+        <div class="tv-player-fallback">
+          <div class="tv-player-fallback-title">리모컨으로 선택</div>
+          <div>오른쪽 채널 목록에서 방향키로 이동 후 확인 버튼을 누르세요</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tv-channels">
+      <div class="tv-channels-title">CHANNELS · 30</div>
+      <div class="tv-channels-list" id="tv-channels"></div>
+    </div>
+  </div>
+
+  <div class="tv-hint">
+    <div class="tv-hint-group">
+      <span><span class="tv-hint-key">↑↓</span>채널 이동</span>
+      <span><span class="tv-hint-key">OK</span>재생</span>
+      <span><span class="tv-hint-key">1~9</span>번호 선택</span>
+    </div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.6.0</div>
+  </div>
+</div>
 
 <div class="app" id="app">
 
@@ -398,19 +690,23 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.5.0</span>
+        <span class="section-meta">v0.6.0</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
           <span>📱 앱으로 설치하기</span>
           <span class="val" id="install-status" style="color:var(--accent);font-weight:700">설치</span>
         </li>
+        <li class="more-row" id="tv-mode-row" style="cursor:pointer">
+          <span>📺 TV 모드로 열기</span>
+          <span class="val" style="color:var(--accent);font-weight:700">열기</span>
+        </li>
         <li class="more-row"><span>데이터 절약 모드</span><span class="val">OFF</span></li>
         <li class="more-row"><span>자동 재생</span><span class="val">ON</span></li>
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.5.0</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.6.0</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -959,6 +1255,200 @@ if ("serviceWorker" in navigator) {
       .then(reg => console.log("SW registered:", reg.scope))
       .catch(err => console.log("SW registration failed:", err));
   });
+}
+
+/* ==========================
+   TV 모드 — ?tv=1 파라미터 활성화
+   리모컨 방향키 네비게이션 지원
+   ========================== */
+const isTVMode = new URLSearchParams(location.search).get("tv") === "1";
+
+// 설정 탭 "TV 모드로 열기" 버튼
+const tvModeBtn = document.getElementById("tv-mode-row");
+if (tvModeBtn) {
+  tvModeBtn.addEventListener("click", () => {
+    window.open(location.pathname + "?tv=1", "_blank");
+  });
+}
+
+if (isTVMode) {
+  document.body.classList.add("tv");
+  initTVMode();
+}
+
+function initTVMode() {
+  var focusedIdx = 0;
+  var playingIdx = -1;
+
+  // 채널 리스트 렌더
+  function renderTVChannels() {
+    var html = "";
+    for (var i = 0; i < CHANNELS.length; i++) {
+      var c = CHANNELS[i];
+      var tag = c.type === "youtube"
+        ? '<span class="tv-card-live">LIVE</span>'
+        : '<span class="tv-card-link">↗</span>';
+      html += '<div class="tv-card" data-idx="' + i + '" id="tv-card-' + i + '">';
+      html +=   '<div class="tv-card-thumb" style="background:linear-gradient(135deg,' + c.color + '38,' + c.color + '14)">';
+      html +=     '<span class="tv-card-flag">' + c.flag + '</span>';
+      html +=     c.code;
+      html +=   '</div>';
+      html +=   '<div class="tv-card-body">';
+      html +=     '<div class="tv-card-num">CH ' + c.num + '</div>';
+      html +=     '<div class="tv-card-name">' + c.name + '</div>';
+      html +=     '<div class="tv-card-program">' + c.program + '</div>';
+      html +=   '</div>';
+      html +=   tag;
+      html += '</div>';
+    }
+    document.getElementById("tv-channels").innerHTML = html;
+
+    // 클릭도 지원 (터치 TV용)
+    var cards = document.querySelectorAll(".tv-card");
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].addEventListener("click", function() {
+        var idx = parseInt(this.getAttribute("data-idx"), 10);
+        focusedIdx = idx;
+        updateFocus();
+        tvPlay(idx);
+      });
+    }
+  }
+
+  // 포커스 갱신
+  function updateFocus() {
+    var cards = document.querySelectorAll(".tv-card");
+    for (var i = 0; i < cards.length; i++) {
+      if (i === focusedIdx) {
+        cards[i].classList.add("focused");
+        // 스크롤
+        cards[i].scrollIntoView({ block: "nearest", behavior: "smooth" });
+      } else {
+        cards[i].classList.remove("focused");
+      }
+      if (i === playingIdx) {
+        cards[i].classList.add("playing");
+      } else {
+        cards[i].classList.remove("playing");
+      }
+    }
+  }
+
+  // 재생
+  function tvPlay(idx) {
+    var c = CHANNELS[idx];
+    document.getElementById("tv-program").textContent = c.program;
+    document.getElementById("tv-chan-info").textContent =
+      c.flag + " CH " + c.num + " · " + c.name + " · " + c.desc;
+
+    var player = document.getElementById("tv-player");
+
+    if (c.type === "link") {
+      // 지상파 본 채널은 임베드 불가 — 안내만
+      player.innerHTML =
+        '<div class="tv-player-fallback">' +
+          '<div class="tv-player-fallback-title">' + c.flag + ' ' + c.name + '</div>' +
+          '<div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>' +
+          '<div class="tv-player-fallback-link">' + c.url + '</div>' +
+        '</div>';
+      return;
+    }
+
+    // 구형 TV 호환을 위해 nocookie 도메인 + 최소 파라미터
+    var src = "https://www.youtube-nocookie.com/embed/live_stream?channel=" + c.ytId + "&autoplay=1&playsinline=1";
+    player.innerHTML = '<iframe src="' + src + '" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+
+    playingIdx = idx;
+    updateFocus();
+  }
+
+  // 리모컨 방향키
+  document.addEventListener("keydown", function(e) {
+    var key = e.keyCode || e.which;
+
+    // 숫자 키 (48-57 = 0-9)
+    if (key >= 48 && key <= 57) {
+      var num = key - 48;
+      if (num === 0) num = 10;
+      if (num <= CHANNELS.length) {
+        focusedIdx = num - 1;
+        updateFocus();
+        tvPlay(focusedIdx);
+        e.preventDefault();
+      }
+      return;
+    }
+
+    switch (key) {
+      case 38: // ↑
+        if (focusedIdx > 0) {
+          focusedIdx--;
+          updateFocus();
+        }
+        e.preventDefault();
+        break;
+      case 40: // ↓
+        if (focusedIdx < CHANNELS.length - 1) {
+          focusedIdx++;
+          updateFocus();
+        }
+        e.preventDefault();
+        break;
+      case 37: // ←  (이전 재생 채널)
+        if (playingIdx > 0) {
+          focusedIdx = playingIdx - 1;
+          while (focusedIdx >= 0 && CHANNELS[focusedIdx].type === "link") focusedIdx--;
+          if (focusedIdx < 0) focusedIdx = 0;
+          updateFocus();
+          tvPlay(focusedIdx);
+        }
+        e.preventDefault();
+        break;
+      case 39: // → (다음 재생 채널)
+        if (playingIdx >= 0 && playingIdx < CHANNELS.length - 1) {
+          focusedIdx = playingIdx + 1;
+          while (focusedIdx < CHANNELS.length && CHANNELS[focusedIdx].type === "link") focusedIdx++;
+          if (focusedIdx >= CHANNELS.length) focusedIdx = CHANNELS.length - 1;
+          updateFocus();
+          tvPlay(focusedIdx);
+        }
+        e.preventDefault();
+        break;
+      case 13:  // Enter (OK)
+      case 32:  // Space
+        tvPlay(focusedIdx);
+        e.preventDefault();
+        break;
+      case 8:   // Backspace (뒤로)
+      case 10009: // 삼성 Tizen RETURN
+      case 461:   // LG webOS BACK
+        // 현재는 그냥 포커스만 채널 리스트로
+        updateFocus();
+        e.preventDefault();
+        break;
+    }
+  });
+
+  // TV 시계
+  function tvTickClock() {
+    var d = new Date();
+    var pad = function(n) { return n < 10 ? "0" + n : "" + n; };
+    var el = document.getElementById("tv-clock");
+    if (el) el.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  tvTickClock();
+  setInterval(tvTickClock, 1000);
+
+  // 초기화
+  renderTVChannels();
+  // 첫 번째 YouTube 채널 자동 재생
+  var firstYT = 0;
+  for (var i = 0; i < CHANNELS.length; i++) {
+    if (CHANNELS[i].type === "youtube") { firstYT = i; break; }
+  }
+  focusedIdx = firstYT;
+  updateFocus();
+  tvPlay(firstYT);
 }
 </script>
 </body>
