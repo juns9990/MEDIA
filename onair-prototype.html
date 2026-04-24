@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#F5F3EE" />
+<title>온에어 · ON AIR — Global Live TV</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F5F3EE;
+    --surface:#FFFFFF;
+    --surface-2:#EFEDE7;
+    --border:#D9D5CC;
+    --border-soft:#E7E3DA;
+    --text:#1C1F24;
+    --text-2:#5B6370;
+    --text-3:#9099A6;
+    --live:#E53E58;
+    --accent:#1F8F85;
+    --accent-soft:#E5F3F1;
+    --radius:10px;
+    --shadow-card:0 1px 2px rgba(28,31,36,0.04), 0 1px 1px rgba(28,31,36,0.03);
+    --shadow-lift:0 10px 30px rgba(28,31,36,0.08), 0 2px 6px rgba(28,31,36,0.04);
+    --header-h:56px; --tabbar-h:68px;
+    --sidebar-w:340px; --schedule-w:300px;
+    --font-sans:"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-serif:"Instrument Serif", serif;
+    --font-mono:"JetBrains Mono", ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:var(--font-sans);letter-spacing:-0.01em;
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1000;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(28,31,36,0.015) 1px, transparent 1px),
+      radial-gradient(circle at 70% 80%, rgba(28,31,36,0.01) 1px, transparent 1px);
+    background-size:3px 3px, 5px 5px;
+    opacity:0.5;
+  }
+  button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+  ul{list-style:none}
+
+  .app{display:grid;height:100dvh;grid-template-rows:var(--header-h) 1fr var(--tabbar-h);grid-template-columns:1fr}
+
+  .header{
+    grid-row:1;display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;border-bottom:1px solid var(--border-soft);
+    background:rgba(245,243,238,0.9);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    position:relative;z-index:10;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand-mark{font-family:var(--font-serif);font-size:24px;font-style:italic;letter-spacing:0.01em;color:var(--text)}
+  .brand-sub{font-family:var(--font-mono);font-size:10px;font-weight:500;color:var(--text-3);letter-spacing:0.14em;text-transform:uppercase}
+  .on-air-pill{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:5px 10px 5px 9px;
+    border:1px solid rgba(229,62,88,0.25);
+    border-radius:999px;background:rgba(229,62,88,0.08);
+    font-family:var(--font-mono);font-size:10px;font-weight:700;
+    letter-spacing:0.14em;color:#C8354D;
+  }
+  .on-air-pill .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--live);
+    box-shadow:0 0 0 0 rgba(229,62,88,0.5);
+    animation:pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(229,62,88,0.5)}
+    70%{box-shadow:0 0 0 6px rgba(229,62,88,0)}
+    100%{box-shadow:0 0 0 0 rgba(229,62,88,0)}
+  }
+  .clock{font-family:var(--font-mono);font-size:12px;color:var(--text-2);letter-spacing:0.08em;font-variant-numeric:tabular-nums}
+
+  .main{grid-row:2;overflow:hidden;position:relative}
+  .view{
+    height:100%;overflow-y:auto;overflow-x:hidden;
+    padding:0 16px 20px;
+    scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  }
+  .view::-webkit-scrollbar{width:6px}
+  .view::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  .view[hidden]{display:none}
+
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:18px 2px 10px;position:sticky;top:0;
+    background:linear-gradient(var(--bg) 80%, transparent);z-index:3;
+  }
+  .section-title{font-family:var(--font-serif);font-size:30px;font-style:italic;font-weight:400;letter-spacing:-0.01em;color:var(--text)}
+  .section-meta{font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:0.12em;text-transform:uppercase}
+
+  .filter{
+    display:flex;gap:6px;padding:2px 2px 14px;
+    overflow-x:auto;scrollbar-width:none;
+    position:sticky;top:64px;
+    background:linear-gradient(var(--bg) 80%, transparent);z-index:2;
+  }
+  .filter::-webkit-scrollbar{display:none}
+  .chip{
+    flex-shrink:0;padding:7px 14px;
+    font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.08em;
+    color:var(--text-2);background:var(--surface);
+    border:1px solid var(--border-soft);border-radius:999px;
+    transition:all .15s;
+    box-shadow:var(--shadow-card);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .chip:hover{color:var(--text);border-color:var(--border)}
+  .chip.is-active{color:#fff;background:var(--accent);border-color:var(--accent);font-weight:700;box-shadow:0 2px 8px rgba(31,143,133,0.25)}
+  .chip .count{opacity:0.5;font-size:10px}
+  .chip.is-active .count{opacity:0.75}
+  .chip .flag{font-size:13px;line-height:1}
+
+  .channels{display:grid;grid-template-columns:1fr;gap:10px}
+  .card{
+    display:flex;gap:14px;padding:14px;
+    background:var(--surface);
+    border:1px solid var(--border-soft);border-radius:var(--radius);
+    cursor:pointer;transition:all .2s;
+    position:relative;overflow:hidden;
+    box-shadow:var(--shadow-card);
+  }
+  .card:hover{border-color:var(--border);transform:translateY(-1px);box-shadow:var(--shadow-lift)}
+  .card:active{transform:scale(0.995)}
+  .card.is-playing{
+    border-color:var(--accent);
+    background:linear-gradient(180deg, var(--accent-soft), var(--surface) 60%);
+  }
+  .thumb{
+    width:96px;height:64px;flex-shrink:0;
+    background:var(--surface-2);border-radius:6px;overflow:hidden;
+    position:relative;border:1px solid var(--border-soft);
+  }
+  .thumb::before{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg, rgba(28,31,36,0.015) 0 1px, transparent 1px 2px);
+  }
+  .thumb-label{
+    position:absolute;bottom:6px;left:7px;
+    font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.12em;
+    color:rgba(255,255,255,0.95);text-shadow:0 1px 4px rgba(0,0,0,0.5);
+  }
+  .thumb-flag{
+    position:absolute;top:6px;left:7px;
+    font-size:13px;line-height:1;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  }
+  .live-tag{
+    position:absolute;top:6px;right:6px;
+    display:inline-flex;align-items:center;gap:4px;padding:2px 6px;
+    background:var(--live);color:white;
+    font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.1em;
+    border-radius:3px;
+  }
+  .live-tag .dot{width:4px;height:4px;background:white;border-radius:50%}
+  .link-tag{
+    position:absolute;top:6px;right:6px;
+    width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(28,31,36,0.6);color:rgba(255,255,255,0.95);
+    border-radius:4px;backdrop-filter:blur(4px);
+  }
+  .link-tag svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.2;fill:none}
+  .replay-tag{
+    position:absolute;top:6px;right:6px;
+    display:inline-flex;align-items:center;gap:4px;padding:2px 6px;
+    background:rgba(28,31,36,0.75);color:white;
+    font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.1em;
+    border-radius:3px;backdrop-filter:blur(4px);
+  }
+
+  .card-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0}
+  .card-top{display:flex;align-items:center;gap:8px}
+  .ch-num{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-3);letter-spacing:0.06em}
+  .ch-name{font-size:14px;font-weight:600;color:var(--text)}
+  .program-title{font-size:13.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}
+  .program-meta{font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:0.06em;margin-top:4px}
+
+  .player-overlay{position:absolute;inset:0;background:var(--bg);z-index:5;display:flex;flex-direction:column}
+  .player-overlay[hidden]{display:none}
+  .player-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-soft);background:var(--bg)}
+  .back-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--text-2)}
+  .back-btn:hover{background:var(--surface-2)}
+  .player-title{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+  .player-frame{position:relative;background:#000;aspect-ratio:16/9;width:100%}
+  .player-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .player-info{padding:16px;flex:1;overflow-y:auto;background:var(--bg)}
+  .player-program{font-family:var(--font-serif);font-size:24px;font-style:italic;margin-bottom:6px;color:var(--text)}
+  .player-sub{font-family:var(--font-mono);font-size:11px;color:var(--text-2);letter-spacing:0.06em;margin-bottom:16px}
+  .schedule-list{display:flex;flex-direction:column;gap:2px}
+  .schedule-head{font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:0.14em;text-transform:uppercase;padding:8px 0 6px;border-top:1px solid var(--border-soft)}
+  .sch-row{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-soft)}
+  .sch-time{font-family:var(--font-mono);font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums}
+  .sch-title{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sch-now{font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--live);letter-spacing:0.12em}
+  .sch-row.is-now .sch-title{color:var(--accent);font-weight:600}
+
+  .tabbar{
+    grid-row:3;display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--border-soft);
+    background:rgba(245,243,238,0.9);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tab{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    color:var(--text-3);font-size:10px;
+    font-family:var(--font-mono);letter-spacing:0.08em;padding-top:4px;
+  }
+  .tab svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none}
+  .tab.is-active{color:var(--text)}
+  .tab.is-active svg{stroke:var(--accent)}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--text-3)}
+  .empty-title{font-family:var(--font-serif);font-style:italic;font-size:22px;color:var(--text-2);margin-bottom:6px}
+  .empty-desc{font-size:13px;line-height:1.6}
+
+  .more-list{display:flex;flex-direction:column;gap:2px;padding-top:10px}
+  .more-row{display:flex;justify-content:space-between;align-items:center;padding:16px 4px;border-bottom:1px solid var(--border-soft);font-size:14px}
+  .more-row .val{color:var(--text-3);font-family:var(--font-mono);font-size:12px}
+
+  .footer-credit{margin-top:36px;text-align:center;font-family:var(--font-mono);font-size:10px;letter-spacing:0.24em;color:var(--text-3);padding:20px 0}
+
+  .replay-notice{
+    padding:12px 14px;margin:4px 2px 14px;
+    background:var(--accent-soft);
+    border:1px solid rgba(31,143,133,0.2);
+    border-radius:8px;
+    font-size:12px;color:var(--text-2);line-height:1.55;
+  }
+  .replay-notice strong{color:var(--accent);font-weight:700}
+
+  /* Section divider in channel list */
+  .ch-group-head{
+    padding:14px 2px 6px;
+    font-family:var(--font-mono);font-size:10px;font-weight:700;
+    letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--text-3);
+    display:flex;align-items:center;gap:8px;
+  }
+  .ch-group-head .line{flex:1;height:1px;background:var(--border-soft)}
+
+  /* DESKTOP */
+  @media (min-width: 1100px){
+    body{overflow:hidden}
+    .app{
+      grid-template-rows:var(--header-h) 1fr;
+      grid-template-columns:var(--sidebar-w) 1fr var(--schedule-w);
+      grid-template-areas:"header header header" "side stage sched";
+    }
+    .header{grid-area:header;padding:0 24px}
+    .tabbar{display:none}
+    .main{display:contents}
+    .view{padding:0;height:calc(100dvh - var(--header-h))}
+    #view-now{grid-area:side;border-right:1px solid var(--border-soft);padding:0;background:var(--surface-2)}
+    #view-now .section-head{padding:20px 20px 10px;background:var(--surface-2)}
+    #view-now .filter{top:68px;padding:0 16px 14px;background:var(--surface-2)}
+    .channels{padding:0 12px 20px}
+    .card{padding:10px;gap:10px}
+    .thumb{width:78px;height:52px}
+    .ch-name{font-size:13px}
+    .program-title{font-size:13px}
+    .program-meta{font-size:9px}
+    .ch-group-head{padding:10px 8px 4px}
+
+    #view-stage{grid-area:stage;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+    .stage-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border-soft)}
+    .stage-title-wrap{display:flex;flex-direction:column;gap:2px}
+    .stage-program{font-family:var(--font-serif);font-size:24px;font-style:italic;line-height:1.2}
+    .stage-chan{font-family:var(--font-mono);font-size:11px;color:var(--text-2);letter-spacing:0.1em}
+    .stage-player{
+      flex:1;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;
+      background:radial-gradient(circle at 50% 30%, rgba(31,143,133,0.04), transparent 60%), var(--bg);
+    }
+    .stage-frame{
+      width:100%;max-width:min(100%, calc((100dvh - var(--header-h) - 180px) * 16 / 9));
+      aspect-ratio:16/9;background:#000;
+      border:1px solid var(--border);border-radius:var(--radius);
+      overflow:hidden;position:relative;
+      box-shadow:0 20px 60px rgba(28,31,36,0.12);
+    }
+    .stage-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .stage-foot{padding:14px 24px;border-top:1px solid var(--border-soft);display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:0.12em;text-transform:uppercase}
+
+    #view-guide{grid-area:sched;border-left:1px solid var(--border-soft);padding:0;background:var(--surface-2)}
+    #view-guide .section-head{padding:20px 20px 14px;background:var(--surface-2)}
+    .guide-grid{padding:0 16px 20px;gap:4px}
+    .guide-ch{background:transparent;border:none;border-radius:0;padding:0 4px 12px;border-bottom:1px solid var(--border-soft);box-shadow:none}
+
+    .player-overlay{display:none !important}
+    #view-replay, #view-more{display:none !important}
+    .footer-credit{display:none}
+  }
+
+  @media (min-width: 640px) and (max-width: 1099px){
+    .channels{grid-template-columns:1fr 1fr}
+  }
+
+  .guide-grid{display:flex;flex-direction:column;gap:16px;padding-bottom:20px}
+  .guide-ch{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-card)}
+  .guide-ch-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border-soft);margin-bottom:8px}
+  .guide-ch-name{font-size:14px;font-weight:600}
+  .guide-ch-num{font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:0.06em}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <header class="header">
+    <div class="brand">
+      <span class="brand-mark">ON AIR</span>
+      <span class="brand-sub">GLOBAL</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="on-air-pill"><span class="dot"></span>LIVE</span>
+      <span class="clock" id="clock">--:--:--</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="view" id="view-now">
+      <div class="section-head">
+        <h2 class="section-title">지금 방송중</h2>
+        <span class="section-meta" id="viewer-meta">30 CH</span>
+      </div>
+      <div class="filter" id="filter-live"></div>
+      <ul class="channels" id="channels"></ul>
+      <div class="footer-credit">MADE BY JUNS</div>
+    </section>
+
+    <section class="view" id="view-stage">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-program" id="stage-program">채널을 선택하세요</span>
+          <span class="stage-chan" id="stage-chan">— · —</span>
+        </div>
+        <span class="on-air-pill"><span class="dot"></span>LIVE</span>
+      </div>
+      <div class="stage-player">
+        <div class="stage-frame" id="stage-frame"></div>
+      </div>
+      <div class="stage-foot">
+        <span>SIGNAL · YOUTUBE OFFICIAL</span>
+        <span>MADE BY JUNS</span>
+      </div>
+    </section>
+
+    <section class="view" id="view-guide" hidden>
+      <div class="section-head">
+        <h2 class="section-title">오늘의 편성</h2>
+        <span class="section-meta" id="today-label">TODAY</span>
+      </div>
+      <div class="guide-grid" id="guide-grid"></div>
+      <div class="footer-credit">MADE BY JUNS</div>
+    </section>
+
+    <section class="view" id="view-replay" hidden>
+      <div class="section-head">
+        <h2 class="section-title">다시보기</h2>
+        <span class="section-meta">REPLAY</span>
+      </div>
+      <div class="replay-notice">
+        <strong>안내</strong> · 공식 유튜브 채널의 최근 업로드·하이라이트·뉴스 다시보기를 봅니다. 지상파 드라마·예능 풀회차는 저작권상 Wavve 등 정식 플랫폼에서만 제공됩니다.
+      </div>
+      <div class="filter" id="filter-replay"></div>
+      <ul class="channels" id="replays"></ul>
+      <div class="footer-credit">MADE BY JUNS</div>
+    </section>
+
+    <section class="view" id="view-more" hidden>
+      <div class="section-head">
+        <h2 class="section-title">설정</h2>
+        <span class="section-meta">v0.4.0</span>
+      </div>
+      <ul class="more-list">
+        <li class="more-row"><span>데이터 절약 모드</span><span class="val">OFF</span></li>
+        <li class="more-row"><span>자동 재생</span><span class="val">ON</span></li>
+        <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
+        <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
+        <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.4.0</span></li>
+      </ul>
+      <div class="footer-credit">MADE BY JUNS</div>
+    </section>
+
+    <section class="player-overlay" id="player-overlay" hidden>
+      <div class="player-head">
+        <button class="back-btn" id="back-btn" aria-label="뒤로가기">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="player-title" id="player-title">채널</div>
+        <span class="on-air-pill" id="player-pill"><span class="dot"></span>LIVE</span>
+      </div>
+      <div class="player-frame" id="player-frame"></div>
+      <div class="player-info">
+        <div class="player-program" id="player-program">—</div>
+        <div class="player-sub" id="player-sub">—</div>
+        <div class="schedule-head" id="player-schedule-head">편성표</div>
+        <ul class="schedule-list" id="player-schedule"></ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab is-active" data-tab="now">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>
+      지금
+    </button>
+    <button class="tab" data-tab="guide">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+      편성
+    </button>
+    <button class="tab" data-tab="replay">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      다시보기
+    </button>
+    <button class="tab" data-tab="more">
+      <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>
+      더보기
+    </button>
+  </nav>
+
+</div>
+
+<script>
+/* ==========================
+   채널 30개 (한국 16 + 미국 4 + 유럽 5 + 아시아 3 + 중동 2)
+   country: kr | us | eu | asia | mena
+   ========================== */
+const CHANNELS = [
+  /* ========== 한국 지상파 ========== */
+  { num:"01", code:"KBS1", name:"KBS 1TV", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://onair.kbs.co.kr/", color:"#1E4FD6",
+    program:"공영 교양·뉴스", desc:"KBS my K 공식 플레이어" },
+  { num:"02", code:"KBS2", name:"KBS 2TV", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://onair.kbs.co.kr/", color:"#0BA5E9",
+    program:"드라마·예능", desc:"KBS my K 공식 플레이어" },
+  { num:"03", code:"MBC", name:"MBC", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://onair.imbc.com/", color:"#FF3355",
+    program:"드라마·예능·뉴스", desc:"MBC onair 공식 플레이어" },
+  { num:"04", code:"SBS", name:"SBS", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://programs.sbs.co.kr/onair/", color:"#FFBE2E",
+    program:"드라마·예능·뉴스", desc:"SBS onair 공식 플레이어" },
+  { num:"05", code:"EBS1", name:"EBS 1TV", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://www.ebs.co.kr/onair", color:"#10B981",
+    program:"교육·다큐", desc:"EBS 공식 플레이어" },
+  { num:"06", code:"EBS2", name:"EBS 2TV", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://www.ebs.co.kr/onair", color:"#059669",
+    program:"교육·어린이", desc:"EBS 공식 플레이어" },
+
+  /* ========== 한국 뉴스 24시간 ========== */
+  { num:"11", code:"KBS-N", name:"KBS 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCcQTRi69dsVYHN3exePtZ1A", color:"#1E4FD6",
+    program:"KBS 뉴스 · 24시간", desc:"공영 뉴스 라이브" },
+  { num:"12", code:"MBC-N", name:"MBC 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCF4Wxdo3inmxP-Y59wXDsFw", color:"#FF3355",
+    program:"MBC 뉴스 · 24시간", desc:"MBC 뉴스 라이브" },
+  { num:"13", code:"SBS-N", name:"SBS 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UC2FW-PSQGcCCSNIDymKeB-A", color:"#FFBE2E",
+    program:"SBS 뉴스 · 24시간", desc:"SBS 뉴스 라이브" },
+  { num:"14", code:"YTN", name:"YTN", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UChlgI3UHCOnwUGzWzbJ3H5w", color:"#C71E1D",
+    program:"YTN 24 · 실시간", desc:"뉴스 전문채널" },
+  { num:"15", code:"YNA", name:"연합뉴스TV", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCUZobs9QZaKGmES6zODvo8A", color:"#0A5FBF",
+    program:"연합뉴스TV · 실시간", desc:"뉴스 전문채널" },
+  { num:"16", code:"JTBC", name:"JTBC 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCsvn_Po0SmunchJYOWpOxMg", color:"#B84F9B",
+    program:"JTBC 뉴스룸 · 실시간", desc:"종편 뉴스" },
+  { num:"17", code:"MBN", name:"MBN 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCG9aFJTZ-lMCHAiO1KJsirg", color:"#DC2626",
+    program:"MBN 뉴스 · 실시간", desc:"종편 뉴스" },
+  { num:"18", code:"TVC", name:"TV조선 뉴스", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UCWlV3Lz_55UaX4JsMj-z__Q", color:"#1E40AF",
+    program:"TV조선 뉴스 · 실시간", desc:"종편 뉴스" },
+
+  /* ========== 한국 글로벌 ========== */
+  { num:"21", code:"KBSW", name:"KBS WORLD", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UC5BMQOsAB8hKUyHu9KI6yig", color:"#0EA5E9",
+    program:"K-엔터 · 24시간", desc:"한류 콘텐츠 글로벌 채널" },
+  { num:"22", code:"AR", name:"Arirang TV", type:"youtube", country:"kr", flag:"🇰🇷",
+    ytId:"UC-PHIZjV-oX8H7zD1cCN2NQ", color:"#7FD4C9",
+    program:"Arirang World · 24/7", desc:"영문 국제방송" },
+
+  /* ========== 미국 🇺🇸 ========== */
+  { num:"31", code:"CNN", name:"CNN", type:"youtube", country:"us", flag:"🇺🇸",
+    ytId:"UCupvZG-5ko_eiXAupbDfxWw", color:"#CC0000",
+    program:"CNN · 24시간 뉴스", desc:"미국 대표 뉴스 채널" },
+  { num:"32", code:"FOX", name:"Fox News", type:"youtube", country:"us", flag:"🇺🇸",
+    ytId:"UCXIJgqnII2ZOINSWNOGFThA", color:"#003366",
+    program:"Fox News · 실시간", desc:"보수 성향 뉴스 네트워크" },
+  { num:"33", code:"NBC", name:"NBC News NOW", type:"youtube", country:"us", flag:"🇺🇸",
+    ytId:"UCeY0bbntWzzVIaj2z3QigXg", color:"#6D2C91",
+    program:"NBC News · 스트리밍", desc:"NBC 24시간 뉴스" },
+  { num:"34", code:"BBG", name:"Bloomberg TV", type:"youtube", country:"us", flag:"🇺🇸",
+    ytId:"UCIALMKvObZNtJ6AmdCLP7Lg", color:"#000000",
+    program:"Bloomberg · 경제 24시간", desc:"글로벌 경제·금융 전문" },
+
+  /* ========== 유럽 ========== */
+  { num:"41", code:"BBC", name:"BBC News", type:"youtube", country:"eu", flag:"🇬🇧",
+    ytId:"UC16niRr50-MSBwiO3YDb3RA", color:"#BB1919",
+    program:"BBC News · 24/7", desc:"영국 공영방송" },
+  { num:"42", code:"SKY", name:"Sky News", type:"youtube", country:"eu", flag:"🇬🇧",
+    ytId:"UCoMdktPbSTixAyNGwb-UYkQ", color:"#0088CC",
+    program:"Sky News · Live", desc:"영국 24시간 뉴스" },
+  { num:"43", code:"DW", name:"DW News", type:"youtube", country:"eu", flag:"🇩🇪",
+    ytId:"UCknLrEdhRCp1aegoMqRaCZg", color:"#002D5B",
+    program:"DW News · English", desc:"독일 국제방송 (영어)" },
+  { num:"44", code:"F24", name:"France 24", type:"youtube", country:"eu", flag:"🇫🇷",
+    ytId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", color:"#0056A4",
+    program:"France 24 · English", desc:"프랑스 국제방송 (영어)" },
+  { num:"45", code:"EUR", name:"Euronews", type:"youtube", country:"eu", flag:"🇪🇺",
+    ytId:"UCSrZ3UV4jOidv8ppoVuvW9Q", color:"#1AA1DB",
+    program:"Euronews · English", desc:"유럽 통합 뉴스" },
+
+  /* ========== 아시아 ========== */
+  { num:"51", code:"NHK", name:"NHK WORLD", type:"youtube", country:"asia", flag:"🇯🇵",
+    ytId:"UCSPEjw8F2nQDtmUKPFNF7_A", color:"#E60000",
+    program:"NHK WORLD · English", desc:"일본 국제방송" },
+  { num:"52", code:"CGTN", name:"CGTN", type:"youtube", country:"asia", flag:"🇨🇳",
+    ytId:"UCgrNz-aDmcr2uuto8_DL2jg", color:"#CE1126",
+    program:"CGTN · Global", desc:"중국 국제방송 (영어)" },
+  { num:"53", code:"ABCA", name:"ABC News", type:"youtube", country:"asia", flag:"🇦🇺",
+    ytId:"UCVgO39Bk5sMo66-6o6Spn6Q", color:"#FFCC00",
+    program:"ABC News · Australia", desc:"호주 공영방송 뉴스" },
+
+  /* ========== 중동 ========== */
+  { num:"61", code:"AJE", name:"Al Jazeera English", type:"youtube", country:"mena", flag:"🇶🇦",
+    ytId:"UCNye-wNBqNL5ZzHSJj3l8Bg", color:"#F7A600",
+    program:"Al Jazeera · 24/7", desc:"카타르 국제 뉴스 (영어)" },
+  { num:"62", code:"TRT", name:"TRT World", type:"youtube", country:"mena", flag:"🇹🇷",
+    ytId:"UC7fWeaHhqgM4Ry-RMpM2YYw", color:"#C8102E",
+    program:"TRT World · English", desc:"터키 국제방송" },
+];
+
+const COUNTRIES = [
+  { key:"all",   label:"전체",   flag:"" },
+  { key:"kr",    label:"한국",   flag:"🇰🇷" },
+  { key:"us",    label:"미국",   flag:"🇺🇸" },
+  { key:"eu",    label:"유럽",   flag:"🇪🇺" },
+  { key:"asia",  label:"아시아", flag:"🌏" },
+  { key:"mena",  label:"중동",   flag:"🌍" },
+];
+
+/* 다시보기 */
+const REPLAY_CATEGORIES = [
+  { key:"all",   label:"전체" },
+  { key:"news",  label:"뉴스" },
+  { key:"enter", label:"예능·클립" },
+  { key:"doc",   label:"다큐·교양" },
+  { key:"world", label:"해외" },
+];
+
+const REPLAYS = [
+  // 한국 뉴스
+  { code:"R-KBS-N",  name:"KBS 뉴스",       ytChannelId:"UCcQTRi69dsVYHN3exePtZ1A", category:"news",  color:"#1E4FD6", desc:"최근 업로드" },
+  { code:"R-MBC-N",  name:"MBC 뉴스",       ytChannelId:"UCF4Wxdo3inmxP-Y59wXDsFw", category:"news",  color:"#FF3355", desc:"최근 업로드" },
+  { code:"R-SBS-N",  name:"SBS 뉴스",       ytChannelId:"UC2FW-PSQGcCCSNIDymKeB-A", category:"news",  color:"#FFBE2E", desc:"최근 업로드" },
+  { code:"R-JTBC",   name:"JTBC 뉴스룸",    ytChannelId:"UCsvn_Po0SmunchJYOWpOxMg", category:"news",  color:"#B84F9B", desc:"최근 업로드" },
+  { code:"R-YTN",    name:"YTN 뉴스 클립",  ytChannelId:"UChlgI3UHCOnwUGzWzbJ3H5w", category:"news",  color:"#C71E1D", desc:"최근 업로드" },
+
+  // 한국 예능·클립
+  { code:"R-MBC-E",  name:"MBC 엔터테인먼트",  ytChannelId:"UCiBr0bK06imaMbLc8sAEz0A", category:"enter", color:"#FF3355", desc:"예능 클립·하이라이트" },
+  { code:"R-KBSW",   name:"KBS WORLD TV",      ytChannelId:"UC5BMQOsAB8hKUyHu9KI6yig", category:"enter", color:"#0EA5E9", desc:"K-엔터 · 공식 클립" },
+
+  // 다큐
+  { code:"R-KBS-DOC", name:"KBS 다큐",        ytChannelId:"UCJVGAe6hMeI3_5Mx_1GCS0w", category:"doc",   color:"#10B981", desc:"KBS 다큐 아카이브" },
+  { code:"R-EBS-DOC", name:"EBS 다큐프라임",  ytChannelId:"UCzfT6j-VKJLMiqiLxuvVOSw", category:"doc",   color:"#059669", desc:"EBS 다큐" },
+
+  // 해외 뉴스 다시보기
+  { code:"R-CNN",    name:"CNN",             ytChannelId:"UCupvZG-5ko_eiXAupbDfxWw", category:"world", color:"#CC0000", desc:"미국 뉴스 · 최근 업로드" },
+  { code:"R-BBC",    name:"BBC News",        ytChannelId:"UC16niRr50-MSBwiO3YDb3RA", category:"world", color:"#BB1919", desc:"영국 뉴스 · 최근 업로드" },
+  { code:"R-AJE",    name:"Al Jazeera English", ytChannelId:"UCNye-wNBqNL5ZzHSJj3l8Bg", category:"world", color:"#F7A600", desc:"국제 뉴스 · 최근 업로드" },
+  { code:"R-DW",     name:"DW News",         ytChannelId:"UCknLrEdhRCp1aegoMqRaCZg", category:"world", color:"#002D5B", desc:"독일 뉴스 · 최근 업로드" },
+  { code:"R-F24",    name:"France 24",       ytChannelId:"UCQfwfsi5VrQ8yKZ-UWmAEFg", category:"world", color:"#0056A4", desc:"프랑스 뉴스 · 최근 업로드" },
+];
+
+const DEMO_SCHEDULE = {
+  "KBS1":[["06:00","KBS 뉴스광장"],["09:00","인간극장"],["12:00","KBS 뉴스 12"],["19:00","KBS 뉴스 7"],["21:00","KBS 뉴스 9"]],
+  "KBS2":[["07:00","굿모닝 대한민국"],["10:00","여유만만"],["17:30","2TV 생생정보"],["22:00","월화 드라마"]],
+  "MBC": [["06:00","MBC 뉴스투데이"],["12:00","MBC 뉴스"],["19:30","MBC 뉴스데스크"],["22:00","PD수첩"]],
+  "SBS": [["06:00","SBS 모닝와이드"],["12:00","SBS 뉴스"],["20:00","SBS 8 뉴스"],["22:00","그것이 알고싶다"]],
+  "EBS1":[["07:00","EBS 뉴스"],["10:00","지식채널e"],["20:45","다큐멘터리"],["22:00","세계테마기행"]],
+  "EBS2":[["07:00","뽀롱뽀롱 뽀로로"],["14:00","보니하니"],["17:00","딩동댕 유치원"]],
+  "KBS-N":[["06:00","뉴스광장"],["12:00","뉴스 12"],["19:00","뉴스 7"],["21:00","뉴스 9"]],
+  "MBC-N":[["06:00","뉴스투데이"],["12:00","MBC 뉴스"],["19:30","뉴스데스크"],["22:00","이브닝 뉴스"]],
+  "SBS-N":[["06:00","모닝와이드"],["12:00","SBS 뉴스"],["20:00","SBS 8 뉴스"],["23:00","나이트라인"]],
+  "YTN": [["06:00","뉴스 출발"],["12:00","뉴스N이슈"],["20:00","뉴스나이트"]],
+  "YNA": [["07:00","아침뉴스"],["13:00","뉴스 1번지"],["22:00","뉴스워치"]],
+  "JTBC":[["06:30","아침&"],["18:30","사건반장"],["20:00","JTBC 뉴스룸"]],
+  "MBN": [["07:00","뉴스와이드"],["20:00","MBN 뉴스 8"],["22:00","뉴스파이터"]],
+  "TVC": [["07:00","뉴스퍼레이드"],["17:00","시사쇼"],["20:00","뉴스 9"]],
+  "KBSW":[["09:00","K-Drama Morning"],["14:00","Music Bank"],["21:00","K-Drama Prime"]],
+  "AR":  [["08:00","Arirang News"],["15:00","Korea Today"],["19:00","Pops in Seoul"]],
+  "CNN": [["00:00","CNN Newsroom"],["09:00","CNN This Morning"],["21:00","Anderson Cooper 360"]],
+  "FOX": [["06:00","Fox & Friends"],["18:00","Special Report"],["20:00","Tucker Carlson"]],
+  "NBC": [["00:00","NBC News Now"],["12:00","Top Story"],["19:00","NBC Nightly News"]],
+  "BBG": [["00:00","Bloomberg Markets"],["09:00","Surveillance"],["16:00","Balance of Power"]],
+  "BBC": [["00:00","BBC News"],["06:00","Breakfast"],["22:00","Newsnight"]],
+  "SKY": [["00:00","Sky News Tonight"],["06:00","Sunrise"],["22:00","The News Hour"]],
+  "DW":  [["00:00","DW News"],["12:00","News Bulletin"],["21:00","The Day"]],
+  "F24": [["00:00","Live News"],["12:00","France 24 News"],["22:00","The Debate"]],
+  "EUR": [["00:00","Europe Today"],["12:00","Good Morning Europe"],["20:00","Europe News"]],
+  "NHK": [["00:00","NEWSLINE"],["10:00","Asia 3-minute"],["21:00","Tokyo Eye"]],
+  "CGTN":[["00:00","World Today"],["12:00","China 24"],["21:00","Global Business"]],
+  "ABCA":[["07:00","News Breakfast"],["19:00","ABC News"],["22:30","7.30"]],
+  "AJE": [["00:00","Newshour"],["12:00","Inside Story"],["22:00","Al Jazeera World"]],
+  "TRT": [["00:00","Breaking News"],["12:00","Strait Talk"],["22:00","Roundtable"]],
+};
+
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+
+let currentCountry = "all";
+let currentReplayCat = "all";
+let currentIdx = CHANNELS.findIndex(c => c.type === "youtube");
+
+/* ==========================
+   라이브 렌더
+   ========================== */
+function filteredChannels(){
+  if (currentCountry === "all") return CHANNELS.map((c, i) => ({...c, _i:i}));
+  return CHANNELS.map((c, i) => ({...c, _i:i})).filter(c => c.country === currentCountry);
+}
+
+function renderLiveFilter(){
+  const wrap = $("#filter-live");
+  wrap.innerHTML = COUNTRIES.map(cat => {
+    const count = cat.key === "all" ? CHANNELS.length : CHANNELS.filter(c => c.country === cat.key).length;
+    return `<button class="chip ${cat.key===currentCountry?'is-active':''}" data-cat="${cat.key}">
+      ${cat.flag?`<span class="flag">${cat.flag}</span>`:""}
+      ${cat.label}<span class="count">${count}</span>
+    </button>`;
+  }).join("");
+  $$(".chip", wrap).forEach(chip => {
+    chip.addEventListener("click", () => {
+      currentCountry = chip.dataset.cat;
+      renderLiveFilter();
+      renderChannels();
+    });
+  });
+}
+
+function renderChannels(){
+  const wrap = $("#channels");
+  const items = filteredChannels();
+  wrap.innerHTML = items.map(c => {
+    const tag = c.type === "youtube"
+      ? `<span class="live-tag"><span class="dot"></span>LIVE</span>`
+      : `<span class="link-tag" title="공식 플레이어"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>`;
+    return `
+      <li class="card ${c._i===currentIdx?'is-playing':''}" data-idx="${c._i}">
+        <div class="thumb" style="background:linear-gradient(135deg, ${c.color}38, ${c.color}14)">
+          <span class="thumb-flag">${c.flag}</span>
+          ${tag}
+          <span class="thumb-label">${c.code}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-top">
+            <span class="ch-num">CH ${c.num}</span>
+            <span class="ch-name">${c.name}</span>
+          </div>
+          <div class="program-title">${c.program}</div>
+          <div class="program-meta">${c.desc}</div>
+        </div>
+      </li>`;
+  }).join("");
+
+  $$(".card", wrap).forEach(card => {
+    card.addEventListener("click", () => playChannel(+card.dataset.idx));
+  });
+}
+
+/* ==========================
+   다시보기
+   ========================== */
+function filteredReplays(){
+  if (currentReplayCat === "all") return REPLAYS.map((r, i) => ({...r, _i:i}));
+  return REPLAYS.map((r, i) => ({...r, _i:i})).filter(r => r.category === currentReplayCat);
+}
+
+function renderReplayFilter(){
+  const wrap = $("#filter-replay");
+  wrap.innerHTML = REPLAY_CATEGORIES.map(cat => {
+    const count = cat.key === "all" ? REPLAYS.length : REPLAYS.filter(r => r.category === cat.key).length;
+    return `<button class="chip ${cat.key===currentReplayCat?'is-active':''}" data-cat="${cat.key}">${cat.label}<span class="count">${count}</span></button>`;
+  }).join("");
+  $$(".chip", wrap).forEach(chip => {
+    chip.addEventListener("click", () => {
+      currentReplayCat = chip.dataset.cat;
+      renderReplayFilter();
+      renderReplays();
+    });
+  });
+}
+
+function renderReplays(){
+  const wrap = $("#replays");
+  const items = filteredReplays();
+  wrap.innerHTML = items.map(r => `
+    <li class="card" data-replay-idx="${r._i}">
+      <div class="thumb" style="background:linear-gradient(135deg, ${r.color}38, ${r.color}14)">
+        <span class="replay-tag">REPLAY</span>
+        <span class="thumb-label">VOD</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="ch-name">${r.name}</span>
+        </div>
+        <div class="program-meta">${r.desc}</div>
+      </div>
+    </li>`).join("");
+
+  $$(".card", wrap).forEach(card => {
+    card.addEventListener("click", () => playReplay(+card.dataset.replayIdx));
+  });
+}
+
+function renderGuide(){
+  const wrap = $("#guide-grid");
+  wrap.innerHTML = CHANNELS.map(c => {
+    const sched = DEMO_SCHEDULE[c.code] || [];
+    const nowIdx = findNowIndex(sched);
+    return `
+      <div class="guide-ch">
+        <div class="guide-ch-head">
+          <span class="guide-ch-num">CH ${c.num}</span>
+          <span class="guide-ch-name">${c.flag} ${c.name}</span>
+        </div>
+        <ul class="schedule-list">
+          ${sched.map(([t, title], i) => `
+            <li class="sch-row ${i===nowIdx?'is-now':''}">
+              <span class="sch-time">${t}</span>
+              <span class="sch-title">${title}</span>
+              <span class="sch-now">${i===nowIdx?'ON AIR':''}</span>
+            </li>`).join("")}
+        </ul>
+      </div>`;
+  }).join("");
+}
+
+function findNowIndex(sched){
+  if (!sched.length) return -1;
+  const now = new Date();
+  const cur = now.getHours()*60 + now.getMinutes();
+  let idx = -1;
+  sched.forEach(([t], i) => {
+    const [h, m] = t.split(":").map(Number);
+    if (h*60 + m <= cur) idx = i;
+  });
+  return idx;
+}
+
+/* ==========================
+   재생
+   ========================== */
+function liveEmbedUrl(ytId){
+  return `https://www.youtube.com/embed/live_stream?channel=${ytId}&autoplay=1`;
+}
+function uploadsPlaylistId(ytChannelId){
+  return "UU" + ytChannelId.slice(2);
+}
+function replayEmbedUrl(ytChannelId){
+  const pid = uploadsPlaylistId(ytChannelId);
+  return `https://www.youtube.com/embed/videoseries?list=${pid}&autoplay=1`;
+}
+
+function playChannel(idx){
+  const c = CHANNELS[idx];
+  if (c.type === "link"){
+    window.open(c.url, "_blank", "noopener,noreferrer");
+    return;
+  }
+  currentIdx = idx;
+  $$(".card", $("#channels")).forEach(el => el.classList.toggle("is-playing", +el.dataset.idx === idx));
+
+  if (isDesktop()){
+    $("#stage-program").textContent = c.program;
+    $("#stage-chan").textContent = `${c.flag} CH ${c.num} · ${c.name}`;
+    $("#stage-frame").innerHTML = `<iframe src="${liveEmbedUrl(c.ytId)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    openMobilePlayer({
+      title:`${c.flag} ${c.name}`,
+      program:c.program,
+      sub:`CH ${c.num} · ${c.desc}`,
+      src:liveEmbedUrl(c.ytId),
+      isLive:true,
+      scheduleCode:c.code,
+    });
+  }
+}
+
+function playReplay(idx){
+  const r = REPLAYS[idx];
+  if (isDesktop()){
+    $("#stage-program").textContent = r.name;
+    $("#stage-chan").textContent = `REPLAY · ${r.desc}`;
+    $("#stage-frame").innerHTML = `<iframe src="${replayEmbedUrl(r.ytChannelId)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    openMobilePlayer({
+      title:r.name,
+      program:r.name,
+      sub:`REPLAY · ${r.desc}`,
+      src:replayEmbedUrl(r.ytChannelId),
+      isLive:false,
+    });
+  }
+}
+
+function openMobilePlayer({title, program, sub, src, isLive, scheduleCode}){
+  $("#player-title").textContent = title;
+  $("#player-program").textContent = program;
+  $("#player-sub").textContent = sub;
+  $("#player-frame").innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  $("#player-pill").style.display = isLive ? "" : "none";
+
+  if (isLive && scheduleCode){
+    $("#player-schedule-head").style.display = "";
+    const sched = DEMO_SCHEDULE[scheduleCode] || [];
+    const nowIdx = findNowIndex(sched);
+    $("#player-schedule").innerHTML = sched.map(([t, titleRow], i) => `
+      <li class="sch-row ${i===nowIdx?'is-now':''}">
+        <span class="sch-time">${t}</span>
+        <span class="sch-title">${titleRow}</span>
+        <span class="sch-now">${i===nowIdx?'ON AIR':''}</span>
+      </li>`).join("");
+  } else {
+    $("#player-schedule-head").style.display = "none";
+    $("#player-schedule").innerHTML = "";
+  }
+  $("#player-overlay").hidden = false;
+}
+
+function closePlayer(){
+  $("#player-overlay").hidden = true;
+  $("#player-frame").innerHTML = "";
+}
+$("#back-btn").addEventListener("click", closePlayer);
+
+const VIEWS = { now:"view-now", guide:"view-guide", replay:"view-replay", more:"view-more" };
+$$(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    const name = tab.dataset.tab;
+    $$(".tab").forEach(t => t.classList.toggle("is-active", t===tab));
+    Object.entries(VIEWS).forEach(([k, id]) => { $("#"+id).hidden = (k !== name); });
+    closePlayer();
+  });
+});
+
+function tickClock(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  $("#clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+(function setToday(){
+  const d = new Date();
+  $("#today-label").textContent = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
+})();
+
+function isDesktop(){ return window.matchMedia("(min-width: 1100px)").matches; }
+function handleResize(){
+  if (isDesktop()){
+    closePlayer();
+    if (!$("#stage-frame").querySelector("iframe")) playChannel(currentIdx);
+  } else {
+    $("#stage-frame").innerHTML = "";
+  }
+}
+window.addEventListener("resize", handleResize);
+
+renderLiveFilter();
+renderChannels();
+renderReplayFilter();
+renderReplays();
+renderGuide();
+if (isDesktop()) playChannel(currentIdx);
+</script>
+</body>
+</html>
