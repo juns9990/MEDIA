@@ -1,7 +1,7 @@
-// ON AIR Service Worker v0.11.0
+// ON AIR Service Worker v0.12.0
 // Minimal PWA service worker for installability
 
-const CACHE_NAME = "onair-v0.11.0";
+const CACHE_NAME = "onair-v0.12.0";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
