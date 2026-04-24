@@ -623,7 +623,7 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.7.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.7.1</div>
   </div>
 </div>
 
@@ -693,7 +693,7 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.7.0</span>
+        <span class="section-meta">v0.7.1</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
@@ -709,7 +709,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.7.0</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.7.1</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -863,39 +863,39 @@ const CHANNELS = [
     ytId:"UC7fWeaHhqgM4Ry-RMpM2YYw", color:"#C8102E",
     program:"TRT World · English", desc:"터키 국제방송" },
 
-  /* ========== 애니메이션 · 어린이 🧸 ========== */
-  { num:"71", code:"PORORO", name:"뽀로로", type:"youtube", country:"anime", flag:"🐧",
+  /* ========== 애니메이션 · 어린이 🧸 (VOD 연속재생) ========== */
+  { num:"71", code:"PORORO", name:"뽀로로", type:"playlist", country:"anime", flag:"🐧",
     ytId:"UCPUeGC_AL-OnDQORKhRm6iA", color:"#60A5FA",
-    program:"뽀롱뽀롱 뽀로로", desc:"뽀통령 공식 채널" },
-  { num:"72", code:"PINK", name:"핑크퐁", type:"youtube", country:"anime", flag:"🦈",
+    program:"뽀롱뽀롱 뽀로로", desc:"공식 채널 · 연속재생" },
+  { num:"72", code:"PINK", name:"핑크퐁", type:"playlist", country:"anime", flag:"🦈",
     ytId:"UCqXwKu6dKobXEQFhdKtiJLQ", color:"#EC4899",
-    program:"핑크퐁 · 아기상어", desc:"인기 동요·동화" },
-  { num:"73", code:"TAYO", name:"꼬마버스 타요", type:"youtube", country:"anime", flag:"🚌",
+    program:"핑크퐁 · 아기상어", desc:"공식 채널 · 연속재생" },
+  { num:"73", code:"TAYO", name:"꼬마버스 타요", type:"playlist", country:"anime", flag:"🚌",
     ytId:"UCsEcR23ynGeg0S09t3hfu5A", color:"#3B82F6",
-    program:"꼬마버스 타요", desc:"EBS 인기 어린이 애니" },
-  { num:"74", code:"ROBOCAR", name:"로보카 폴리", type:"youtube", country:"anime", flag:"🚓",
+    program:"꼬마버스 타요", desc:"공식 채널 · 연속재생" },
+  { num:"74", code:"ROBOCAR", name:"로보카 폴리", type:"playlist", country:"anime", flag:"🚓",
     ytId:"UCfS7o_zIGA3bjbpAcCVWtyQ", color:"#EF4444",
-    program:"로보카 폴리 공식", desc:"변신 로봇 구조대" },
-  { num:"75", code:"LARVA", name:"라바", type:"youtube", country:"anime", flag:"🐛",
+    program:"로보카 폴리", desc:"공식 채널 · 연속재생" },
+  { num:"75", code:"LARVA", name:"라바", type:"playlist", country:"anime", flag:"🐛",
     ytId:"UCb9eVKZL33NT5CAiwyHHqRA", color:"#FBBF24",
-    program:"라바(Larva)", desc:"유쾌한 애벌레 코미디" },
-  { num:"76", code:"TITIPO", name:"띠띠뽀", type:"youtube", country:"anime", flag:"🚂",
+    program:"라바(Larva)", desc:"공식 채널 · 연속재생" },
+  { num:"76", code:"TITIPO", name:"띠띠뽀", type:"playlist", country:"anime", flag:"🚂",
     ytId:"UCbsFHbDM0_W9cs-JPHjVc9w", color:"#22C55E",
-    program:"띠띠뽀 띠띠뽀", desc:"꼬마기차 공식 채널" },
+    program:"띠띠뽀 띠띠뽀", desc:"공식 채널 · 연속재생" },
 
-  /* ========== 애니메이션 · 성인 🎌 ========== */
-  { num:"81", code:"CRUN", name:"Crunchyroll", type:"youtube", country:"anime", flag:"🎌",
+  /* ========== 애니메이션 · 성인 🎌 (VOD 연속재생) ========== */
+  { num:"81", code:"CRUN", name:"Crunchyroll", type:"playlist", country:"anime", flag:"🎌",
     ytId:"UC6pGDc4bFGD1_36IKv3FnYg", color:"#F47521",
-    program:"Crunchyroll Collection", desc:"공식 애니 클립·트레일러" },
-  { num:"82", code:"CRDUB", name:"Crunchyroll Dubs", type:"youtube", country:"anime", flag:"🎌",
+    program:"Crunchyroll Collection", desc:"공식 · 연속재생" },
+  { num:"82", code:"CRDUB", name:"Crunchyroll Dubs", type:"playlist", country:"anime", flag:"🎌",
     ytId:"UCvC4D8onUfXzvjTOM-dBfEA", color:"#F47521",
-    program:"Crunchyroll Dubs", desc:"영어 더빙 애니" },
-  { num:"83", code:"TOEI", name:"Toei Animation", type:"youtube", country:"anime", flag:"🇯🇵",
+    program:"Crunchyroll Dubs", desc:"영어 더빙 · 연속재생" },
+  { num:"83", code:"TOEI", name:"Toei Animation", type:"playlist", country:"anime", flag:"🇯🇵",
     ytId:"UCHqGmfymjrNI3WQQs1bd_hw", color:"#1E40AF",
-    program:"Toei Animation 공식", desc:"드래곤볼·원피스 제작사" },
-  { num:"84", code:"MUSE", name:"Muse Asia", type:"youtube", country:"anime", flag:"🎌",
+    program:"Toei Animation 공식", desc:"드래곤볼·원피스 · 연속재생" },
+  { num:"84", code:"MUSE", name:"Muse Asia", type:"playlist", country:"anime", flag:"🎌",
     ytId:"UCQ0X-VJamyIhKQZmtCHPeuQ", color:"#8B5CF6",
-    program:"Muse Asia 공식", desc:"무료 애니 정식 스트리밍" },
+    program:"Muse Asia", desc:"무료 정식 애니 · 연속재생" },
 ];
 
 const COUNTRIES = [
@@ -1025,9 +1025,14 @@ function renderChannels(){
   const wrap = $("#channels");
   const items = filteredChannels();
   wrap.innerHTML = items.map(c => {
-    const tag = c.type === "youtube"
-      ? `<span class="live-tag"><span class="dot"></span>LIVE</span>`
-      : `<span class="link-tag" title="공식 플레이어"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>`;
+    let tag;
+    if (c.type === "youtube") {
+      tag = `<span class="live-tag"><span class="dot"></span>LIVE</span>`;
+    } else if (c.type === "playlist") {
+      tag = `<span class="replay-tag">▶ PLAY</span>`;
+    } else {
+      tag = `<span class="link-tag" title="공식 플레이어"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>`;
+    }
     return `
       <li class="card ${c._i===currentIdx?'is-playing':''}" data-idx="${c._i}">
         <div class="thumb" style="background:linear-gradient(135deg, ${c.color}38, ${c.color}14)">
@@ -1154,17 +1159,21 @@ function playChannel(idx){
   currentIdx = idx;
   $$(".card", $("#channels")).forEach(el => el.classList.toggle("is-playing", +el.dataset.idx === idx));
 
+  // 타입별 URL 결정: youtube=라이브, playlist=연속재생
+  const src = c.type === "playlist" ? replayEmbedUrl(c.ytId) : liveEmbedUrl(c.ytId);
+  const isLive = c.type === "youtube";
+
   if (isDesktop()){
     $("#stage-program").textContent = c.program;
     $("#stage-chan").textContent = `${c.flag} CH ${c.num} · ${c.name}`;
-    $("#stage-frame").innerHTML = `<iframe src="${liveEmbedUrl(c.ytId)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    $("#stage-frame").innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
   } else {
     openMobilePlayer({
       title:`${c.flag} ${c.name}`,
       program:c.program,
       sub:`CH ${c.num} · ${c.desc}`,
-      src:liveEmbedUrl(c.ytId),
-      isLive:true,
+      src:src,
+      isLive:isLive,
       scheduleCode:c.code,
     });
   }
@@ -1337,9 +1346,14 @@ function initTVMode() {
     var html = "";
     for (var i = 0; i < CHANNELS.length; i++) {
       var c = CHANNELS[i];
-      var tag = c.type === "youtube"
-        ? '<span class="tv-card-live">LIVE</span>'
-        : '<span class="tv-card-link">↗</span>';
+      var tag;
+      if (c.type === "youtube") {
+        tag = '<span class="tv-card-live">LIVE</span>';
+      } else if (c.type === "playlist") {
+        tag = '<span class="tv-card-live" style="background:#8B5CF6">PLAY</span>';
+      } else {
+        tag = '<span class="tv-card-link">↗</span>';
+      }
       html += '<div class="tv-card" data-idx="' + i + '" id="tv-card-' + i + '">';
       html +=   '<div class="tv-card-thumb" style="background:linear-gradient(135deg,' + c.color + '38,' + c.color + '14)">';
       html +=     '<span class="tv-card-flag">' + c.flag + '</span>';
@@ -1406,8 +1420,14 @@ function initTVMode() {
       return;
     }
 
-    // 구형 TV 호환을 위해 nocookie 도메인 + 최소 파라미터
-    var src = "https://www.youtube-nocookie.com/embed/live_stream?channel=" + c.ytId + "&autoplay=1&playsinline=1";
+    // playlist 타입 = VOD 연속재생, youtube 타입 = 라이브
+    var src;
+    if (c.type === "playlist") {
+      var pid = "UU" + c.ytId.slice(2);
+      src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + pid + "&autoplay=1&playsinline=1";
+    } else {
+      src = "https://www.youtube-nocookie.com/embed/live_stream?channel=" + c.ytId + "&autoplay=1&playsinline=1";
+    }
     player.innerHTML = '<iframe src="' + src + '" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
 
     playingIdx = idx;
