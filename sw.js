@@ -1,7 +1,5 @@
-// ON AIR Service Worker v0.13.0
-// Minimal PWA service worker for installability
-
-const CACHE_NAME = "onair-v0.13.0";
+// ON AIR Service Worker v0.13.2
+const CACHE_NAME = "onair-v0.13.2";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
@@ -12,9 +10,7 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
-      .catch(() => {})
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(() => {})
   );
   self.skipWaiting();
 });
