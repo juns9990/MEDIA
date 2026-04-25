@@ -26,7 +26,7 @@
 
 <style>
   /* ==========================
-     ON AIR v0.13.0 — 80년대 브라운관 TV
+     ON AIR v0.13.2 — 80년대 브라운관 TV
      Sony Trinitron · 금성 · 삼성 황금기
      ========================== */
   :root{
@@ -388,6 +388,51 @@
     display:flex;align-items:center;justify-content:space-between;
     position:relative;z-index:1;
   }
+
+  /* ==========================================
+     ON AIR 스튜디오 사인 (v0.13.2 추가)
+     80년대 방송국 스튜디오 문 위에 걸리던 사인
+     ========================================== */
+  .on-air-sign{
+    position:absolute;
+    top:10px;right:16px;
+    display:inline-flex;align-items:center;gap:10px;
+    padding:6px 12px 6px 14px;
+    background:
+      linear-gradient(180deg, #1A0A08 0%, #2A1410 50%, #1A0A08 100%);
+    border:1px solid var(--wood-light);
+    border-radius:4px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,180,100,0.15),
+      inset 0 -1px 0 rgba(0,0,0,0.4),
+      0 2px 6px rgba(0,0,0,0.6),
+      0 0 12px rgba(63,229,111,0.15);
+    z-index:2;
+  }
+  .on-air-sign-text{
+    font-family:var(--display);
+    font-size:11px;
+    letter-spacing:0.26em;
+    color:#D9C9A0;
+    text-shadow:
+      0 0 4px rgba(63,229,111,0.4),
+      0 1px 0 rgba(0,0,0,0.8);
+    line-height:1;
+  }
+  .on-air-sign-led{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--led-green);
+    box-shadow:
+      0 0 4px var(--led-green),
+      0 0 10px rgba(63,229,111,0.8),
+      0 0 16px rgba(63,229,111,0.4),
+      inset 0 -1px 2px rgba(0,0,0,0.3);
+    animation:ledPulseSlow 1.8s ease-in-out infinite;
+  }
+  @keyframes ledPulseSlow{
+    0%,100%{opacity:1;box-shadow:0 0 4px var(--led-green),0 0 10px rgba(63,229,111,0.8),0 0 16px rgba(63,229,111,0.4)}
+    50%{opacity:0.7;box-shadow:0 0 2px var(--led-green),0 0 5px rgba(63,229,111,0.5)}
+  }
   .brand-plate{
     font-family:var(--display);
     font-size:14px;
@@ -498,6 +543,31 @@
   .chip .flag{font-size:11px;line-height:1}
 
   /* === 채널 카드 === */
+  /* 채널 섹션 서브헤더 (v0.13.2) */
+  .ch-subheader{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:4px 4px 6px;
+    margin-top:4px;
+    border-bottom:2px solid var(--ink);
+    margin-bottom:2px;
+  }
+  .ch-subheader-title{
+    font-family:var(--display);
+    font-size:14px;
+    letter-spacing:0.26em;
+    color:var(--ink);
+  }
+  .ch-subheader-count{
+    font-family:var(--crt);
+    font-size:16px;
+    color:var(--ink-2);
+    background:#F2E8CC;
+    padding:1px 8px;
+    border-radius:2px;
+    border:1px solid var(--beige-dark);
+    letter-spacing:0.06em;
+  }
+
   .channels{
     display:grid;
     grid-template-columns:1fr;
@@ -566,10 +636,9 @@
     display:flex;align-items:center;justify-content:center;
     background:var(--led-amber);color:var(--ink);
     border-radius:1px;
-    z-index:1;font-weight:700;font-size:9px;
+    z-index:1;font-weight:700;font-size:10px;
+    line-height:1;
   }
-  .link-tag svg{display:none}
-  .link-tag::before{content:"↗";font-size:10px}
   .replay-tag{
     position:absolute;top:1px;right:2px;
     padding:0 3px;
@@ -655,6 +724,7 @@
     border-bottom:1px dashed var(--beige-dark);
     font-size:13px;
   }
+  .more-row.clickable{cursor:pointer}
   .more-row .val{color:var(--ink-3);font-family:var(--mono);font-size:10px;letter-spacing:0.08em}
 
   .footer-credit{
@@ -727,6 +797,102 @@
     .channels{grid-template-columns:1fr 1fr;gap:0 16px}
     .card{padding:10px 4px}
     .ch-name{font-size:14px}
+    .footer-credit{display:none}
+  }
+
+  /* ============= 대형 모니터 ============= */
+  @media (min-width: 1600px){
+    .app{grid-template-columns:600px 1fr}
+    .tv-set{padding:28px 24px}
+    .tv-body{grid-template-columns:1fr 128px;gap:18px}
+    .crt-info-title{font-size:44px}
+    .ctrl-brand{font-size:11px}
+    .ch-counter-num{font-size:28px}
+    .dial{width:80px;height:80px}
+    .dial::before{height:18px}
+    .on-air-sign{top:14px;right:24px;padding:8px 16px 8px 18px}
+    .on-air-sign-text{font-size:13px}
+    .on-air-sign-led{width:10px;height:10px}
+    .brand-plate{font-size:18px}
+    .clock-plate{font-size:22px;padding:3px 12px}
+    .section-title{font-size:38px}
+    .view{padding:0 32px 24px}
+  }
+
+  /* ============= 스마트 TV / 초대형 화면 ============= */
+  @media (min-width: 1920px){
+    .app{grid-template-columns:720px 1fr}
+    .tv-set{padding:36px 32px}
+    .tv-body{grid-template-columns:1fr 150px;gap:22px}
+    .crt-info-title{font-size:56px}
+    .ch-counter-num{font-size:34px}
+    .dial{width:96px;height:96px}
+    .dial::before{height:22px}
+    .on-air-sign-text{font-size:15px}
+    .on-air-sign-led{width:12px;height:12px}
+    .brand-plate{font-size:22px}
+    .clock-plate{font-size:26px;padding:4px 16px}
+    .section-title{font-size:48px}
+    .ch-subheader-title{font-size:18px}
+    .card{padding:14px 6px}
+    .ch-name{font-size:17px}
+    .thumb{width:60px;height:44px}
+  }
+
+  /* ============= 모바일 가로 (눕혔을 때) ============= */
+  @media (max-width: 1099px) and (orientation: landscape) and (max-height: 600px){
+    .app{
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      grid-template-rows:1fr var(--tabbar-h);
+      grid-template-areas:
+        "tv main"
+        "tv tabs";
+      height:100dvh;
+    }
+    .tv-set{
+      grid-area:tv;
+      border-right:3px solid var(--wood-bezel);
+      border-bottom:none;
+      padding:10px 10px 10px 12px;
+      display:flex;flex-direction:column;
+      min-height:0;
+    }
+    .tv-body{
+      flex:1;min-height:0;
+      grid-template-columns:1fr 72px;
+      gap:8px;
+    }
+    .crt-frame{
+      display:flex;flex-direction:column;
+      padding:8px;
+    }
+    .crt-screen{
+      aspect-ratio:auto;
+      flex:1;
+      height:100%;
+    }
+    .ctrl-panel{
+      padding:6px 4px;gap:4px;
+    }
+    .dial{width:50px;height:50px}
+    .dial::before{height:10px}
+    .ch-counter-num{font-size:18px}
+    .ch-btn{padding:3px 0;font-size:9px}
+    .tv-foot{margin-top:6px;padding-top:4px}
+    .brand-plate{font-size:11px}
+    .brand-plate-sub{font-size:6px}
+    .clock-plate{font-size:14px;padding:1px 6px}
+    .on-air-sign{top:6px;right:10px;padding:4px 8px 4px 10px}
+    .on-air-sign-text{font-size:9px;letter-spacing:0.22em}
+    .on-air-sign-led{width:6px;height:6px}
+    .main{grid-area:main;border-top:none;border-left:3px solid var(--wood-bezel)}
+    .tabbar{grid-area:tabs}
+    .view{padding:0 10px 12px}
+    .section-head{padding:10px 4px 6px}
+    .section-title{font-size:18px}
+    .filter{top:38px;padding:4px 4px 8px}
+    .chip{padding:4px 8px;font-size:9px}
     .footer-credit{display:none}
   }
 
@@ -831,16 +997,22 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.13.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.13.2</div>
   </div>
 </div>
 
 <div class="app" id="app">
 
   <!-- ==========================
-       브라운관 TV 본체 — v0.13.0
+       브라운관 TV 본체 — v0.13.2
        ========================== -->
   <div class="tv-set">
+    <!-- ON AIR 스튜디오 사인 -->
+    <div class="on-air-sign" role="status" aria-label="방송중">
+      <span class="on-air-sign-text">ON AIR</span>
+      <span class="on-air-sign-led"></span>
+    </div>
+
     <div class="tv-body">
       <!-- CRT 스크린 -->
       <div class="crt-frame">
@@ -910,6 +1082,10 @@
         <span class="section-meta" id="viewer-meta">55 CH</span>
       </div>
       <div class="filter" id="filter-live"></div>
+      <div class="ch-subheader">
+        <span class="ch-subheader-title">CHANNELS</span>
+        <span class="ch-subheader-count" id="ch-subheader-count">55</span>
+      </div>
       <ul class="channels" id="channels"></ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -956,14 +1132,14 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.13.0</span>
+        <span class="section-meta">v0.13.2</span>
       </div>
       <ul class="more-list">
-        <li class="more-row" id="install-row" style="cursor:pointer">
+        <li class="more-row clickable" id="install-row">
           <span>📱 앱으로 설치하기</span>
           <span class="val" id="install-status" style="color:var(--accent);font-weight:700">설치</span>
         </li>
-        <li class="more-row" id="tv-mode-row" style="cursor:pointer">
+        <li class="more-row clickable" id="tv-mode-row">
           <span>📺 TV 모드로 열기</span>
           <span class="val" style="color:var(--accent);font-weight:700">열기</span>
         </li>
@@ -972,7 +1148,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.13.0</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.13.2</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -1260,12 +1436,9 @@ const DEMO_SCHEDULE = {
   "YTN": [["06:00","뉴스 출발"],["12:00","뉴스N이슈"],["20:00","뉴스나이트"]],
   "YNA": [["07:00","아침뉴스"],["13:00","뉴스 1번지"],["22:00","뉴스워치"]],
   "JTBC":[["06:30","아침&"],["18:30","사건반장"],["20:00","JTBC 뉴스룸"]],
-  "MBN": [["07:00","뉴스와이드"],["20:00","MBN 뉴스 8"],["22:00","뉴스파이터"]],
-  "TVC": [["07:00","뉴스퍼레이드"],["17:00","시사쇼"],["20:00","뉴스 9"]],
   "KBSW":[["09:00","K-Drama Morning"],["14:00","Music Bank"],["21:00","K-Drama Prime"]],
   "AR":  [["08:00","Arirang News"],["15:00","Korea Today"],["19:00","Pops in Seoul"]],
   "CNN": [["00:00","CNN Newsroom"],["09:00","CNN This Morning"],["21:00","Anderson Cooper 360"]],
-  "FOX": [["06:00","Fox & Friends"],["18:00","Special Report"],["20:00","Tucker Carlson"]],
   "NBC": [["00:00","NBC News Now"],["12:00","Top Story"],["19:00","NBC Nightly News"]],
   "BBG": [["00:00","Bloomberg Markets"],["09:00","Surveillance"],["16:00","Balance of Power"]],
   "BBC": [["00:00","BBC News"],["06:00","Breakfast"],["22:00","Newsnight"]],
@@ -1273,9 +1446,6 @@ const DEMO_SCHEDULE = {
   "DW":  [["00:00","DW News"],["12:00","News Bulletin"],["21:00","The Day"]],
   "F24": [["00:00","Live News"],["12:00","France 24 News"],["22:00","The Debate"]],
   "EUR": [["00:00","Europe Today"],["12:00","Good Morning Europe"],["20:00","Europe News"]],
-  "NHK": [["00:00","NEWSLINE"],["10:00","Asia 3-minute"],["21:00","Tokyo Eye"]],
-  "CGTN":[["00:00","World Today"],["12:00","China 24"],["21:00","Global Business"]],
-  "ABCA":[["07:00","News Breakfast"],["19:00","ABC News"],["22:30","7.30"]],
   "AJE": [["00:00","Newshour"],["12:00","Inside Story"],["22:00","Al Jazeera World"]],
   "TRT": [["00:00","Breaking News"],["12:00","Strait Talk"],["22:00","Roundtable"]],
 };
@@ -1329,6 +1499,9 @@ function renderLiveFilter(){
 function renderChannels(){
   const wrap = $("#channels");
   const items = filteredChannels();
+  // v0.13.2: 채널 서브헤더 카운트 업데이트
+  const countEl = $("#ch-subheader-count");
+  if (countEl) countEl.textContent = items.length;
   wrap.innerHTML = items.map(c => {
     let tag;
     if (c.type === "youtube" || c.type === "youtube_video") {
@@ -1336,7 +1509,7 @@ function renderChannels(){
     } else if (c.type === "playlist") {
       tag = `<span class="replay-tag">▶ VOD</span>`;
     } else {
-      tag = `<span class="link-tag" title="공식 플레이어"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>`;
+      tag = `<span class="link-tag" title="공식 플레이어">↗</span>`;
     }
     return `
       <li class="card ${c._i===currentIdx?'is-playing':''}" data-idx="${c._i}">
@@ -1513,10 +1686,9 @@ function playChannel(idx){
     window._osdTimer = setTimeout(() => { osd.style.opacity = "0"; }, 2500);
   }
 
-  // 다이얼 회전 (현재 인덱스에 비례)
+  // 다이얼 회전 (채널 인덱스에 비례)
   const dial = $("#dial");
   if (dial) {
-    const playableChannels = CHANNELS.filter(ch => ch.type !== "link" || true); // 모든 채널
     const ratio = idx / Math.max(1, CHANNELS.length - 1);
     const rotation = ratio * 720; // 2바퀴까지
     dial.style.transform = `rotate(${rotation}deg)`;
@@ -1616,51 +1788,31 @@ renderReplays();
 renderGuide();
 
 /* ==========================
-   브라운관 TV 컨트롤 (v0.13.0)
+   브라운관 TV 컨트롤 (v0.13.2)
+   - 재생 가능한 채널 인덱스를 미리 계산
    - CH ▲▼ 버튼: 재생 가능 채널만 순환
-   - 다이얼 클릭/탭: 다음 채널
+   - 다이얼 클릭: 다음 재생 가능 채널
    ========================== */
-function getPlayableChannels(){
-  // 모든 채널 (link 포함 — 외부이동도 채널 변경으로 침)
-  return CHANNELS.map((c, i) => i);
-}
+const PLAYABLE_INDICES = CHANNELS
+  .map((c, i) => c.type !== "link" ? i : -1)
+  .filter(i => i >= 0);
 
 function changeChannel(direction){
-  const playable = getPlayableChannels();
-  let curPos = playable.indexOf(currentIdx);
-  if (curPos < 0) curPos = 0;
-  let nextPos = (curPos + direction + playable.length) % playable.length;
-  const nextIdx = playable[nextPos];
-  // link 타입은 새창으로 열려서 재생 안 됨 — 스킵
-  if (CHANNELS[nextIdx].type === "link") {
-    // link는 건너뛰고 다음 재생 가능한 채널로
-    let safety = 0;
-    while (CHANNELS[nextIdx]?.type === "link" && safety < 100) {
-      nextPos = (nextPos + direction + playable.length) % playable.length;
-      const newIdx = playable[nextPos];
-      if (newIdx === currentIdx) break;
-      safety++;
-      if (CHANNELS[newIdx]?.type !== "link") {
-        playChannel(newIdx);
-        return;
-      }
-    }
-  }
-  playChannel(nextIdx);
+  if (PLAYABLE_INDICES.length === 0) return;
+  // 현재 인덱스의 PLAYABLE 위치 찾기 (없으면 0번부터)
+  let curPos = PLAYABLE_INDICES.indexOf(currentIdx);
+  if (curPos < 0) curPos = direction > 0 ? -1 : 0;
+  const nextPos = (curPos + direction + PLAYABLE_INDICES.length) % PLAYABLE_INDICES.length;
+  playChannel(PLAYABLE_INDICES[nextPos]);
 }
 
-const chUpBtn = document.getElementById("ch-up");
-const chDownBtn = document.getElementById("ch-down");
-const dialEl = document.getElementById("dial");
-
-if (chUpBtn) chUpBtn.addEventListener("click", () => changeChannel(1));
-if (chDownBtn) chDownBtn.addEventListener("click", () => changeChannel(-1));
-if (dialEl) dialEl.addEventListener("click", () => changeChannel(1));
+$("#ch-up")?.addEventListener("click", () => changeChannel(1));
+$("#ch-down")?.addEventListener("click", () => changeChannel(-1));
+$("#dial")?.addEventListener("click", () => changeChannel(1));
 
 // 첫 재생 가능한 채널로 시작
-const firstPlayable = CHANNELS.findIndex(c => c.type !== "link");
-if (firstPlayable >= 0) {
-  playChannel(firstPlayable);
+if (PLAYABLE_INDICES.length > 0) {
+  playChannel(PLAYABLE_INDICES[0]);
 } else if (isDesktop()) {
   playChannel(currentIdx);
 }
