@@ -21,587 +21,722 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=VT323&family=Major+Mono+Display&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
 
 <style>
   /* ==========================
-     ON AIR v0.12.0 — 에디토리얼 잡지 고급
-     Monocle · The New York Times Magazine · Kinfolk 감성
+     ON AIR v0.13.0 — 80년대 브라운관 TV
+     Sony Trinitron · 금성 · 삼성 황금기
      ========================== */
   :root{
-    /* 아이보리 종이 + 잉크 블랙 */
-    --paper:#F7F3EC;           /* 아이보리 종이 (살짝 따뜻) */
-    --paper-2:#EFEAE0;         /* 더 어두운 종이 */
-    --paper-warm:#F2EADC;      /* 카드 배경 */
-    --ink:#1A1915;             /* 잉크 블랙 (완전 검정 아님) */
-    --ink-2:#4A473F;           /* 본문 회색 */
-    --ink-3:#8A867C;           /* 메타 텍스트 */
-    --ink-4:#B8B3A6;           /* 연한 텍스트 */
+    /* 우드 베젤 — 진한 갈색+오렌지 */
+    --wood:#3D2817;
+    --wood-2:#5C3A1E;
+    --wood-light:#8B5A2B;
+    --wood-bezel:#1F1410;
 
-    /* 헤어라인 — 정말 얇게 */
-    --line:#D9D2C2;
-    --line-soft:#E6E0D0;
+    /* 베이지 패널 — 본체 색 */
+    --beige:#D9C9A0;
+    --beige-2:#C8B687;
+    --beige-3:#A89866;
+    --beige-dark:#7A6B43;
 
-    /* 포인트 단 1색 — 와인 레드 (잡지 표지 느낌) */
-    --accent:#8A1C1C;
-    --accent-bg:rgba(138,28,28,0.08);
+    /* CRT 화면 안 */
+    --crt-bg:#0E1A1A;
+    --crt-glow:#5DCFFF;
+    --crt-amber:#FFB347;
 
-    /* 어두운 잉크 섹션 (대비용) */
-    --dark:#1A1915;
-    --dark-soft:#2A2823;
+    /* 텍스트 */
+    --ink:#1F1410;
+    --ink-2:#3D2817;
+    --ink-3:#7A6B43;
 
-    --header-h:56px;
+    /* 액센트 — TV 빨간 녹화 LED */
+    --led-red:#FF3030;
+    --led-green:#3FE56F;
+    --led-amber:#FFAE3C;
+
+    /* 룸 배경 — 80년대 거실 */
+    --room:#2A1810;
+    --room-2:#1A0F08;
+
+    --serif:"DM Serif Display", "Noto Sans KR", serif;
+    --crt:"VT323", monospace;
+    --display:"Major Mono Display", monospace;
+    --sans:"Noto Sans KR", sans-serif;
+    --mono:"Space Mono", monospace;
+
+    --header-h:0px; /* 헤더 통합 */
     --tabbar-h:64px;
-    --sidebar-w:340px;
-    --schedule-w:300px;
-
-    --serif-display:"Fraunces", "Noto Serif KR", Georgia, serif;
-    --serif-body:"Noto Serif KR", Georgia, serif;
-    --sans:"Inter", -apple-system, sans-serif;
-    --mono:"JetBrains Mono", ui-monospace, monospace;
   }
 
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    background:var(--paper);
+    background:var(--room);
     color:var(--ink);
     font-family:var(--sans);
-    letter-spacing:0;
     line-height:1.5;
     -webkit-font-smoothing:antialiased;
     overflow:hidden;
     position:relative;
   }
 
-  /* 종이 질감 — 미묘하게 */
+  /* 80년대 거실 배경 — 벽지 패턴 + 비네팅 */
   body::before{
     content:"";
-    position:fixed;inset:0;pointer-events:none;z-index:0;
+    position:fixed;inset:0;
     background:
-      radial-gradient(ellipse at top, rgba(26,25,21,0.015) 0%, transparent 60%),
-      radial-gradient(ellipse at bottom, rgba(138,28,28,0.02) 0%, transparent 50%);
-  }
-  body::after{
-    content:"";
-    position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.5;
-    background-image:
-      radial-gradient(circle at 50% 50%, rgba(26,25,21,0.015) 1px, transparent 1px);
-    background-size:3px 3px;
+      radial-gradient(ellipse at center top, rgba(217,201,160,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(0,0,0,0.5) 0%, transparent 70%),
+      repeating-linear-gradient(45deg, transparent 0 12px, rgba(217,201,160,0.015) 12px 13px),
+      var(--room);
+    z-index:0;
+    pointer-events:none;
   }
 
   button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;font-size:inherit}
   ul{list-style:none}
 
   .app{
-    display:grid;height:100dvh;
-    grid-template-rows:var(--header-h) 1fr var(--tabbar-h);
-    grid-template-columns:1fr;
+    display:flex;flex-direction:column;
+    height:100dvh;
     position:relative;z-index:2;
   }
 
-  /* ========== HEADER — 잡지 머스트헤드 스타일 ========== */
-  .header{
-    grid-row:1;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 22px;
-    background:var(--paper);
-    position:relative;z-index:10;
-    border-bottom:1px solid var(--line);
-  }
-  .brand{display:flex;align-items:baseline;gap:12px}
-  .brand-mark{
-    font-family:var(--serif-display);
-    font-size:26px;font-weight:900;
-    letter-spacing:-0.02em;
-    color:var(--ink);
-    line-height:1;
-    font-style:italic;
-  }
-  .brand-sub{
-    font-family:var(--mono);
-    font-size:8px;font-weight:500;
-    color:var(--ink-3);
-    letter-spacing:0.24em;
-    text-transform:uppercase;
+  /* ==========================================
+     === TV SET — 모든 기기에 보이는 메인 ===
+     ========================================== */
+  .tv-set{
+    flex-shrink:0;
+    padding:14px 12px 14px;
+    background:linear-gradient(180deg, var(--wood-light) 0%, var(--wood) 50%, var(--wood-2) 100%);
+    border-bottom:3px solid var(--wood-bezel);
+    box-shadow:
+      inset 0 -8px 16px rgba(0,0,0,0.4),
+      inset 0 2px 0 rgba(255,200,150,0.15),
+      0 6px 14px rgba(0,0,0,0.6);
+    position:relative;
   }
 
-  .on-air-pill{
-    display:inline-flex;align-items:center;gap:6px;
-    padding:4px 10px;
-    background:transparent;
-    border:1px solid var(--accent);
-    border-radius:0;
-    font-family:var(--mono);
-    font-size:9px;font-weight:700;
-    letter-spacing:0.2em;
-    color:var(--accent);
-    text-transform:uppercase;
+  /* 우드 그레인 */
+  .tv-set::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0 3px,
+        rgba(0,0,0,0.06) 3px 4px,
+        transparent 4px 9px,
+        rgba(255,180,120,0.04) 9px 10px),
+      repeating-linear-gradient(90deg,
+        transparent 0 60px,
+        rgba(0,0,0,0.08) 60px 62px,
+        transparent 62px 110px);
+    pointer-events:none;
   }
-  .on-air-pill .dot{
-    width:5px;height:5px;border-radius:50%;
-    background:var(--accent);
-    animation:pulse 2s ease-out infinite;
+
+  /* TV 본체 = 화면 + 우측 컨트롤 패널 */
+  .tv-body{
+    display:grid;
+    grid-template-columns:1fr 96px;
+    gap:10px;
+    align-items:stretch;
+    position:relative;z-index:1;
   }
-  @keyframes pulse{
-    0%{opacity:1}
-    50%{opacity:0.35}
-    100%{opacity:1}
+
+  /* === CRT 스크린 === */
+  .crt-frame{
+    position:relative;
+    background:var(--wood-bezel);
+    padding:10px;
+    border-radius:14px;
+    box-shadow:
+      inset 0 0 0 2px var(--wood-2),
+      inset 0 4px 8px rgba(0,0,0,0.6);
   }
-  .clock{
-    font-family:var(--mono);
-    font-size:11px;color:var(--ink-2);
-    letter-spacing:0.06em;
+  .crt-screen{
+    position:relative;
+    aspect-ratio:4/3;
+    background:var(--crt-bg);
+    border-radius:30px / 22px; /* 살짝 oval CRT 느낌 */
+    overflow:hidden;
+    box-shadow:
+      inset 0 0 40px rgba(0,0,0,0.9),
+      inset 0 0 80px rgba(0,0,0,0.4),
+      0 0 0 1px #000;
+  }
+  /* 스크린 내부 — iframe 또는 정보 */
+  .crt-content{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+  }
+  .crt-content iframe{
+    flex:1;width:100%;height:100%;border:0;display:block;
+  }
+  .crt-info{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--crt-glow);
+    text-align:center;padding:20px;
+    font-family:var(--crt);
+    text-shadow:0 0 8px var(--crt-glow), 0 0 16px rgba(93,207,255,0.4);
+  }
+  .crt-info-title{
+    font-size:32px;line-height:1;margin-bottom:8px;letter-spacing:0.04em;
+  }
+  .crt-info-sub{font-size:18px;opacity:0.7;letter-spacing:0.1em}
+
+  /* CRT 효과 — 스캔라인 + 비네팅 + 글레어 */
+  .crt-screen::before{
+    content:"";
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.18) 3px,
+      rgba(0,0,0,0) 4px
+    );
+    pointer-events:none;z-index:3;
+  }
+  .crt-screen::after{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at 30% 15%, rgba(255,255,255,0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%);
+    pointer-events:none;z-index:4;
+  }
+
+  /* ON-SCREEN DISPLAY — 옛날 TV 채널 표시 */
+  .osd{
+    position:absolute;top:8px;left:10px;
+    font-family:var(--crt);
+    color:var(--crt-amber);
+    font-size:24px;line-height:1;
+    text-shadow:0 0 6px var(--crt-amber), 0 0 12px rgba(255,179,71,0.4);
+    z-index:5;letter-spacing:0.08em;
+    pointer-events:none;
+    opacity:1;
+    transition:opacity .6s ease;
+  }
+  .osd-num{font-size:36px;font-weight:400}
+  .osd-name{font-size:16px;margin-top:2px;color:var(--crt-glow);text-shadow:0 0 6px var(--crt-glow)}
+
+  /* === 우측 컨트롤 패널 === */
+  .ctrl-panel{
+    background:linear-gradient(180deg, var(--beige) 0%, var(--beige-2) 100%);
+    border-radius:8px;
+    padding:8px 6px;
+    display:flex;flex-direction:column;gap:6px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.4),
+      inset 0 -1px 0 rgba(0,0,0,0.15),
+      0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  /* 브랜드 라벨 */
+  .ctrl-brand{
+    font-family:var(--display);
+    font-size:9px;
+    text-align:center;
+    color:var(--ink);
+    letter-spacing:0.18em;
+    padding:4px 0 2px;
+    border-bottom:1px solid var(--beige-dark);
+  }
+
+  /* 다이얼 — 핵심 컴포넌트! */
+  .dial-wrap{
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    padding:6px 0;
+  }
+  .dial{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 30%, #F4E8C8 0%, var(--beige) 30%, var(--beige-2) 60%, var(--beige-dark) 100%);
+    position:relative;
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,0.6),
+      inset 0 -2px 4px rgba(0,0,0,0.3),
+      0 2px 4px rgba(0,0,0,0.4);
+    cursor:grab;
+    transition:transform .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .dial:active{cursor:grabbing}
+  /* 다이얼 표시기 (선) */
+  .dial::before{
+    content:"";
+    position:absolute;
+    top:5px;left:50%;
+    transform:translateX(-50%);
+    width:3px;height:14px;
+    background:var(--ink);
+    border-radius:1.5px;
+    box-shadow:0 1px 1px rgba(0,0,0,0.4);
+  }
+  /* 다이얼 중앙 도트 */
+  .dial::after{
+    content:"";
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:10px;height:10px;
+    background:var(--ink);
+    border-radius:50%;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 2px var(--beige-dark);
+  }
+
+  /* 다이얼 주변 눈금 */
+  .dial-ticks{
+    position:relative;
+    width:80px;height:80px;
+    margin-top:-72px;
+    pointer-events:none;
+  }
+  .dial-tick{
+    position:absolute;
+    top:50%;left:50%;
+    width:1px;height:4px;
+    background:var(--beige-dark);
+    transform-origin:50% 36px;
+  }
+
+  /* CH 디지털 카운터 */
+  .ch-counter{
+    background:#0A0E0E;
+    border-radius:4px;
+    padding:4px 6px;
+    text-align:center;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(255,255,255,0.05);
+    margin:2px 0 4px;
+    border:1px solid var(--ink);
+  }
+  .ch-counter-label{
+    font-family:var(--mono);font-size:6px;
+    color:#5A6A50;letter-spacing:0.16em;
+  }
+  .ch-counter-num{
+    font-family:var(--crt);font-size:22px;
+    color:#3FE56F;line-height:1;
+    text-shadow:0 0 4px #3FE56F, 0 0 8px rgba(63,229,111,0.5);
+    letter-spacing:0.05em;
     font-variant-numeric:tabular-nums;
   }
 
-  .main{grid-row:2;overflow:hidden;position:relative}
+  /* CH ▲▼ 버튼 */
+  .ch-btns{display:flex;flex-direction:column;gap:3px}
+  .ch-btn{
+    background:linear-gradient(180deg, var(--beige) 0%, var(--beige-2) 50%, var(--beige-dark) 100%);
+    border-radius:4px;
+    padding:5px 0;
+    font-size:11px;
+    font-weight:700;
+    color:var(--ink);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.4),
+      inset 0 -1px 0 rgba(0,0,0,0.2),
+      0 1px 2px rgba(0,0,0,0.3);
+    transition:all .08s;
+    font-family:var(--mono);
+    letter-spacing:0.1em;
+  }
+  .ch-btn:active{
+    background:linear-gradient(180deg, var(--beige-dark) 0%, var(--beige-2) 100%);
+    transform:translateY(1px);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .ch-btn span{font-size:10px}
+
+  /* 전원 LED */
+  .led-row{
+    display:flex;justify-content:center;gap:4px;
+    padding:4px 0 2px;
+    border-top:1px solid var(--beige-dark);
+  }
+  .led{
+    width:6px;height:6px;border-radius:50%;
+    box-shadow:inset 0 -1px 1px rgba(0,0,0,0.5);
+  }
+  .led.on-air{
+    background:var(--led-red);
+    box-shadow:0 0 4px var(--led-red), 0 0 8px rgba(255,48,48,0.6), inset 0 -1px 1px rgba(0,0,0,0.4);
+    animation:ledPulse 2s ease-in-out infinite;
+  }
+  .led.power{
+    background:var(--led-green);
+    box-shadow:0 0 4px var(--led-green), 0 0 8px rgba(63,229,111,0.5);
+  }
+  @keyframes ledPulse{
+    0%,100%{opacity:1}
+    50%{opacity:0.4}
+  }
+  .led-label{
+    font-family:var(--mono);font-size:6px;
+    color:var(--ink-2);letter-spacing:0.1em;
+    text-align:center;line-height:1;
+    margin-top:-1px;
+  }
+
+  /* TV 하단 — 브랜드 라벨 */
+  .tv-foot{
+    margin-top:10px;padding-top:8px;
+    border-top:1px solid rgba(0,0,0,0.3);
+    display:flex;align-items:center;justify-content:space-between;
+    position:relative;z-index:1;
+  }
+  .brand-plate{
+    font-family:var(--display);
+    font-size:14px;
+    color:var(--beige);
+    letter-spacing:0.32em;
+    text-shadow:0 1px 0 rgba(0,0,0,0.5);
+  }
+  .brand-plate-sub{
+    font-family:var(--mono);font-size:8px;
+    color:var(--beige-3);
+    letter-spacing:0.18em;margin-top:2px;
+  }
+  .clock-plate{
+    font-family:var(--crt);
+    font-size:18px;
+    color:var(--led-amber);
+    text-shadow:0 0 4px var(--led-amber), 0 0 8px rgba(255,174,60,0.4);
+    letter-spacing:0.06em;
+    font-variant-numeric:tabular-nums;
+    background:#0A0E0E;
+    padding:2px 8px;
+    border-radius:3px;
+    border:1px solid #000;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);
+  }
+
+  /* ==========================================
+     === 채널 리스트 영역 (TV 아래) ===
+     ========================================== */
+  .main{
+    flex:1;
+    overflow:hidden;
+    position:relative;
+    background:var(--beige);
+    border-top:2px solid var(--wood-bezel);
+    box-shadow:inset 0 4px 8px rgba(0,0,0,0.2);
+  }
   .view{
     height:100%;
     overflow-y:auto;overflow-x:hidden;
-    padding:0 20px 24px;
+    padding:0 14px 16px;
     scrollbar-width:thin;
-    scrollbar-color:var(--line) transparent;
+    scrollbar-color:var(--beige-dark) transparent;
   }
-  .view::-webkit-scrollbar{width:4px}
-  .view::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+  .view::-webkit-scrollbar{width:5px}
+  .view::-webkit-scrollbar-thumb{background:var(--beige-dark);border-radius:2px}
   .view[hidden]{display:none}
 
-  #view-stage{display:none}
-
-  /* ========== 섹션 헤더 — 잡지 표지 느낌 ========== */
+  /* 섹션 헤더 */
   .section-head{
     display:flex;align-items:baseline;justify-content:space-between;
-    padding:36px 4px 12px;
+    padding:14px 4px 10px;
     position:sticky;top:0;
-    background:linear-gradient(var(--paper) 80%, transparent);
+    background:linear-gradient(var(--beige) 75%, transparent);
     z-index:3;
-    border-bottom:none;
+    border-bottom:1px solid var(--beige-dark);
   }
   .section-title{
-    font-family:var(--serif-display);
-    font-size:42px;
+    font-family:var(--serif);
+    font-size:24px;
     font-weight:400;
     font-style:italic;
-    letter-spacing:-0.03em;
     color:var(--ink);
-    line-height:0.95;
+    letter-spacing:-0.01em;
+    line-height:1;
   }
   .section-meta{
     font-family:var(--mono);
     font-size:9px;color:var(--ink-3);
-    letter-spacing:0.24em;text-transform:uppercase;
+    letter-spacing:0.18em;text-transform:uppercase;
   }
 
-  /* 필터 — 탭 언더라인 스타일 (잡지 카테고리) */
+  /* 카테고리 필터 — 빈티지 탭 */
   .filter{
-    display:flex;gap:0;
-    padding:0 4px 0;
+    display:flex;gap:4px;
+    padding:8px 4px 12px;
     overflow-x:auto;
     scrollbar-width:none;
-    position:sticky;top:86px;
-    background:linear-gradient(var(--paper) 75%, transparent);
+    position:sticky;top:48px;
+    background:linear-gradient(var(--beige) 80%, transparent);
     z-index:2;
-    border-bottom:1px solid var(--line);
-    margin-bottom:8px;
   }
   .filter::-webkit-scrollbar{display:none}
   .chip{
     flex-shrink:0;
-    padding:12px 14px 14px;
-    font-family:var(--sans);
-    font-size:11px;font-weight:500;
-    color:var(--ink-3);
-    background:transparent;
-    border:none;
-    border-radius:0;
-    border-bottom:2px solid transparent;
-    transition:all .2s ease;
-    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 10px;
+    font-family:var(--mono);
+    font-size:10px;font-weight:700;
+    color:var(--ink-2);
+    background:var(--beige-2);
+    border:1px solid var(--beige-dark);
+    border-radius:3px;
+    transition:all .15s;
+    display:inline-flex;align-items:center;gap:4px;
     white-space:nowrap;
     letter-spacing:0.08em;
     text-transform:uppercase;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 1px rgba(0,0,0,0.15);
   }
-  .chip:hover{color:var(--ink)}
+  .chip:hover{background:var(--beige)}
   .chip.is-active{
-    color:var(--ink);
-    border-bottom-color:var(--ink);
-    font-weight:700;
+    background:var(--ink);
+    color:var(--beige);
+    border-color:var(--ink);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.4);
   }
-  .chip .count{
-    opacity:0.6;font-size:9px;
-    font-family:var(--mono);
-    font-weight:400;
-  }
-  .chip.is-active .count{opacity:0.9}
-  .chip .flag{font-size:12px;line-height:1}
+  .chip .count{opacity:0.6;font-size:9px}
+  .chip .flag{font-size:11px;line-height:1}
 
-  /* ========== 카드 — 잡지 스프레드 아이템 ========== */
+  /* === 채널 카드 === */
   .channels{
     display:grid;
     grid-template-columns:1fr;
     gap:0;
   }
   .card{
-    display:flex;gap:14px;
-    padding:14px 4px;
+    display:flex;gap:10px;align-items:center;
+    padding:9px 4px;
     background:transparent;
     border:none;
-    border-bottom:1px solid var(--line-soft);
-    border-radius:0;
+    border-bottom:1px dashed var(--beige-dark);
     cursor:pointer;
-    transition:background .15s ease;
+    transition:background .12s ease;
     position:relative;
   }
-  .card:hover{background:rgba(26,25,21,0.02)}
-  .card:active{background:rgba(26,25,21,0.04)}
-  .card.is-playing{
-    background:var(--accent-bg);
-  }
+  .card:hover{background:rgba(122,107,67,0.08)}
+  .card:active{background:rgba(122,107,67,0.15)}
+  .card.is-playing{background:rgba(255,48,48,0.08)}
   .card.is-playing::before{
-    content:"";position:absolute;left:-20px;top:0;bottom:0;
-    width:2px;background:var(--accent);
+    content:"";position:absolute;left:-10px;top:0;bottom:0;
+    width:3px;background:var(--led-red);
+    box-shadow:0 0 4px var(--led-red);
   }
 
   .thumb{
-    width:72px;height:54px;flex-shrink:0;
-    background:var(--paper-warm);
-    border:1px solid var(--line-soft);
-    border-radius:0;
+    width:48px;height:36px;flex-shrink:0;
+    background:var(--ink);
+    border-radius:2px;
     overflow:hidden;
     position:relative;
+    border:1px solid var(--ink-2);
+    box-shadow:inset 0 1px 2px rgba(255,255,255,0.05);
   }
-  .thumb-label{
-    position:absolute;bottom:5px;left:6px;
-    font-family:var(--mono);
-    font-size:8px;font-weight:700;letter-spacing:0.12em;
-    color:rgba(255,255,255,0.95);
-    text-shadow:0 1px 3px rgba(0,0,0,0.5);
+  /* 썸네일에 미니 스캔라인 */
+  .thumb::after{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg, transparent 0 1px, rgba(0,0,0,0.3) 1px 2px);
+    pointer-events:none;
   }
   .thumb-flag{
-    position:absolute;top:4px;left:5px;
-    font-size:12px;line-height:1;
-    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+    position:absolute;top:2px;left:3px;
+    font-size:11px;line-height:1;z-index:1;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+  }
+  .thumb-label{
+    position:absolute;bottom:2px;left:3px;
+    font-family:var(--crt);
+    font-size:11px;line-height:1;
+    color:var(--crt-glow);
+    text-shadow:0 0 3px var(--crt-glow);
+    letter-spacing:0.05em;
+    z-index:1;
   }
 
-  /* 태그 — 타이포 위주 */
+  /* 태그 */
   .live-tag{
-    position:absolute;top:4px;right:4px;
-    display:inline-flex;align-items:center;gap:3px;padding:1px 5px;
-    background:var(--accent);color:#fff;
-    font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.1em;
-    border-radius:0;
+    position:absolute;top:1px;right:2px;
+    padding:0 3px;
+    background:var(--led-red);color:#fff;
+    font-family:var(--mono);font-size:7px;font-weight:700;letter-spacing:0.08em;
+    border-radius:1px;z-index:1;
   }
-  .live-tag .dot{width:3px;height:3px;background:#fff;border-radius:50%}
   .link-tag{
-    position:absolute;top:4px;right:4px;
-    width:18px;height:18px;
+    position:absolute;top:1px;right:2px;
+    width:13px;height:13px;
     display:flex;align-items:center;justify-content:center;
-    background:rgba(26,25,21,0.7);color:#fff;
-    border-radius:0;
+    background:var(--led-amber);color:var(--ink);
+    border-radius:1px;
+    z-index:1;font-weight:700;font-size:9px;
   }
-  .link-tag svg{width:10px;height:10px;stroke:currentColor;stroke-width:2;fill:none}
+  .link-tag svg{display:none}
+  .link-tag::before{content:"↗";font-size:10px}
   .replay-tag{
-    position:absolute;top:4px;right:4px;
-    display:inline-flex;align-items:center;padding:1px 5px;
-    background:var(--ink);color:var(--paper);
-    font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.12em;
-    border-radius:0;
+    position:absolute;top:1px;right:2px;
+    padding:0 3px;
+    background:var(--ink);color:var(--beige);
+    font-family:var(--mono);font-size:7px;font-weight:700;letter-spacing:0.06em;
+    z-index:1;
   }
 
-  .card-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px}
-  .card-top{display:flex;align-items:baseline;gap:10px}
+  .card-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px}
+  .card-top{display:flex;align-items:baseline;gap:8px}
   .ch-num{
-    font-family:var(--mono);
-    font-size:9px;font-weight:700;
-    color:var(--ink-3);letter-spacing:0.12em;
+    font-family:var(--crt);
+    font-size:16px;font-weight:400;
+    color:var(--ink-2);letter-spacing:0.04em;
+    line-height:1;
+    background:#F2E8CC;
+    padding:1px 4px;
+    border-radius:2px;
+    border:1px solid var(--beige-dark);
+    min-width:34px;text-align:center;
   }
   .ch-name{
-    font-family:var(--serif-display);
-    font-size:17px;font-weight:500;
+    font-family:var(--serif);
+    font-size:15px;font-weight:400;
     color:var(--ink);
     letter-spacing:-0.01em;
     line-height:1.1;
   }
   .program-title{
-    font-size:12px;color:var(--ink-2);
+    font-size:11px;color:var(--ink-2);
     font-weight:400;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    margin-top:1px;
   }
   .program-meta{
     font-family:var(--mono);
-    font-size:9px;color:var(--ink-3);
+    font-size:8px;color:var(--ink-3);
     letter-spacing:0.06em;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     text-transform:uppercase;
   }
 
-  /* 플레이어 오버레이 */
-  .player-overlay{position:absolute;inset:0;background:var(--paper);z-index:5;display:flex;flex-direction:column}
-  .player-overlay[hidden]{display:none}
-  .player-head{
-    display:flex;align-items:center;gap:12px;
-    padding:14px 20px;
-    border-bottom:1px solid var(--line);
-    background:var(--paper);
-  }
-  .back-btn{
-    width:32px;height:32px;
-    display:flex;align-items:center;justify-content:center;
-    border-radius:0;color:var(--ink-2);
-  }
-  .back-btn:hover{color:var(--ink)}
-  .player-title{
-    font-family:var(--serif-display);
-    font-size:16px;font-weight:500;
-    flex:1;min-width:0;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    color:var(--ink);
-    letter-spacing:-0.01em;
-  }
-  .player-frame{position:relative;background:#000;aspect-ratio:16/9;width:100%}
-  .player-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .player-info{padding:24px 20px;flex:1;overflow-y:auto;background:var(--paper)}
-  .player-program{
-    font-family:var(--serif-display);
-    font-size:36px;font-weight:400;font-style:italic;
-    margin-bottom:6px;color:var(--ink);
-    line-height:1.05;
-    letter-spacing:-0.02em;
-  }
-  .player-sub{
-    font-family:var(--mono);
-    font-size:9px;color:var(--ink-3);
-    letter-spacing:0.16em;
-    margin-bottom:24px;
-    text-transform:uppercase;
-  }
-  .schedule-list{display:flex;flex-direction:column;gap:0}
-  .schedule-head{
-    font-family:var(--mono);
-    font-size:9px;color:var(--ink-3);
-    letter-spacing:0.24em;text-transform:uppercase;
-    padding:14px 0 10px;
-    border-top:1px solid var(--ink);
-    border-bottom:1px solid var(--line);
-    margin-bottom:4px;
-  }
-  .sch-row{
-    display:grid;grid-template-columns:50px 1fr auto;
-    align-items:center;gap:12px;
-    padding:10px 0;
-    border-bottom:1px solid var(--line-soft);
-  }
-  .sch-time{
-    font-family:var(--mono);font-size:11px;
-    color:var(--ink-2);
-    font-variant-numeric:tabular-nums;
-    letter-spacing:0.04em;
-  }
-  .sch-title{
-    font-family:var(--serif-body);
-    font-size:13px;color:var(--ink);
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  }
-  .sch-now{
-    font-family:var(--mono);font-size:8px;font-weight:700;
-    color:var(--accent);letter-spacing:0.2em;
-  }
-  .sch-row.is-now .sch-title{color:var(--accent);font-weight:600}
+  /* 플레이어 오버레이 — 모바일에선 안 씀 (TV 화면이 직접 재생) */
+  .player-overlay{display:none !important}
 
-  /* ========== 탭바 ========== */
+  /* === 탭바 === */
   .tabbar{
-    grid-row:3;
+    flex-shrink:0;
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    background:var(--paper);
-    border-top:1px solid var(--line);
+    grid-template-columns:repeat(3,1fr);  /* 3개로 축소 */
+    background:var(--wood);
+    border-top:3px solid var(--wood-bezel);
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);
     padding-bottom:env(safe-area-inset-bottom);
+    height:var(--tabbar-h);
   }
   .tab{
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    color:var(--ink-3);
+    color:var(--beige-3);
     font-size:9px;
     font-family:var(--mono);
-    font-weight:500;
+    font-weight:700;
     padding-top:4px;
-    letter-spacing:0.14em;
+    letter-spacing:0.16em;
     text-transform:uppercase;
-    transition:color .15s;
+    transition:all .15s;
+    border-right:1px solid var(--wood-bezel);
   }
-  .tab svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .tab.is-active{color:var(--ink)}
+  .tab:last-child{border-right:none}
+  .tab svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .tab.is-active{color:var(--beige);background:rgba(0,0,0,0.2)}
+  .tab.is-active svg{stroke:var(--led-amber);filter:drop-shadow(0 0 4px var(--led-amber))}
 
   /* 빈 상태 */
-  .empty{text-align:center;padding:60px 20px;color:var(--ink-3)}
-  .empty-title{
-    font-family:var(--serif-display);
-    font-size:32px;font-style:italic;
-    color:var(--ink-2);
-    margin-bottom:10px;
-  }
-  .empty-desc{font-size:12px;line-height:1.6}
+  .empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+  .empty-title{font-family:var(--serif);font-size:24px;font-style:italic;color:var(--ink-2);margin-bottom:8px}
+  .empty-desc{font-size:11px;line-height:1.6}
 
   /* 설정 */
-  .more-list{display:flex;flex-direction:column;gap:0;padding-top:10px}
+  .more-list{display:flex;flex-direction:column;gap:0;padding-top:6px}
   .more-row{
     display:flex;justify-content:space-between;align-items:center;
-    padding:18px 6px;
-    border-bottom:1px solid var(--line-soft);
+    padding:14px 6px;
+    border-bottom:1px dashed var(--beige-dark);
     font-size:13px;
-    font-weight:400;
   }
-  .more-row:first-child{border-top:1px solid var(--ink)}
   .more-row .val{color:var(--ink-3);font-family:var(--mono);font-size:10px;letter-spacing:0.08em}
 
   .footer-credit{
-    margin-top:56px;
+    margin-top:32px;
     text-align:center;
     font-family:var(--mono);
-    font-size:8px;letter-spacing:0.32em;
+    font-size:8px;letter-spacing:0.36em;
     color:var(--ink-3);
-    padding:24px 0;
+    padding:16px 0;
     text-transform:uppercase;
-    border-top:1px solid var(--line-soft);
+    border-top:1px dashed var(--beige-dark);
   }
 
-  /* 안내 박스 — 잡지 콜아웃 */
+  /* 안내 박스 */
   .replay-notice{
-    padding:20px 4px;
-    margin:8px 4px 20px;
-    background:transparent;
-    border-top:1px solid var(--ink);
-    border-bottom:1px solid var(--line);
-    font-family:var(--serif-body);
-    font-size:13px;
-    color:var(--ink-2);line-height:1.6;
-    font-style:italic;
+    padding:12px 10px;
+    margin:8px 4px 14px;
+    background:#F2E8CC;
+    border:1px dashed var(--beige-dark);
+    border-radius:3px;
+    font-size:11px;color:var(--ink-2);line-height:1.5;
+    font-family:var(--mono);
   }
-  .replay-notice strong{
-    color:var(--accent);font-weight:700;
-    font-style:normal;
-    font-family:var(--sans);
-    font-size:11px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    display:block;
-    margin-bottom:6px;
-  }
+  .replay-notice strong{color:var(--led-red);font-weight:700;display:block;margin-bottom:4px;font-size:10px;letter-spacing:0.1em}
 
   /* 편성표 */
-  .guide-grid{display:flex;flex-direction:column;gap:28px;padding-bottom:24px}
+  .guide-grid{display:flex;flex-direction:column;gap:0;padding-bottom:18px}
   .guide-ch{
     background:transparent;
-    border:none;
-    border-radius:0;
-    padding:0 4px;
-    border-top:1px solid var(--ink);
-    padding-top:14px;
+    padding:10px 4px;
+    border-bottom:1px dashed var(--beige-dark);
   }
   .guide-ch-head{
-    display:flex;align-items:baseline;gap:12px;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line-soft);
+    display:flex;align-items:baseline;gap:10px;
+    padding-bottom:8px;
     margin-bottom:4px;
   }
-  .guide-ch-name{
-    font-family:var(--serif-display);
-    font-size:18px;font-weight:500;
-    letter-spacing:-0.01em;
+  .guide-ch-name{font-family:var(--serif);font-size:16px}
+  .guide-ch-num{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.12em}
+  .schedule-list{display:flex;flex-direction:column;gap:0}
+  .sch-row{
+    display:grid;grid-template-columns:50px 1fr auto;
+    align-items:center;gap:10px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--beige-dark);
   }
-  .guide-ch-num{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.14em;text-transform:uppercase}
+  .sch-time{font-family:var(--crt);font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .sch-title{font-size:12px;color:var(--ink)}
+  .sch-now{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--led-red);letter-spacing:0.16em}
+  .sch-row.is-now .sch-title{color:var(--led-red);font-weight:700}
 
   /* ============= 데스크톱 ============= */
   @media (min-width: 1100px){
-    body{overflow:hidden}
     .app{
-      grid-template-rows:var(--header-h) 1fr;
-      grid-template-columns:var(--sidebar-w) 1fr var(--schedule-w);
-      grid-template-areas:"header header header" "side stage sched";
+      display:grid;
+      grid-template-columns:480px 1fr;
+      grid-template-rows:1fr var(--tabbar-h);
+      grid-template-areas:
+        "tv main"
+        "tv tabs";
+      height:100dvh;
     }
-    .header{grid-area:header;padding:0 32px}
-    .tabbar{display:none}
-    .main{display:contents}
-    .view{padding:0;height:calc(100dvh - var(--header-h))}
-
-    #view-now{
-      grid-area:side;
-      border-right:1px solid var(--line);
-      padding:0;
-      background:var(--paper);
-    }
-    #view-now .section-head{padding:24px 22px 10px}
-    #view-now .filter{top:86px;padding:0 18px;background:var(--paper)}
-    .channels{padding:0 22px 24px}
-    .card{padding:12px 4px;gap:12px}
-    .thumb{width:64px;height:48px}
-    .ch-name{font-size:15px}
-    .program-title{font-size:11px}
-    .program-meta{font-size:8px}
-
-    #view-stage{
-      display:flex;grid-area:stage;
-      flex-direction:column;overflow:hidden;background:var(--paper-2);
-    }
-    .stage-header{
-      display:flex;align-items:baseline;justify-content:space-between;
-      padding:22px 36px 18px;
-      border-bottom:1px solid var(--ink);
-    }
-    .stage-title-wrap{display:flex;flex-direction:column;gap:4px}
-    .stage-program{
-      font-family:var(--serif-display);
-      font-size:42px;font-weight:400;font-style:italic;
-      line-height:1;letter-spacing:-0.02em;
-    }
-    .stage-chan{font-family:var(--mono);font-size:9px;color:var(--ink-2);letter-spacing:0.2em;text-transform:uppercase}
-    .stage-player{
-      flex:1;display:flex;align-items:center;justify-content:center;padding:28px;position:relative;
-    }
-    .stage-frame{
-      width:100%;
-      max-width:min(100%, calc((100dvh - var(--header-h) - 180px) * 16 / 9));
-      aspect-ratio:16/9;background:#000;
-      border:1px solid var(--ink);
-      border-radius:0;
-      overflow:hidden;position:relative;
-    }
-    .stage-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-    .stage-foot{
-      padding:14px 36px;border-top:1px solid var(--line);
-      display:flex;justify-content:space-between;align-items:center;
-      font-family:var(--mono);font-size:9px;color:var(--ink-3);
-      letter-spacing:0.2em;text-transform:uppercase
-    }
-
-    #view-guide{
-      grid-area:sched;
-      border-left:1px solid var(--line);
-      padding:0;
-      background:var(--paper);
-    }
-    #view-guide .section-head{padding:24px 22px 14px}
-    .guide-grid{padding:0 22px 24px;gap:20px}
-    .guide-ch{padding:12px 0 0}
-
-    .player-overlay{display:none !important}
-    #view-favorites, #view-more, #view-replay{display:none !important}
+    .tv-set{grid-area:tv;border-right:3px solid var(--wood-bezel);border-bottom:none;padding:20px 18px}
+    .tv-body{grid-template-columns:1fr 110px;gap:14px}
+    .crt-screen{aspect-ratio:4/3}
+    .main{grid-area:main}
+    .view{padding:0 24px 20px}
+    .tabbar{grid-area:tabs;border-top:3px solid var(--wood-bezel);border-left:3px solid var(--wood-bezel)}
+    .section-title{font-size:32px}
+    .channels{grid-template-columns:1fr 1fr;gap:0 16px}
+    .card{padding:10px 4px}
+    .ch-name{font-size:14px}
     .footer-credit{display:none}
   }
 
   @media (min-width: 640px) and (max-width: 1099px){
-    .channels{grid-template-columns:1fr 1fr;gap:0}
-    .card{border-right:1px solid var(--line-soft)}
-    .card:nth-child(2n){border-right:none}
+    .channels{grid-template-columns:1fr 1fr;gap:0 12px}
   }
 
-  /* ============= TV 모드 ============= */
-  body.tv{
-    background:#0A0907;color:#F7F3EC;overflow:hidden;
-  }
-  body.tv::before, body.tv::after{display:none}
+  /* ============= TV 모드 (?tv=1) ============= */
+  body.tv{background:#0A0907;color:#F7F3EC;overflow:hidden}
+  body.tv::before{display:none}
   body.tv .app{display:none}
   body.tv .tv-app{display:flex}
 
@@ -613,66 +748,44 @@
     position:fixed;inset:0;
   }
   .tv-header{
-    padding:28px 60px 20px;
+    padding:24px 50px 16px;
     display:flex;align-items:center;justify-content:space-between;
     border-bottom:1px solid rgba(247,243,236,0.1);
   }
-  .tv-brand{font-family:var(--serif-display);font-size:52px;font-weight:900;font-style:italic;letter-spacing:-0.03em;line-height:1}
-  .tv-brand-sub{font-family:var(--mono);font-size:12px;color:#8A867C;letter-spacing:0.28em;margin-left:18px;text-transform:uppercase}
-  .tv-clock{font-family:var(--mono);font-size:18px;color:#8A867C;font-variant-numeric:tabular-nums;letter-spacing:0.06em}
-  .tv-on-air{
-    display:inline-flex;align-items:center;gap:10px;
-    padding:8px 14px;border:1px solid #8A1C1C;
-    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.24em;color:#C53F3F;
-    margin-right:20px;
-    text-transform:uppercase;
-  }
-  .tv-on-air .dot{width:7px;height:7px;background:#8A1C1C;animation:pulse 2s ease-out infinite}
-  .tv-stage{flex:1;display:flex;padding:30px 60px;gap:40px;min-height:0}
+  .tv-brand{font-family:var(--display);font-size:42px;letter-spacing:0.1em;line-height:1}
+  .tv-brand-sub{font-family:var(--mono);font-size:11px;color:#8A867C;letter-spacing:0.28em;margin-left:18px;text-transform:uppercase}
+  .tv-clock{font-family:var(--crt);font-size:28px;color:var(--led-amber);text-shadow:0 0 6px var(--led-amber);letter-spacing:0.06em}
+  .tv-on-air{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--led-red);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.24em;color:var(--led-red);margin-right:20px}
+  .tv-on-air .dot{width:7px;height:7px;background:var(--led-red);border-radius:50%;animation:ledPulse 2s ease-out infinite;box-shadow:0 0 6px var(--led-red)}
+  .tv-stage{flex:1;display:flex;padding:24px 50px;gap:36px;min-height:0}
   .tv-player-wrap{flex:2;display:flex;flex-direction:column}
-  .tv-player-info{margin-bottom:14px}
-  .tv-program{font-family:var(--serif-display);font-size:48px;font-weight:400;font-style:italic;line-height:1.05;margin-bottom:4px;letter-spacing:-0.02em}
-  .tv-chan-info{font-family:var(--mono);font-size:13px;color:#8A867C;letter-spacing:0.2em;text-transform:uppercase}
-  .tv-player{flex:1;background:#000;border:1px solid #2A2823;border-radius:0;overflow:hidden;position:relative}
+  .tv-player-info{margin-bottom:12px}
+  .tv-program{font-family:var(--serif);font-size:42px;font-style:italic;line-height:1.05;margin-bottom:4px;letter-spacing:-0.02em}
+  .tv-chan-info{font-family:var(--mono);font-size:12px;color:#8A867C;letter-spacing:0.18em;text-transform:uppercase}
+  .tv-player{flex:1;background:#000;border:1px solid #2A2823;overflow:hidden;position:relative}
   .tv-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .tv-player-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;color:#8A867C}
-  .tv-player-fallback-title{font-family:var(--serif-display);font-size:40px;font-style:italic;color:#F7F3EC;margin-bottom:12px}
-  .tv-player-fallback-link{margin-top:20px;padding:12px 24px;background:transparent;border:1px solid #F7F3EC;color:#F7F3EC;font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase}
-  .tv-channels{flex:1;display:flex;flex-direction:column;min-width:380px}
-  .tv-channels-title{font-family:var(--mono);font-size:11px;font-weight:700;color:#8A867C;letter-spacing:0.28em;margin-bottom:14px;padding-left:4px;text-transform:uppercase}
-  .tv-channels-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0;padding-right:10px}
+  .tv-player-fallback-title{font-family:var(--serif);font-size:36px;font-style:italic;color:#F7F3EC;margin-bottom:12px}
+  .tv-player-fallback-link{margin-top:18px;padding:10px 22px;border:1px solid #F7F3EC;color:#F7F3EC;font-family:var(--mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase}
+  .tv-channels{flex:1;display:flex;flex-direction:column;min-width:360px}
+  .tv-channels-title{font-family:var(--mono);font-size:11px;font-weight:700;color:#8A867C;letter-spacing:0.28em;margin-bottom:12px;padding-left:4px;text-transform:uppercase}
+  .tv-channels-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0;padding-right:8px}
   .tv-channels-list::-webkit-scrollbar{width:5px}
-  .tv-channels-list::-webkit-scrollbar-thumb{background:#2A2823;border-radius:2px}
-  .tv-card{
-    display:flex;align-items:center;gap:16px;
-    padding:14px 12px;
-    background:transparent;
-    border:none;
-    border-bottom:1px solid rgba(247,243,236,0.08);
-    transition:all .15s;
-  }
-  .tv-card.focused{
-    background:rgba(247,243,236,0.05);
-    border-left:2px solid #F7F3EC;
-    padding-left:14px;
-  }
-  .tv-card.playing .tv-card-name{color:#C53F3F}
-  .tv-card-thumb{width:64px;height:44px;flex-shrink:0;border:1px solid rgba(247,243,236,0.1);display:flex;align-items:center;justify-content:center;position:relative;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.14em;color:rgba(255,255,255,0.92)}
+  .tv-channels-list::-webkit-scrollbar-thumb{background:#2A2823}
+  .tv-card{display:flex;align-items:center;gap:14px;padding:12px 10px;background:transparent;border:none;border-bottom:1px solid rgba(247,243,236,0.08);transition:all .15s}
+  .tv-card.focused{background:rgba(247,243,236,0.05);border-left:2px solid var(--led-amber);padding-left:12px}
+  .tv-card.playing .tv-card-name{color:var(--led-red)}
+  .tv-card-thumb{width:60px;height:42px;flex-shrink:0;border:1px solid rgba(247,243,236,0.1);display:flex;align-items:center;justify-content:center;position:relative;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.14em;color:rgba(255,255,255,0.92)}
   .tv-card-flag{position:absolute;top:3px;left:4px;font-size:11px}
   .tv-card-body{flex:1;min-width:0}
-  .tv-card-num{font-family:var(--mono);font-size:9px;color:#5B5550;letter-spacing:0.16em;margin-bottom:2px;text-transform:uppercase}
-  .tv-card-name{font-family:var(--serif-display);font-size:18px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em}
+  .tv-card-num{font-family:var(--mono);font-size:9px;color:#5B5550;letter-spacing:0.16em;margin-bottom:2px}
+  .tv-card-name{font-family:var(--serif);font-size:18px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tv-card-program{font-size:11px;color:#8A867C;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);letter-spacing:0.06em;text-transform:uppercase}
-  .tv-card-live{padding:2px 6px;background:transparent;border:1px solid #8A1C1C;color:#C53F3F;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.16em;flex-shrink:0;text-transform:uppercase}
-  .tv-card-link{font-family:var(--mono);font-size:14px;color:#8A867C;flex-shrink:0}
-  .tv-hint{padding:16px 60px;border-top:1px solid rgba(247,243,236,0.1);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:11px;color:#5B5550;letter-spacing:0.16em;text-transform:uppercase}
-  .tv-hint-group{display:flex;gap:28px;align-items:center}
-  .tv-hint-key{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 8px;background:transparent;border:1px solid #2A2823;font-weight:700;color:#F7F3EC;margin-right:8px;font-size:10px}
-  @media (min-width:1920px){
-    .tv-program{font-size:56px}
-    .tv-card-name{font-size:20px}
-    .tv-brand{font-size:64px}
-  }
+  .tv-card-live{padding:2px 5px;background:transparent;border:1px solid var(--led-red);color:var(--led-red);font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.16em;flex-shrink:0;text-transform:uppercase}
+  .tv-card-link{font-family:var(--mono);font-size:13px;color:#8A867C;flex-shrink:0}
+  .tv-hint{padding:14px 50px;border-top:1px solid rgba(247,243,236,0.1);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;color:#5B5550;letter-spacing:0.16em;text-transform:uppercase}
+  .tv-hint-group{display:flex;gap:24px;align-items:center}
+  .tv-hint-key{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;background:transparent;border:1px solid #2A2823;font-weight:700;color:#F7F3EC;margin-right:6px;font-size:10px}
 </style>
 </head>
 <body>
@@ -718,22 +831,77 @@
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.12.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.13.0</div>
   </div>
 </div>
 
 <div class="app" id="app">
 
-  <header class="header">
-    <div class="brand">
-      <span class="brand-mark">ON AIR</span>
-      <span class="brand-sub">GLOBAL</span>
+  <!-- ==========================
+       브라운관 TV 본체 — v0.13.0
+       ========================== -->
+  <div class="tv-set">
+    <div class="tv-body">
+      <!-- CRT 스크린 -->
+      <div class="crt-frame">
+        <div class="crt-screen">
+          <div class="osd" id="osd">
+            <div class="osd-num" id="osd-num">--</div>
+            <div class="osd-name" id="osd-name">SELECT CHANNEL</div>
+          </div>
+          <div class="crt-content" id="crt-content">
+            <div class="crt-info">
+              <div class="crt-info-title">ON AIR</div>
+              <div class="crt-info-sub">▼ TUNE BELOW ▼</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 컨트롤 패널 -->
+      <div class="ctrl-panel">
+        <div class="ctrl-brand">JUNS-TV</div>
+
+        <!-- CH 디지털 카운터 -->
+        <div class="ch-counter">
+          <div class="ch-counter-label">CH</div>
+          <div class="ch-counter-num" id="ch-counter">--</div>
+        </div>
+
+        <!-- 다이얼 -->
+        <div class="dial-wrap">
+          <div class="dial" id="dial" style="transform:rotate(0deg)" role="button" aria-label="채널 다이얼"></div>
+        </div>
+
+        <!-- CH ▲▼ 버튼 -->
+        <div class="ch-btns">
+          <button class="ch-btn" id="ch-up" aria-label="채널 위"><span>▲ CH</span></button>
+          <button class="ch-btn" id="ch-down" aria-label="채널 아래"><span>CH ▼</span></button>
+        </div>
+
+        <!-- LED -->
+        <div class="led-row">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div class="led on-air"></div>
+            <div class="led-label">ON</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div class="led power"></div>
+            <div class="led-label">PWR</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <span class="on-air-pill"><span class="dot"></span>LIVE</span>
-      <span class="clock" id="clock">--:--:--</span>
+
+    <!-- TV 하단 라벨 -->
+    <div class="tv-foot">
+      <div>
+        <div class="brand-plate">ON AIR</div>
+        <div class="brand-plate-sub">TRINITRON · MADE BY JUNS</div>
+      </div>
+      <div class="clock-plate" id="clock">--:--:--</div>
     </div>
-  </header>
+  </div>
 
   <main class="main">
     <section class="view" id="view-now">
@@ -788,7 +956,7 @@
     <section class="view" id="view-more" hidden>
       <div class="section-head">
         <h2 class="section-title">설정</h2>
-        <span class="section-meta">v0.12.0</span>
+        <span class="section-meta">v0.13.0</span>
       </div>
       <ul class="more-list">
         <li class="more-row" id="install-row" style="cursor:pointer">
@@ -804,7 +972,7 @@
         <li class="more-row"><span>화질</span><span class="val">AUTO</span></li>
         <li class="more-row"><span>자막 언어</span><span class="val">KO/EN</span></li>
         <li class="more-row"><span>테마</span><span class="val">LIGHT</span></li>
-        <li class="more-row"><span>앱 정보</span><span class="val">v0.12.0</span></li>
+        <li class="more-row"><span>앱 정보</span><span class="val">v0.13.0</span></li>
       </ul>
       <div class="footer-credit">MADE BY JUNS</div>
     </section>
@@ -835,10 +1003,6 @@
     <button class="tab" data-tab="guide">
       <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
       편성
-    </button>
-    <button class="tab" data-tab="replay">
-      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-      다시보기
     </button>
     <button class="tab" data-tab="more">
       <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>
@@ -987,58 +1151,58 @@ const CHANNELS = [
     program:"BBC Earth · 자연 다큐", desc:"최고 수준의 자연 다큐" },
 
 
-  /* ========== 스포츠 ⚽ ========== */
-  { num:"71", code:"FIFA", name:"FIFA", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCpcTrCXblq78GZrTUTLWeBw", color:"#326295",
-    program:"FIFA · 세계 축구", desc:"월드컵·국제대회 공식" },
-  { num:"72", code:"UEFA-CL", name:"UEFA Champions League", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCWHfJ7BY8Hr1saLplH_Vdhg", color:"#00204E",
-    program:"UEFA 챔피언스리그", desc:"유럽 최고 클럽대회" },
-  { num:"73", code:"UEFA", name:"UEFA", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCyGa1YEx9ST66rYrJTGIKOw", color:"#004B9B",
-    program:"UEFA · 유럽 축구", desc:"유로파·EURO 등" },
-  { num:"74", code:"EPL", name:"Premier League", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCG5qGWdu8nIRZqJ_GgDwQ-w", color:"#38003C",
-    program:"프리미어리그", desc:"잉글랜드 1부 공식" },
-  { num:"75", code:"LALIGA", name:"LaLiga", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCKvn9VBLAiLiYL4FFJHri6g", color:"#EE3524",
-    program:"라리가 · 스페인", desc:"스페인 프로축구 공식" },
-  { num:"76", code:"BUND", name:"Bundesliga", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCW2bTLkL9XJ8-dxDQ59_2_g", color:"#D3010C",
-    program:"분데스리가 · 독일", desc:"독일 프로축구 공식" },
-  { num:"77", code:"SERIE", name:"Serie A", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCWRLkjaxptdJGv3pP5DCpXw", color:"#008FD7",
-    program:"세리에 A · 이탈리아", desc:"이탈리아 프로축구" },
-  { num:"78", code:"KLEAGUE", name:"K리그 TV", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCvV4rt4O3ynIUBAhIxgWYVA", color:"#E50914",
-    program:"K리그 · 한국 축구", desc:"한국프로축구연맹 공식" },
-  { num:"81", code:"NBA", name:"NBA", type:"playlist", country:"sports", flag:"🏀",
-    ytId:"UCWJ2lWNubArHWmf3FIHbfcQ", color:"#C9082A",
-    program:"NBA · 미국 농구", desc:"미국 프로농구 공식" },
-  { num:"82", code:"KBL", name:"KBL", type:"playlist", country:"sports", flag:"🏀",
-    ytId:"UCtAp_fc5UjZ9H2KzhSoFFVg", color:"#003876",
-    program:"KBL · 한국 농구", desc:"한국프로농구 공식" },
-  { num:"83", code:"MLB", name:"MLB", type:"playlist", country:"sports", flag:"⚾",
-    ytId:"UCoLrcjPV5PbUrUyXq5mjc_A", color:"#002D72",
-    program:"MLB · 메이저리그", desc:"미국 메이저리그 공식" },
-  { num:"84", code:"KBO", name:"KBO", type:"playlist", country:"sports", flag:"⚾",
-    ytId:"UCzcTIrWxVTKalYcxSSoAWsA", color:"#09529F",
-    program:"KBO · 한국 야구", desc:"한국프로야구 공식" },
-  { num:"85", code:"NFL", name:"NFL", type:"playlist", country:"sports", flag:"🏈",
-    ytId:"UCDVYQ4Zhbm3S2dlz7P1GBDg", color:"#013369",
-    program:"NFL · 미식축구", desc:"미국 미식축구 공식" },
-  { num:"86", code:"F1", name:"Formula 1", type:"playlist", country:"sports", flag:"🏎️",
-    ytId:"UCB_qr75-ydFVKSF9Dmo6izg", color:"#E10600",
-    program:"F1 · 포뮬러 원", desc:"세계 자동차 경주 공식" },
-  { num:"87", code:"ATP", name:"ATP Tour", type:"playlist", country:"sports", flag:"🎾",
-    ytId:"UCUDvdSkzW7mvIjjzDE8gnrw", color:"#F59E0B",
-    program:"ATP · 남자 테니스", desc:"남자 프로테니스 공식" },
-  { num:"88", code:"WTA", name:"WTA", type:"playlist", country:"sports", flag:"🎾",
-    ytId:"UC8-ZVWvrpEbIjK0mnYc3W_w", color:"#6D28D9",
-    program:"WTA · 여자 테니스", desc:"여자 프로테니스 공식" },
-  { num:"89", code:"UFC", name:"UFC", type:"playlist", country:"sports", flag:"🥊",
-    ytId:"UCvA7hgX-TG8p4sZpZlFFoDA", color:"#D20A0A",
-    program:"UFC · 종합격투기", desc:"세계 MMA 공식" },
+  /* ========== 스포츠 ⚽ (유튜브 채널로 외부 이동) ========== */
+  { num:"71", code:"FIFA", name:"FIFA", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@FIFA", color:"#326295",
+    program:"FIFA · 세계 축구", desc:"유튜브 공식 채널 이동" },
+  { num:"72", code:"UEFA-CL", name:"UEFA Champions League", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@ChampionsLeague", color:"#00204E",
+    program:"UEFA 챔피언스리그", desc:"유튜브 공식 채널 이동" },
+  { num:"73", code:"UEFA", name:"UEFA", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@UEFA", color:"#004B9B",
+    program:"UEFA · 유럽 축구", desc:"유튜브 공식 채널 이동" },
+  { num:"74", code:"EPL", name:"Premier League", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@premierleague", color:"#38003C",
+    program:"프리미어리그", desc:"유튜브 공식 채널 이동" },
+  { num:"75", code:"LALIGA", name:"LaLiga", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@LaLiga", color:"#EE3524",
+    program:"라리가 · 스페인", desc:"유튜브 공식 채널 이동" },
+  { num:"76", code:"BUND", name:"Bundesliga", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@Bundesliga", color:"#D3010C",
+    program:"분데스리가 · 독일", desc:"유튜브 공식 채널 이동" },
+  { num:"77", code:"SERIE", name:"Serie A", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@SerieA", color:"#008FD7",
+    program:"세리에 A · 이탈리아", desc:"유튜브 공식 채널 이동" },
+  { num:"78", code:"KLEAGUE", name:"K리그 TV", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@kleague", color:"#E50914",
+    program:"K리그 · 한국 축구", desc:"유튜브 공식 채널 이동" },
+  { num:"81", code:"NBA", name:"NBA", type:"link", country:"sports", flag:"🏀",
+    url:"https://www.youtube.com/@NBA", color:"#C9082A",
+    program:"NBA · 미국 농구", desc:"유튜브 공식 채널 이동" },
+  { num:"82", code:"KBL", name:"KBL", type:"link", country:"sports", flag:"🏀",
+    url:"https://www.youtube.com/@KBLOfficial", color:"#003876",
+    program:"KBL · 한국 농구", desc:"유튜브 공식 채널 이동" },
+  { num:"83", code:"MLB", name:"MLB", type:"link", country:"sports", flag:"⚾",
+    url:"https://www.youtube.com/@MLB", color:"#002D72",
+    program:"MLB · 메이저리그", desc:"유튜브 공식 채널 이동" },
+  { num:"84", code:"KBO", name:"KBO", type:"link", country:"sports", flag:"⚾",
+    url:"https://www.youtube.com/@KBOtube", color:"#09529F",
+    program:"KBO · 한국 야구", desc:"유튜브 공식 채널 이동" },
+  { num:"85", code:"NFL", name:"NFL", type:"link", country:"sports", flag:"🏈",
+    url:"https://www.youtube.com/@NFL", color:"#013369",
+    program:"NFL · 미식축구", desc:"유튜브 공식 채널 이동" },
+  { num:"86", code:"F1", name:"Formula 1", type:"link", country:"sports", flag:"🏎️",
+    url:"https://www.youtube.com/@Formula1", color:"#E10600",
+    program:"F1 · 포뮬러 원", desc:"유튜브 공식 채널 이동" },
+  { num:"87", code:"ATP", name:"ATP Tour", type:"link", country:"sports", flag:"🎾",
+    url:"https://www.youtube.com/@atptour", color:"#F59E0B",
+    program:"ATP · 남자 테니스", desc:"유튜브 공식 채널 이동" },
+  { num:"88", code:"WTA", name:"WTA", type:"link", country:"sports", flag:"🎾",
+    url:"https://www.youtube.com/@wta", color:"#6D28D9",
+    program:"WTA · 여자 테니스", desc:"유튜브 공식 채널 이동" },
+  { num:"89", code:"UFC", name:"UFC", type:"link", country:"sports", flag:"🥊",
+    url:"https://www.youtube.com/@UFC", color:"#D20A0A",
+    program:"UFC · 종합격투기", desc:"유튜브 공식 채널 이동" },
 ];
 
 const COUNTRIES = [
@@ -1307,39 +1471,61 @@ function replayEmbedUrl(ytChannelId){
 
 function playChannel(idx){
   const c = CHANNELS[idx];
+
+  // link 타입: 새 창으로
   if (c.type === "link"){
     window.open(c.url, "_blank", "noopener,noreferrer");
     return;
   }
+
   currentIdx = idx;
   $$(".card", $("#channels")).forEach(el => el.classList.toggle("is-playing", +el.dataset.idx === idx));
 
-  // 타입별 URL 결정
-  let src, isLive;
+  // 타입별 URL
+  let src;
   if (c.type === "youtube_video") {
     src = videoEmbedUrl(c.videoId);
-    isLive = true;
   } else if (c.type === "playlist") {
     src = replayEmbedUrl(c.ytId);
-    isLive = false;
   } else {
     src = liveEmbedUrl(c.ytId);
-    isLive = true;
   }
 
-  if (isDesktop()){
+  // CRT 화면에 재생 (모바일/데스크톱 모두)
+  const crtEl = $("#crt-content");
+  if (crtEl) {
+    crtEl.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  }
+
+  // CH 카운터 + OSD 업데이트
+  const chNum = $("#ch-counter");
+  const osdNum = $("#osd-num");
+  const osdName = $("#osd-name");
+  if (chNum) chNum.textContent = c.num;
+  if (osdNum) osdNum.textContent = c.num;
+  if (osdName) osdName.textContent = `${c.flag} ${c.name}`.toUpperCase();
+
+  // OSD 잠시 보였다가 사라짐
+  const osd = $("#osd");
+  if (osd) {
+    osd.style.opacity = "1";
+    clearTimeout(window._osdTimer);
+    window._osdTimer = setTimeout(() => { osd.style.opacity = "0"; }, 2500);
+  }
+
+  // 다이얼 회전 (현재 인덱스에 비례)
+  const dial = $("#dial");
+  if (dial) {
+    const playableChannels = CHANNELS.filter(ch => ch.type !== "link" || true); // 모든 채널
+    const ratio = idx / Math.max(1, CHANNELS.length - 1);
+    const rotation = ratio * 720; // 2바퀴까지
+    dial.style.transform = `rotate(${rotation}deg)`;
+  }
+
+  // 데스크톱 사이드 정보도 업데이트
+  if (isDesktop() && $("#stage-program")){
     $("#stage-program").textContent = c.program;
     $("#stage-chan").textContent = `${c.flag} CH ${c.num} · ${c.name}`;
-    $("#stage-frame").innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-  } else {
-    openMobilePlayer({
-      title:`${c.flag} ${c.name}`,
-      program:c.program,
-      sub:`CH ${c.num} · ${c.desc}`,
-      src:src,
-      isLive:isLive,
-      scheduleCode:c.code,
-    });
   }
 }
 
@@ -1428,7 +1614,56 @@ renderChannels();
 renderReplayFilter();
 renderReplays();
 renderGuide();
-if (isDesktop()) playChannel(currentIdx);
+
+/* ==========================
+   브라운관 TV 컨트롤 (v0.13.0)
+   - CH ▲▼ 버튼: 재생 가능 채널만 순환
+   - 다이얼 클릭/탭: 다음 채널
+   ========================== */
+function getPlayableChannels(){
+  // 모든 채널 (link 포함 — 외부이동도 채널 변경으로 침)
+  return CHANNELS.map((c, i) => i);
+}
+
+function changeChannel(direction){
+  const playable = getPlayableChannels();
+  let curPos = playable.indexOf(currentIdx);
+  if (curPos < 0) curPos = 0;
+  let nextPos = (curPos + direction + playable.length) % playable.length;
+  const nextIdx = playable[nextPos];
+  // link 타입은 새창으로 열려서 재생 안 됨 — 스킵
+  if (CHANNELS[nextIdx].type === "link") {
+    // link는 건너뛰고 다음 재생 가능한 채널로
+    let safety = 0;
+    while (CHANNELS[nextIdx]?.type === "link" && safety < 100) {
+      nextPos = (nextPos + direction + playable.length) % playable.length;
+      const newIdx = playable[nextPos];
+      if (newIdx === currentIdx) break;
+      safety++;
+      if (CHANNELS[newIdx]?.type !== "link") {
+        playChannel(newIdx);
+        return;
+      }
+    }
+  }
+  playChannel(nextIdx);
+}
+
+const chUpBtn = document.getElementById("ch-up");
+const chDownBtn = document.getElementById("ch-down");
+const dialEl = document.getElementById("dial");
+
+if (chUpBtn) chUpBtn.addEventListener("click", () => changeChannel(1));
+if (chDownBtn) chDownBtn.addEventListener("click", () => changeChannel(-1));
+if (dialEl) dialEl.addEventListener("click", () => changeChannel(1));
+
+// 첫 재생 가능한 채널로 시작
+const firstPlayable = CHANNELS.findIndex(c => c.type !== "link");
+if (firstPlayable >= 0) {
+  playChannel(firstPlayable);
+} else if (isDesktop()) {
+  playChannel(currentIdx);
+}
 
 /* ==========================
    PWA: 앱 설치 로직
