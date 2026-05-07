@@ -1,5 +1,5 @@
-// ON AIR Service Worker v0.16.0-sports-inapp
-const CACHE_NAME = "onair-v0.16.0-sports-inapp";
+// ON AIR Service Worker v0.17.0-luxury-brand
+const CACHE_NAME = "onair-v0.17.0-luxury-brand";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
