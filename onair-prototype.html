@@ -1029,9 +1029,12 @@
     .tv-brand-sub{display:none}
     .tv-clock{font-size:20px}
   }
-  /* v0.15.0: 모바일 세로 — 영상 위, 채널 리스트 아래 */
+  /* v0.18.0: 모바일 세로 — 영상 위, 채널 리스트 아래로 자연 스크롤 */
   @media (max-width: 720px){
-    .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px}
+    /* 모바일에서는 페이지 자체 스크롤 허용 (TV 모드 fixed 해제) */
+    body.tv{overflow:auto;height:auto}
+    .tv-app{position:static;height:auto;min-height:100dvh;inset:auto}
+    .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:5;background:#0A0907}
     .tv-brand{font-size:22px;letter-spacing:0.14em}
     .tv-brand-amp{font-size:16px;transform:translateY(-2px)}
     .tv-brand-kr{font-size:13px;letter-spacing:0.22em;padding-left:8px;margin-left:6px}
@@ -1039,12 +1042,13 @@
     .tv-brand-sub{display:none}
     .tv-on-air{padding:4px 8px;font-size:9px;margin-right:8px}
     .tv-clock{font-size:14px}
-    .tv-stage{flex-direction:column;padding:10px 12px;gap:12px}
+    .tv-stage{flex-direction:column;padding:10px 12px;gap:12px;flex:0 0 auto}
     .tv-player-wrap{flex:0 0 auto}
     .tv-player{aspect-ratio:16/9;flex:0 0 auto}
     .tv-program{font-size:20px;margin-bottom:2px}
     .tv-chan-info{font-size:10px;letter-spacing:0.12em}
-    .tv-channels{flex:1;min-width:0}
+    .tv-channels{flex:0 0 auto;min-width:0;min-height:0}
+    .tv-channels-list{flex:0 0 auto;overflow-y:visible;padding-right:0}
     .tv-channels-title{font-size:10px;margin-bottom:6px}
     .tv-card{padding:10px 8px;gap:10px}
     .tv-card-thumb{width:48px;height:34px}
@@ -1107,7 +1111,7 @@
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
       <span><span class="tv-hint-key">F</span>전체화면</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.17.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.18.0</div>
   </div>
 </div>
 
