@@ -1,5 +1,5 @@
-// ON AIR Service Worker v0.18.0-mobile-scroll
-const CACHE_NAME = "onair-v0.18.0-mobile-scroll";
+// ON AIR Service Worker v0.19.0-yt-fallback
+const CACHE_NAME = "onair-v0.19.0-yt-fallback";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
