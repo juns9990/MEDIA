@@ -973,9 +973,19 @@
   .tv-on-air .dot{width:7px;height:7px;background:var(--led-red);border-radius:50%;animation:ledPulse 2s ease-out infinite;box-shadow:0 0 6px var(--led-red)}
   .tv-stage{flex:1;display:flex;padding:24px 50px;gap:36px;min-height:0}
   .tv-player-wrap{flex:2;display:flex;flex-direction:column}
-  .tv-player-info{margin-bottom:12px}
+  .tv-player-info{margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .tv-info-text{flex:1;min-width:0}
   .tv-program{font-family:var(--serif);font-size:42px;font-style:italic;line-height:1.05;margin-bottom:4px;letter-spacing:-0.02em}
   .tv-chan-info{font-family:var(--mono);font-size:12px;color:#8A867C;letter-spacing:0.18em;text-transform:uppercase}
+  .tv-yt-fallback{
+    flex-shrink:0;display:none;align-items:center;gap:6px;
+    padding:8px 14px;border:1px solid rgba(232,199,110,0.4);
+    color:#E8C76E;font-family:var(--mono);font-size:11px;
+    letter-spacing:0.16em;text-decoration:none;text-transform:uppercase;
+    transition:all .15s;
+  }
+  .tv-yt-fallback:hover{background:rgba(232,199,110,0.1);border-color:#E8C76E}
+  .tv-yt-fallback.visible{display:inline-flex}
   .tv-player{flex:1;background:#000;border:1px solid #2A2823;overflow:hidden;position:relative}
   .tv-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .tv-player-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;color:#8A867C}
@@ -1029,9 +1039,12 @@
     .tv-brand-sub{display:none}
     .tv-clock{font-size:20px}
   }
-  /* v0.15.0: 모바일 세로 — 영상 위, 채널 리스트 아래 */
+  /* v0.18.0: 모바일 세로 — 영상 위, 채널 리스트 아래로 자연 스크롤 */
   @media (max-width: 720px){
-    .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px}
+    /* 모바일에서는 페이지 자체 스크롤 허용 (TV 모드 fixed 해제) */
+    body.tv{overflow:auto;height:auto}
+    .tv-app{position:static;height:auto;min-height:100dvh;inset:auto}
+    .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:5;background:#0A0907}
     .tv-brand{font-size:22px;letter-spacing:0.14em}
     .tv-brand-amp{font-size:16px;transform:translateY(-2px)}
     .tv-brand-kr{font-size:13px;letter-spacing:0.22em;padding-left:8px;margin-left:6px}
@@ -1039,12 +1052,14 @@
     .tv-brand-sub{display:none}
     .tv-on-air{padding:4px 8px;font-size:9px;margin-right:8px}
     .tv-clock{font-size:14px}
-    .tv-stage{flex-direction:column;padding:10px 12px;gap:12px}
+    .tv-stage{flex-direction:column;padding:10px 12px;gap:12px;flex:0 0 auto}
     .tv-player-wrap{flex:0 0 auto}
     .tv-player{aspect-ratio:16/9;flex:0 0 auto}
     .tv-program{font-size:20px;margin-bottom:2px}
     .tv-chan-info{font-size:10px;letter-spacing:0.12em}
-    .tv-channels{flex:1;min-width:0}
+    .tv-yt-fallback{padding:6px 10px;font-size:9px;letter-spacing:0.12em}
+    .tv-channels{flex:0 0 auto;min-width:0;min-height:0}
+    .tv-channels-list{flex:0 0 auto;overflow-y:visible;padding-right:0}
     .tv-channels-title{font-size:10px;margin-bottom:6px}
     .tv-card{padding:10px 8px;gap:10px}
     .tv-card-thumb{width:48px;height:34px}
@@ -1080,8 +1095,11 @@
   <div class="tv-stage">
     <div class="tv-player-wrap">
       <div class="tv-player-info">
-        <div class="tv-program" id="tv-program">채널을 선택하세요</div>
-        <div class="tv-chan-info" id="tv-chan-info">← → ↑ ↓ 키로 채널 선택</div>
+        <div class="tv-info-text">
+          <div class="tv-program" id="tv-program">채널을 선택하세요</div>
+          <div class="tv-chan-info" id="tv-chan-info">← → ↑ ↓ 키로 채널 선택</div>
+        </div>
+        <a class="tv-yt-fallback" id="tv-yt-fallback" href="#" target="_blank" rel="noopener noreferrer" title="앱에서 안 나올 때 유튜브에서 직접 시청">▶ 유튜브에서 보기 ↗</a>
       </div>
       <div class="tv-player" id="tv-player">
         <div class="tv-player-content" id="tv-player-content">
@@ -1107,7 +1125,7 @@
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
       <span><span class="tv-hint-key">F</span>전체화면</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.17.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.19.0</div>
   </div>
 </div>
 
@@ -1349,18 +1367,18 @@ const CHANNELS = [
     program:"연합뉴스TV · 연속재생", desc:"연합뉴스 최신 업로드" },
 
   /* ========== K-엔터테인먼트 ========== */
-  { num:"21", code:"KBSW", name:"KBS WORLD", type:"playlist", country:"kr", flag:"🇰🇷",
+  { num:"21", code:"KBSW", name:"KBS WORLD", type:"youtube", country:"kr", flag:"🇰🇷",
     ytId:"UC5BMQOsAB8hKUyHu9KI6yig", color:"#0EA5E9",
-    program:"K-엔터 · 연속재생", desc:"한류 콘텐츠 글로벌" },
-  { num:"22", code:"MBCE", name:"MBC 엔터테인먼트", type:"playlist", country:"kr", flag:"🇰🇷",
-    ytId:"UCiBr0bK06imaMbLc8sAEz0A", color:"#FF3355",
-    program:"MBC 예능 · 연속재생", desc:"예능 클립 자동 재생" },
-  { num:"23", code:"SBSE", name:"SBS 예능", type:"playlist", country:"kr", flag:"🇰🇷",
-    ytId:"UCmjNKt6kITwaZTqvWuaSPLg", color:"#FFBE2E",
-    program:"SBS 예능 · 연속재생", desc:"예능 클립 자동 재생" },
-  { num:"24", code:"SBSNOW", name:"스브스 NOW", type:"playlist", country:"kr", flag:"🇰🇷",
-    ytId:"UCcOYEm78CpaZQvPE6LtoSeA", color:"#FFBE2E",
-    program:"SBS 공식 종합", desc:"드라마·예능·교양 핫클립" },
+    program:"K-엔터 24/7 라이브", desc:"한류 콘텐츠 라이브 스트림" },
+  { num:"22", code:"MBCE", name:"MBC 엔터테인먼트", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://www.youtube.com/@MBCentertainment", color:"#FF3355",
+    program:"MBC 예능 클립", desc:"임베드 제한 — 유튜브 채널 이동" },
+  { num:"23", code:"SBSE", name:"SBS 예능", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://www.youtube.com/@SBSNOWVID", color:"#FFBE2E",
+    program:"SBS 예능 클립", desc:"임베드 제한 — 유튜브 채널 이동" },
+  { num:"24", code:"SBSNOW", name:"스브스 NOW", type:"link", country:"kr", flag:"🇰🇷",
+    url:"https://www.youtube.com/@SBSNOW", color:"#FFBE2E",
+    program:"SBS 종합 클립", desc:"임베드 제한 — 유튜브 채널 이동" },
 
   /* ========== 미국 🇺🇸 뉴스 ========== */
   { num:"31", code:"CNN", name:"CNN", type:"playlist", country:"us", flag:"🇺🇸",
@@ -2152,12 +2170,32 @@ function initTVMode() {
     });
   }
 
+  /* 채널을 유튜브에서 직접 보는 fallback URL 계산 */
+  function ytFallbackUrl(c) {
+    if (c.type === "youtube_video") return `https://www.youtube.com/watch?v=${c.videoId}`;
+    if (c.type === "playlist" || c.type === "youtube") return `https://www.youtube.com/channel/${c.ytId}`;
+    if (c.type === "link") return c.url;
+    return null;
+  }
+
   /* 재생 */
   function tvPlay(idx) {
     const c = CHANNELS[idx];
     $("#tv-program").textContent = c.program;
     $("#tv-chan-info").textContent =
       `${c.flag} CH ${c.num} · ${c.name} · ${c.desc}`;
+
+    /* 모든 유튜브 계열 채널은 임베드 실패 대비 우측 상단에 'YouTube 에서 보기' 링크 노출 */
+    const fb = $("#tv-yt-fallback");
+    const fbUrl = ytFallbackUrl(c);
+    if (fb) {
+      if (fbUrl && c.type !== "hls") {
+        fb.href = fbUrl;
+        fb.classList.add("visible");
+      } else {
+        fb.classList.remove("visible");
+      }
+    }
 
     const content = $("#tv-player-content");
 
@@ -2166,7 +2204,7 @@ function initTVMode() {
       content.innerHTML = `
         <div class="tv-player-fallback">
           <div class="tv-player-fallback-title">${c.flag} ${c.name}</div>
-          <div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>
+          <div>이 채널은 저작권/임베드 정책상 앱 내 재생이 불가합니다.<br>위쪽 <b>'유튜브에서 보기'</b> 또는 아래 링크에서 시청하세요.</div>
           <div class="tv-player-fallback-link">${c.url}</div>
         </div>`;
       return;
