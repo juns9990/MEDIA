@@ -21,7 +21,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=VT323&family=Major+Mono+Display&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=VT323&family=Major+Mono+Display&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@500;600;700;900&family=Cinzel:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
 
 <!-- HLS.js — 공개 HLS 라이브 스트림 재생용 (DW, France 24, Al Jazeera 등) -->
@@ -921,8 +921,53 @@
     display:flex;align-items:center;justify-content:space-between;
     border-bottom:1px solid rgba(247,243,236,0.1);
   }
-  .tv-brand{font-family:var(--display);font-size:42px;letter-spacing:0.1em;line-height:1}
-  .tv-brand-sub{font-family:var(--mono);font-size:11px;color:#8A867C;letter-spacing:0.28em;margin-left:18px;text-transform:uppercase}
+  /* v0.17.0 — 럭셔리 브랜드 타이포 */
+  .tv-brand-group{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .tv-brand{
+    margin:0;
+    font-family:'Cinzel', var(--display);
+    font-size:46px;line-height:1;
+    font-style:normal;font-weight:600;
+    letter-spacing:0.18em;
+    display:inline-flex;align-items:baseline;gap:10px;
+    /* 샴페인 골드 그라데이션 */
+    background:linear-gradient(180deg, #FFF5D1 0%, #E8C76E 35%, #B98A2F 60%, #FFE9B0 85%, #8E6418 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    /* 미세한 광택/입체감 */
+    filter:drop-shadow(0 1px 0 rgba(0,0,0,0.55)) drop-shadow(0 0 14px rgba(232,199,110,0.25));
+  }
+  .tv-brand-on{letter-spacing:0.06em}
+  .tv-brand-amp{
+    font-family:'Cinzel', var(--serif);font-style:normal;
+    font-size:32px;margin:0 -4px;opacity:0.7;
+    transform:translateY(-6px);display:inline-block;
+    letter-spacing:0;
+  }
+  .tv-brand-air{letter-spacing:0.08em}
+  .tv-brand-kr{
+    font-family:'Noto Serif KR', var(--display);
+    font-style:normal;font-weight:600;
+    font-size:22px;letter-spacing:0.32em;
+    margin-left:10px;padding-left:14px;
+    border-left:1px solid rgba(232,199,110,0.35);
+    background:linear-gradient(180deg, #FFF5D1 0%, #E8C76E 35%, #B98A2F 60%, #FFE9B0 85%, #8E6418 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    align-self:center;
+  }
+  .tv-brand-flourish{
+    font-size:18px;color:#B98A2F;
+    text-shadow:0 0 10px rgba(232,199,110,0.4);
+    transform:translateY(1px);
+  }
+  .tv-brand-sub{
+    font-family:var(--mono);font-size:10px;
+    color:#9A8857;letter-spacing:0.42em;
+    margin-left:6px;padding-left:14px;
+    border-left:1px solid rgba(232,199,110,0.2);
+    text-transform:uppercase;
+  }
   .tv-clock{font-family:var(--crt);font-size:28px;color:var(--led-amber);text-shadow:0 0 6px var(--led-amber);letter-spacing:0.06em}
   .tv-on-air{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--led-red);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.24em;color:var(--led-red);margin-right:20px}
   .tv-on-air .dot{width:7px;height:7px;background:var(--led-red);border-radius:50%;animation:ledPulse 2s ease-out infinite;box-shadow:0 0 6px var(--led-red)}
@@ -978,13 +1023,19 @@
     .tv-channels{min-width:280px;flex:0 0 320px}
     .tv-program{font-size:30px}
     .tv-header{padding:14px 24px 10px}
-    .tv-brand{font-size:30px}
+    .tv-brand{font-size:34px;letter-spacing:0.16em}
+    .tv-brand-amp{font-size:24px;transform:translateY(-4px)}
+    .tv-brand-kr{font-size:18px;letter-spacing:0.28em}
+    .tv-brand-sub{display:none}
     .tv-clock{font-size:20px}
   }
   /* v0.15.0: 모바일 세로 — 영상 위, 채널 리스트 아래 */
   @media (max-width: 720px){
     .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px}
-    .tv-brand{font-size:22px}
+    .tv-brand{font-size:22px;letter-spacing:0.14em}
+    .tv-brand-amp{font-size:16px;transform:translateY(-2px)}
+    .tv-brand-kr{font-size:13px;letter-spacing:0.22em;padding-left:8px;margin-left:6px}
+    .tv-brand-flourish{font-size:13px}
     .tv-brand-sub{display:none}
     .tv-on-air{padding:4px 8px;font-size:9px;margin-right:8px}
     .tv-clock{font-size:14px}
@@ -1011,9 +1062,14 @@
      ============================================ -->
 <div class="tv-app" id="tv-app">
   <header class="tv-header">
-    <div>
-      <span class="tv-brand">ON AIR</span>
-      <span class="tv-brand-sub">TV MODE</span>
+    <div class="tv-brand-group">
+      <span class="tv-brand-flourish">❖</span>
+      <h1 class="tv-brand">
+        <span class="tv-brand-on">ON</span><span class="tv-brand-amp">·</span><span class="tv-brand-air">AIR</span>
+        <span class="tv-brand-kr">온에어</span>
+      </h1>
+      <span class="tv-brand-flourish">❖</span>
+      <span class="tv-brand-sub">SINCE MMXXVI · GLOBAL LIVE</span>
     </div>
     <div style="display:flex;align-items:center">
       <span class="tv-on-air"><span class="dot"></span>LIVE</span>
@@ -1051,7 +1107,7 @@
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
       <span><span class="tv-hint-key">F</span>전체화면</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.16.0</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.17.0</div>
   </div>
 </div>
 
@@ -1411,61 +1467,61 @@ const CHANNELS = [
     hlsUrl:"https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8",
     color:"#FCB900", program:"ABC News Live · 24/7", desc:"미국 ABC 뉴스 라이브" },
 
-  /* ========== 스포츠 ⚽ — v0.16.0 앱 내 재생 (playlist = 최신 업로드 자동연속) ==========
-     ytId 는 YouTube channel ID (UC...). 검증 못한 채널은 재생 시 빈 화면이 나올 수 있음.
-     안 뜨는 채널 발견 시 ytId 만 교체하면 됨. (대형 글로벌 채널은 비교적 안정.)
-     한국 K리그/KBL/KBO 는 channel ID 미확인이라 일단 link 유지. */
-  { num:"71", code:"FIFA", name:"FIFA", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCpcTrCXblq78GZrTUTLWeBw", color:"#326295",
-    program:"FIFA · 세계 축구", desc:"공식 영상 자동연속재생" },
-  { num:"72", code:"UEFA-CL", name:"UEFA Champions League", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCQk2-MkRFV0g6DEC59wEjzA", color:"#00204E",
-    program:"UEFA 챔피언스리그", desc:"하이라이트 자동연속재생" },
-  { num:"73", code:"UEFA", name:"UEFA", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCiOOO9aZSe07qcKNiaaGl5w", color:"#004B9B",
-    program:"UEFA · 유럽 축구", desc:"공식 영상 자동연속재생" },
-  { num:"74", code:"EPL", name:"Premier League", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCG5qGWdu8nIRZqJ_GgDwQ-w", color:"#38003C",
-    program:"프리미어리그", desc:"하이라이트 자동연속재생" },
-  { num:"75", code:"LALIGA", name:"LaLiga", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCTv-XvfzLX3i4IGWAm4sbmA", color:"#EE3524",
-    program:"라리가 · 스페인", desc:"하이라이트 자동연속재생" },
-  { num:"76", code:"BUND", name:"Bundesliga", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UCcLN6XMUqcmXBOWKjtxIDsw", color:"#D3010C",
-    program:"분데스리가 · 독일", desc:"하이라이트 자동연속재생" },
-  { num:"77", code:"SERIE", name:"Serie A", type:"playlist", country:"sports", flag:"⚽",
-    ytId:"UC0u_8DsXiCYsROq1hsDDPZw", color:"#008FD7",
-    program:"세리에 A · 이탈리아", desc:"하이라이트 자동연속재생" },
+  /* ========== 스포츠 ⚽ — 외부 유튜브 채널 이동 ==========
+     v0.16.0 에서 추측 channel ID 로 인앱 재생을 시도했지만 ID 검증 불가로 다수 채널이
+     재생 안 됨. v0.17.0 부터 안정적으로 모두 link 로 복원. 추후 정확한 ytId 확보 시
+     해당 채널만 type:"playlist" + ytId 로 변환하면 인앱 재생 가능. */
+  { num:"71", code:"FIFA", name:"FIFA", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@FIFA", color:"#326295",
+    program:"FIFA · 세계 축구", desc:"유튜브 공식 채널 이동" },
+  { num:"72", code:"UEFA-CL", name:"UEFA Champions League", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@ChampionsLeague", color:"#00204E",
+    program:"UEFA 챔피언스리그", desc:"유튜브 공식 채널 이동" },
+  { num:"73", code:"UEFA", name:"UEFA", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@UEFA", color:"#004B9B",
+    program:"UEFA · 유럽 축구", desc:"유튜브 공식 채널 이동" },
+  { num:"74", code:"EPL", name:"Premier League", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@premierleague", color:"#38003C",
+    program:"프리미어리그", desc:"유튜브 공식 채널 이동" },
+  { num:"75", code:"LALIGA", name:"LaLiga", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@LaLiga", color:"#EE3524",
+    program:"라리가 · 스페인", desc:"유튜브 공식 채널 이동" },
+  { num:"76", code:"BUND", name:"Bundesliga", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@Bundesliga", color:"#D3010C",
+    program:"분데스리가 · 독일", desc:"유튜브 공식 채널 이동" },
+  { num:"77", code:"SERIE", name:"Serie A", type:"link", country:"sports", flag:"⚽",
+    url:"https://www.youtube.com/@SerieA", color:"#008FD7",
+    program:"세리에 A · 이탈리아", desc:"유튜브 공식 채널 이동" },
   { num:"78", code:"KLEAGUE", name:"K리그 TV", type:"link", country:"sports", flag:"⚽",
     url:"https://www.youtube.com/@kleague", color:"#E50914",
     program:"K리그 · 한국 축구", desc:"유튜브 공식 채널 이동" },
-  { num:"81", code:"NBA", name:"NBA", type:"playlist", country:"sports", flag:"🏀",
-    ytId:"UCWJ2lWNubArHWmf3FIHbfcQ", color:"#C9082A",
-    program:"NBA · 미국 농구", desc:"하이라이트 자동연속재생" },
+  { num:"81", code:"NBA", name:"NBA", type:"link", country:"sports", flag:"🏀",
+    url:"https://www.youtube.com/@NBA", color:"#C9082A",
+    program:"NBA · 미국 농구", desc:"유튜브 공식 채널 이동" },
   { num:"82", code:"KBL", name:"KBL", type:"link", country:"sports", flag:"🏀",
     url:"https://www.youtube.com/@KBLOfficial", color:"#003876",
     program:"KBL · 한국 농구", desc:"유튜브 공식 채널 이동" },
-  { num:"83", code:"MLB", name:"MLB", type:"playlist", country:"sports", flag:"⚾",
-    ytId:"UCoLrcjPV5PbUrUyXq5mjc_A", color:"#002D72",
-    program:"MLB · 메이저리그", desc:"하이라이트 자동연속재생" },
+  { num:"83", code:"MLB", name:"MLB", type:"link", country:"sports", flag:"⚾",
+    url:"https://www.youtube.com/@MLB", color:"#002D72",
+    program:"MLB · 메이저리그", desc:"유튜브 공식 채널 이동" },
   { num:"84", code:"KBO", name:"KBO", type:"link", country:"sports", flag:"⚾",
     url:"https://www.youtube.com/@KBOtube", color:"#09529F",
     program:"KBO · 한국 야구", desc:"유튜브 공식 채널 이동" },
-  { num:"85", code:"NFL", name:"NFL", type:"playlist", country:"sports", flag:"🏈",
-    ytId:"UCDVYQ4Zhbm3S2dlz7P1GBDg", color:"#013369",
-    program:"NFL · 미식축구", desc:"하이라이트 자동연속재생" },
-  { num:"86", code:"F1", name:"Formula 1", type:"playlist", country:"sports", flag:"🏎️",
-    ytId:"UCB_qr75-ydFVKSF9Dmo6izg", color:"#E10600",
-    program:"F1 · 포뮬러 원", desc:"하이라이트 자동연속재생" },
-  { num:"87", code:"ATP", name:"ATP Tour", type:"playlist", country:"sports", flag:"🎾",
-    ytId:"UCnT9Z6T9UC9UIWhx1PdcKJg", color:"#F59E0B",
-    program:"ATP · 남자 테니스", desc:"하이라이트 자동연속재생" },
-  { num:"88", code:"WTA", name:"WTA", type:"playlist", country:"sports", flag:"🎾",
-    ytId:"UCO_aImQzdwbA5zCeGMpRIZw", color:"#6D28D9",
-    program:"WTA · 여자 테니스", desc:"하이라이트 자동연속재생" },
-  { num:"89", code:"UFC", name:"UFC", type:"playlist", country:"sports", flag:"🥊",
-    ytId:"UCvgfXK4nTYKudb0rFR6noLA", color:"#D20A0A",
-    program:"UFC · 종합격투기", desc:"하이라이트 자동연속재생" },
+  { num:"85", code:"NFL", name:"NFL", type:"link", country:"sports", flag:"🏈",
+    url:"https://www.youtube.com/@NFL", color:"#013369",
+    program:"NFL · 미식축구", desc:"유튜브 공식 채널 이동" },
+  { num:"86", code:"F1", name:"Formula 1", type:"link", country:"sports", flag:"🏎️",
+    url:"https://www.youtube.com/@Formula1", color:"#E10600",
+    program:"F1 · 포뮬러 원", desc:"유튜브 공식 채널 이동" },
+  { num:"87", code:"ATP", name:"ATP Tour", type:"link", country:"sports", flag:"🎾",
+    url:"https://www.youtube.com/@atptour", color:"#F59E0B",
+    program:"ATP · 남자 테니스", desc:"유튜브 공식 채널 이동" },
+  { num:"88", code:"WTA", name:"WTA", type:"link", country:"sports", flag:"🎾",
+    url:"https://www.youtube.com/@wta", color:"#6D28D9",
+    program:"WTA · 여자 테니스", desc:"유튜브 공식 채널 이동" },
+  { num:"89", code:"UFC", name:"UFC", type:"link", country:"sports", flag:"🥊",
+    url:"https://www.youtube.com/@UFC", color:"#D20A0A",
+    program:"UFC · 종합격투기", desc:"유튜브 공식 채널 이동" },
 ];
 
 const COUNTRIES = [
