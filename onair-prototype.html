@@ -24,6 +24,9 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=VT323&family=Major+Mono+Display&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
 
+<!-- HLS.js — 공개 HLS 라이브 스트림 재생용 (DW, France 24, Al Jazeera 등) -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+
 <style>
   /* ==========================
      ON AIR v0.13.2 — 80년대 브라운관 TV
@@ -986,7 +989,7 @@
     </div>
 
     <div class="tv-channels">
-      <div class="tv-channels-title">CHANNELS · 55</div>
+      <div class="tv-channels-title" id="tv-channels-title">CHANNELS</div>
       <div class="tv-channels-list" id="tv-channels"></div>
     </div>
   </div>
@@ -1327,6 +1330,36 @@ const CHANNELS = [
     program:"BBC Earth · 자연 다큐", desc:"최고 수준의 자연 다큐" },
 
 
+  /* ========== 공개 HLS 라이브 (TV/브라우저 직접 재생) 🛰️ ==========
+     공식 사업자가 공개한 HLS 마스터 매니페스트. 일부 스트림은 지역/시간에 따라 변경될 수 있음. */
+  { num:"91", code:"DW-EN", name:"DW News (Live)", type:"hls", country:"hlslive", flag:"🇩🇪",
+    hlsUrl:"https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8",
+    color:"#002D5B", program:"DW News · 24/7 Live", desc:"독일 국제방송 영문 라이브" },
+  { num:"92", code:"DW-DE", name:"DW Deutsch (Live)", type:"hls", country:"hlslive", flag:"🇩🇪",
+    hlsUrl:"https://dwamdstream101.akamaized.net/hls/live/2015524/dwstream101/index.m3u8",
+    color:"#0891B2", program:"DW · Deutsch Live", desc:"독일어 국제방송" },
+  { num:"93", code:"F24-EN", name:"France 24 EN (Live)", type:"hls", country:"hlslive", flag:"🇫🇷",
+    hlsUrl:"https://static.france24.com/live/F24_EN_HI_HLS/live_web.m3u8",
+    color:"#0056A4", program:"France 24 English · Live", desc:"프랑스 국제방송 영문 라이브" },
+  { num:"94", code:"F24-FR", name:"France 24 FR (Live)", type:"hls", country:"hlslive", flag:"🇫🇷",
+    hlsUrl:"https://static.france24.com/live/F24_FR_HI_HLS/live_web.m3u8",
+    color:"#1F75FE", program:"France 24 · Live", desc:"프랑스어 국제방송 라이브" },
+  { num:"95", code:"AJE-LIVE", name:"Al Jazeera EN (Live)", type:"hls", country:"hlslive", flag:"🇶🇦",
+    hlsUrl:"https://live-hls-web-aje.getaj.net/AJE/01.m3u8",
+    color:"#F7A600", program:"Al Jazeera English · Live", desc:"중동 24시간 라이브" },
+  { num:"96", code:"AJA-LIVE", name:"Al Jazeera AR (Live)", type:"hls", country:"hlslive", flag:"🇶🇦",
+    hlsUrl:"https://live-hls-web-aja.getaj.net/AJA/01.m3u8",
+    color:"#C8932E", program:"Al Jazeera Arabic · Live", desc:"아랍어 24시간 라이브" },
+  { num:"97", code:"NHK-W", name:"NHK World (Live)", type:"hls", country:"hlslive", flag:"🇯🇵",
+    hlsUrl:"https://nhkwlive-eum.akamaized.net/hls/live/2003459/nhkwlive-eum-bd/index.m3u8",
+    color:"#D81E26", program:"NHK World-Japan · Live", desc:"일본 국제방송" },
+  { num:"98", code:"EUN-EN", name:"Euronews EN (Live)", type:"hls", country:"hlslive", flag:"🇪🇺",
+    hlsUrl:"https://euronews-euronews-english-2-eu.xiaomi.wurl.tv/playlist.m3u8",
+    color:"#1AA1DB", program:"Euronews · English Live", desc:"유럽 통합 뉴스 라이브" },
+  { num:"99", code:"AB-EN", name:"ABC News Live (US)", type:"hls", country:"hlslive", flag:"🇺🇸",
+    hlsUrl:"https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8",
+    color:"#FCB900", program:"ABC News Live · 24/7", desc:"미국 ABC 뉴스 라이브" },
+
   /* ========== 스포츠 ⚽ (유튜브 채널로 외부 이동) ========== */
   { num:"71", code:"FIFA", name:"FIFA", type:"link", country:"sports", flag:"⚽",
     url:"https://www.youtube.com/@FIFA", color:"#326295",
@@ -1382,13 +1415,14 @@ const CHANNELS = [
 ];
 
 const COUNTRIES = [
-  { key:"all",    label:"전체",   flag:"" },
-  { key:"kr",     label:"한국",   flag:"🇰🇷" },
-  { key:"sports", label:"스포츠", flag:"⚽" },
-  { key:"us",     label:"미국",   flag:"🇺🇸" },
-  { key:"eu",     label:"유럽",   flag:"🇪🇺" },
-  { key:"asia",   label:"아시아", flag:"🌏" },
-  { key:"doc",    label:"다큐",   flag:"🌿" },
+  { key:"all",     label:"전체",     flag:"" },
+  { key:"hlslive", label:"라이브 ●", flag:"🛰️" },
+  { key:"kr",      label:"한국",     flag:"🇰🇷" },
+  { key:"sports",  label:"스포츠",   flag:"⚽" },
+  { key:"us",      label:"미국",     flag:"🇺🇸" },
+  { key:"eu",      label:"유럽",     flag:"🇪🇺" },
+  { key:"asia",    label:"아시아",   flag:"🌏" },
+  { key:"doc",     label:"다큐",     flag:"🌿" },
 ];
 
 /* 다시보기 */
@@ -1457,7 +1491,10 @@ const $$ = (s, el=document) => [...el.querySelectorAll(s)];
    공통 유틸리티 (v0.9.0)
    ========================== */
 const pad2 = (n) => String(n).padStart(2, "0");
-const isTVMode = new URLSearchParams(location.search).get("tv") === "1";
+/* webOS/Tizen 등 스마트TV에서는 자동으로 TV 모드 진입 */
+const _ua = navigator.userAgent || "";
+const isSmartTV = /Web0S|webOS|SmartTV|Tizen|HbbTV|NetCast|VIDAA|PhilipsTV/i.test(_ua);
+const isTVMode = new URLSearchParams(location.search).get("tv") === "1" || isSmartTV;
 
 function updateClock(elementId) {
   const el = document.getElementById(elementId);
@@ -1504,7 +1541,7 @@ function renderChannels(){
   if (countEl) countEl.textContent = items.length;
   wrap.innerHTML = items.map(c => {
     let tag;
-    if (c.type === "youtube" || c.type === "youtube_video") {
+    if (c.type === "youtube" || c.type === "youtube_video" || c.type === "hls") {
       tag = `<span class="live-tag"><span class="dot"></span>LIVE</span>`;
     } else if (c.type === "playlist") {
       tag = `<span class="replay-tag">▶ VOD</span>`;
@@ -1627,6 +1664,47 @@ function findNowIndex(sched){
 /* ==========================
    재생
    ========================== */
+/* HLS 재생 헬퍼 — webOS/Safari는 native, Chrome/Firefox는 hls.js */
+let _activeHls = null;
+function destroyHls(){
+  if (_activeHls){ try{ _activeHls.destroy(); }catch(e){} _activeHls = null; }
+}
+function attachHls(videoEl, url){
+  destroyHls();
+  if (!videoEl) return;
+  videoEl.setAttribute("playsinline", "");
+  videoEl.muted = false;
+  // 1) Native HLS (Safari, webOS, iOS, Tizen)
+  if (videoEl.canPlayType && videoEl.canPlayType("application/vnd.apple.mpegurl")){
+    videoEl.src = url;
+    videoEl.play().catch(()=>{ videoEl.muted = true; videoEl.play().catch(()=>{}); });
+    return;
+  }
+  // 2) hls.js
+  if (typeof Hls !== "undefined" && Hls.isSupported()){
+    const hls = new Hls({ lowLatencyMode:true, backBufferLength:30 });
+    _activeHls = hls;
+    hls.loadSource(url);
+    hls.attachMedia(videoEl);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      videoEl.play().catch(()=>{ videoEl.muted = true; videoEl.play().catch(()=>{}); });
+    });
+    hls.on(Hls.Events.ERROR, (_e, data) => {
+      if (data && data.fatal){
+        try{ hls.destroy(); }catch(e){}
+        _activeHls = null;
+      }
+    });
+    return;
+  }
+  // 3) 마지막 수단
+  videoEl.src = url;
+}
+function hlsVideoMarkup(){
+  return `<video id="hls-video" autoplay playsinline controls
+    style="width:100%;height:100%;background:#000;display:block;border:0"></video>`;
+}
+
 function liveEmbedUrl(ytId){
   return `https://www.youtube.com/embed/live_stream?channel=${ytId}&autoplay=1`;
 }
@@ -1654,20 +1732,28 @@ function playChannel(idx){
   currentIdx = idx;
   $$(".card", $("#channels")).forEach(el => el.classList.toggle("is-playing", +el.dataset.idx === idx));
 
-  // 타입별 URL
-  let src;
-  if (c.type === "youtube_video") {
-    src = videoEmbedUrl(c.videoId);
-  } else if (c.type === "playlist") {
-    src = replayEmbedUrl(c.ytId);
-  } else {
-    src = liveEmbedUrl(c.ytId);
-  }
-
-  // CRT 화면에 재생 (모바일/데스크톱 모두)
   const crtEl = $("#crt-content");
-  if (crtEl) {
-    crtEl.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+
+  // HLS 직접 재생 — <video> 엘리먼트 사용
+  if (c.type === "hls"){
+    if (crtEl) {
+      crtEl.innerHTML = hlsVideoMarkup();
+      attachHls($("#hls-video"), c.hlsUrl);
+    }
+  } else {
+    // 유튜브 임베드
+    let src;
+    if (c.type === "youtube_video") {
+      src = videoEmbedUrl(c.videoId);
+    } else if (c.type === "playlist") {
+      src = replayEmbedUrl(c.ytId);
+    } else {
+      src = liveEmbedUrl(c.ytId);
+    }
+    destroyHls();
+    if (crtEl) {
+      crtEl.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
   }
 
   // CH 카운터 + OSD 업데이트
@@ -1718,11 +1804,17 @@ function playReplay(idx){
   }
 }
 
-function openMobilePlayer({title, program, sub, src, isLive, scheduleCode}){
+function openMobilePlayer({title, program, sub, src, isLive, scheduleCode, hlsUrl}){
   $("#player-title").textContent = title;
   $("#player-program").textContent = program;
   $("#player-sub").textContent = sub;
-  $("#player-frame").innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  if (hlsUrl){
+    $("#player-frame").innerHTML = hlsVideoMarkup();
+    attachHls($("#hls-video"), hlsUrl);
+  } else {
+    destroyHls();
+    $("#player-frame").innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  }
   $("#player-pill").style.display = isLive ? "" : "none";
 
   if (isLive && scheduleCode){
@@ -1743,6 +1835,7 @@ function openMobilePlayer({title, program, sub, src, isLive, scheduleCode}){
 }
 
 function closePlayer(){
+  destroyHls();
   $("#player-overlay").hidden = true;
   $("#player-frame").innerHTML = "";
 }
@@ -1897,6 +1990,8 @@ function initTVMode() {
       let tag;
       if (c.type === "youtube" || c.type === "youtube_video") {
         tag = '<span class="tv-card-live">LIVE</span>';
+      } else if (c.type === "hls") {
+        tag = '<span class="tv-card-live" style="border-color:#22D3EE;color:#22D3EE">●LIVE</span>';
       } else if (c.type === "playlist") {
         tag = '<span class="tv-card-live" style="background:#8B5CF6">PLAY</span>';
       } else {
@@ -1917,6 +2012,8 @@ function initTVMode() {
         </div>`;
     }).join("");
     $("#tv-channels").innerHTML = html;
+    const titleEl = $("#tv-channels-title");
+    if (titleEl) titleEl.textContent = `CHANNELS · ${CHANNELS.length}`;
   }
 
   /* v0.9.0: 이벤트 위임 — #tv-channels에 한 번만 걸고 자식 이벤트 위임 */
@@ -1953,12 +2050,21 @@ function initTVMode() {
     const player = $("#tv-player");
 
     if (c.type === "link") {
+      destroyHls();
       player.innerHTML = `
         <div class="tv-player-fallback">
           <div class="tv-player-fallback-title">${c.flag} ${c.name}</div>
           <div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>
           <div class="tv-player-fallback-link">${c.url}</div>
         </div>`;
+      return;
+    }
+
+    if (c.type === "hls") {
+      player.innerHTML = hlsVideoMarkup();
+      attachHls($("#hls-video"), c.hlsUrl);
+      playingIdx = idx;
+      updateFocus();
       return;
     }
 
@@ -1971,6 +2077,7 @@ function initTVMode() {
     } else {
       src = `https://www.youtube-nocookie.com/embed/live_stream?channel=${c.ytId}&autoplay=1&playsinline=1`;
     }
+    destroyHls();
     player.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
 
     playingIdx = idx;

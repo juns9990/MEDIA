@@ -1,0 +1,59 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/tv-streaming-app-4xy3t
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          cp onair-prototype.html _site/
+          cp manifest.json _site/
+          cp sw.js _site/
+          cp icon-180.png icon-192.png icon-512.png _site/
+          # GitHub Pages 진입점 — onair-prototype.html 로 자동 이동
+          cat > _site/index.html <<'HTML'
+          <!DOCTYPE html><html lang="ko"><head>
+          <meta charset="UTF-8">
+          <title>ON AIR · 온에어</title>
+          <meta http-equiv="refresh" content="0; url=onair-prototype.html">
+          <link rel="canonical" href="onair-prototype.html">
+          </head><body>
+          <script>location.replace("onair-prototype.html" + location.search);</script>
+          <p>Loading… <a href="onair-prototype.html">ON AIR</a></p>
+          </body></html>
+          HTML
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
