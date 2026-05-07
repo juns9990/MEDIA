@@ -1,0 +1,20 @@
+{
+  "id": "com.onair.tv",
+  "version": "0.14.0",
+  "vendor": "ON AIR",
+  "type": "web",
+  "main": "onair-prototype.html",
+  "title": "ON AIR · 온에어",
+  "icon": "icon-192.png",
+  "largeIcon": "icon-512.png",
+  "iconColor": "#F5F3EE",
+  "bgColor": "#0E1A1A",
+  "appDescription": "전세계 지상파·뉴스 실시간 라이브 TV (DW, France 24, NHK World, Al Jazeera 외)",
+  "resolution": "1920x1080",
+  "splashBackground": "icon-512.png",
+  "disableBackHistoryAPI": true,
+  "supportTouchMode": "full",
+  "handlesRelaunch": false,
+  "uiRevision": 2,
+  "requiredPermissions": []
+}
