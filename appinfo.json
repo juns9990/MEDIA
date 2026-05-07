@@ -1,6 +1,6 @@
 {
   "id": "com.onair.tv",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "vendor": "ON AIR",
   "type": "web",
   "main": "onair-prototype.html",

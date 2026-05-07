@@ -955,6 +955,53 @@
   .tv-hint{padding:14px 50px;border-top:1px solid rgba(247,243,236,0.1);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;color:#5B5550;letter-spacing:0.16em;text-transform:uppercase}
   .tv-hint-group{display:flex;gap:24px;align-items:center}
   .tv-hint-key{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;background:transparent;border:1px solid #2A2823;font-weight:700;color:#F7F3EC;margin-right:6px;font-size:10px}
+
+  /* v0.15.0: 풀스크린 토글 버튼 (영상 우측 상단) */
+  .tv-player-content{position:absolute;inset:0}
+  .tv-player video{position:absolute;inset:0;width:100%;height:100%;background:#000;display:block;border:0;object-fit:contain}
+  .tv-player-content iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .tv-fs-btn{
+    position:absolute;top:14px;right:14px;z-index:10;
+    width:44px;height:44px;
+    background:rgba(0,0,0,0.55);border:1px solid rgba(247,243,236,0.25);
+    color:#F7F3EC;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:18px;line-height:1;
+    transition:background .15s,border-color .15s;
+  }
+  .tv-fs-btn:hover{background:rgba(0,0,0,0.85);border-color:#F7F3EC}
+  .tv-fs-btn:focus-visible{outline:2px solid var(--led-amber);outline-offset:2px}
+
+  /* v0.15.0: 태블릿 — 사이드바 폭 축소 */
+  @media (max-width: 1100px){
+    .tv-stage{padding:16px 24px;gap:20px}
+    .tv-channels{min-width:280px;flex:0 0 320px}
+    .tv-program{font-size:30px}
+    .tv-header{padding:14px 24px 10px}
+    .tv-brand{font-size:30px}
+    .tv-clock{font-size:20px}
+  }
+  /* v0.15.0: 모바일 세로 — 영상 위, 채널 리스트 아래 */
+  @media (max-width: 720px){
+    .tv-header{padding:10px 14px;flex-wrap:wrap;gap:8px}
+    .tv-brand{font-size:22px}
+    .tv-brand-sub{display:none}
+    .tv-on-air{padding:4px 8px;font-size:9px;margin-right:8px}
+    .tv-clock{font-size:14px}
+    .tv-stage{flex-direction:column;padding:10px 12px;gap:12px}
+    .tv-player-wrap{flex:0 0 auto}
+    .tv-player{aspect-ratio:16/9;flex:0 0 auto}
+    .tv-program{font-size:20px;margin-bottom:2px}
+    .tv-chan-info{font-size:10px;letter-spacing:0.12em}
+    .tv-channels{flex:1;min-width:0}
+    .tv-channels-title{font-size:10px;margin-bottom:6px}
+    .tv-card{padding:10px 8px;gap:10px}
+    .tv-card-thumb{width:48px;height:34px}
+    .tv-card-name{font-size:15px}
+    .tv-card-program{font-size:10px}
+    .tv-hint{display:none}
+    .tv-fs-btn{width:36px;height:36px;top:8px;right:8px;font-size:15px}
+  }
 </style>
 </head>
 <body>
@@ -981,10 +1028,13 @@
         <div class="tv-chan-info" id="tv-chan-info">← → ↑ ↓ 키로 채널 선택</div>
       </div>
       <div class="tv-player" id="tv-player">
-        <div class="tv-player-fallback">
-          <div class="tv-player-fallback-title">리모컨으로 선택</div>
-          <div>오른쪽 채널 목록에서 방향키로 이동 후 확인 버튼을 누르세요</div>
+        <div class="tv-player-content" id="tv-player-content">
+          <div class="tv-player-fallback">
+            <div class="tv-player-fallback-title">채널을 선택하세요</div>
+            <div>오른쪽 채널 목록에서 클릭하거나, 방향키로 이동 후 OK/Enter</div>
+          </div>
         </div>
+        <button class="tv-fs-btn" id="tv-fs-btn" type="button" aria-label="전체화면" title="전체화면 (F)">⛶</button>
       </div>
     </div>
 
@@ -999,8 +1049,9 @@
       <span><span class="tv-hint-key">↑↓</span>채널 이동</span>
       <span><span class="tv-hint-key">OK</span>재생</span>
       <span><span class="tv-hint-key">1~9</span>번호 선택</span>
+      <span><span class="tv-hint-key">F</span>전체화면</span>
     </div>
-    <div style="color:#5B6370">MADE BY JUNS · v0.13.2</div>
+    <div style="color:#5B6370">MADE BY JUNS · v0.15.0</div>
   </div>
 </div>
 
@@ -1494,7 +1545,9 @@ const pad2 = (n) => String(n).padStart(2, "0");
 /* webOS/Tizen 등 스마트TV에서는 자동으로 TV 모드 진입 */
 const _ua = navigator.userAgent || "";
 const isSmartTV = /Web0S|webOS|SmartTV|Tizen|HbbTV|NetCast|VIDAA|PhilipsTV/i.test(_ua);
-const isTVMode = new URLSearchParams(location.search).get("tv") === "1" || isSmartTV;
+/* v0.15.0: 옛날 CRT UI 폐기 — 모든 기기에서 풀스크린 TV 모드를 기본으로 사용 */
+const FORCE_FULL_TV = true;
+const isTVMode = FORCE_FULL_TV || new URLSearchParams(location.search).get("tv") === "1" || isSmartTV;
 
 function updateClock(elementId) {
   const el = document.getElementById(elementId);
@@ -2047,11 +2100,11 @@ function initTVMode() {
     $("#tv-chan-info").textContent =
       `${c.flag} CH ${c.num} · ${c.name} · ${c.desc}`;
 
-    const player = $("#tv-player");
+    const content = $("#tv-player-content");
 
     if (c.type === "link") {
       destroyHls();
-      player.innerHTML = `
+      content.innerHTML = `
         <div class="tv-player-fallback">
           <div class="tv-player-fallback-title">${c.flag} ${c.name}</div>
           <div>이 채널은 저작권상 앱 내 재생이 불가합니다.<br>스마트폰/PC 브라우저에서 공식 플레이어로 이동합니다.</div>
@@ -2061,7 +2114,7 @@ function initTVMode() {
     }
 
     if (c.type === "hls") {
-      player.innerHTML = hlsVideoMarkup();
+      content.innerHTML = hlsVideoMarkup();
       attachHls($("#hls-video"), c.hlsUrl);
       playingIdx = idx;
       updateFocus();
@@ -2078,11 +2131,27 @@ function initTVMode() {
       src = `https://www.youtube-nocookie.com/embed/live_stream?channel=${c.ytId}&autoplay=1&playsinline=1`;
     }
     destroyHls();
-    player.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    content.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
 
     playingIdx = idx;
     updateFocus();
   }
+
+  /* 풀스크린 토글 — 영상 영역만 전체화면으로 */
+  function toggleFullscreen() {
+    const target = $("#tv-player");
+    const doc = document;
+    const inFs = doc.fullscreenElement || doc.webkitFullscreenElement;
+    if (!inFs) {
+      const req = target.requestFullscreen || target.webkitRequestFullscreen;
+      if (req) req.call(target).catch(()=>{});
+    } else {
+      const exit = doc.exitFullscreen || doc.webkitExitFullscreen;
+      if (exit) exit.call(doc).catch(()=>{});
+    }
+  }
+  const fsBtn = $("#tv-fs-btn");
+  if (fsBtn) fsBtn.addEventListener("click", (e) => { e.stopPropagation(); toggleFullscreen(); });
 
   /* 리모컨 방향키 — e.key(최신) + e.keyCode(구형 TV 호환) 병행 */
   document.addEventListener("keydown", (e) => {
@@ -2137,6 +2206,10 @@ function initTVMode() {
     } else if (key === "Backspace" || code === 8 || code === 10009 || code === 461) {
       /* Tizen(10009), webOS(461), 일반(8) 뒤로가기 */
       updateFocus();
+      e.preventDefault();
+    } else if (key === "f" || key === "F") {
+      /* F 키 — 풀스크린 토글 */
+      toggleFullscreen();
       e.preventDefault();
     }
   });
