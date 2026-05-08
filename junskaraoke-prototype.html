@@ -468,6 +468,7 @@ em { font-style: italic; }
   let lrcLines = [];
   let lastLineIdx = -1;
   let controlsHideTimer = null;
+  let wakeLock = null;
 
   // ── DOM ──
   const $catalog = document.getElementById('catalog');
@@ -563,6 +564,7 @@ em { font-style: italic; }
     }
 
     armControlsAutoHide();
+    requestWakeLock();
   }
 
   function closeStage() {
@@ -573,7 +575,28 @@ em { font-style: italic; }
     if (controlsHideTimer) clearTimeout(controlsHideTimer);
     $controls.classList.remove('hidden');
     $stageHeader.classList.remove('hidden');
+    releaseWakeLock();
   }
+
+  // ── Wake Lock — 재생 중 화면 꺼짐 방지 ──
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) {
+      console.warn('[junskaraoke] wakeLock request failed', e);
+    }
+  }
+  function releaseWakeLock() {
+    if (wakeLock) { try { wakeLock.release(); } catch (_) {} wakeLock = null; }
+  }
+  // 탭이 다시 보이면 Wake Lock 자동 해제됐을 수 있으니 재획득
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && $stage.classList.contains('active') && !wakeLock) {
+      requestWakeLock();
+    }
+  });
 
   $btnBack.addEventListener('click', closeStage);
   document.addEventListener('keydown', (e) => {
