@@ -4,7 +4,7 @@
   "description": "매거진풍 노래방 PWA — 유튜브 MR + 자체 가사 오버레이",
   "start_url": "/MEDIA/junskaraoke-prototype.html",
   "scope": "/MEDIA/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "orientation": "any",
   "background_color": "#0f0e0d",
   "theme_color": "#a8d8c9",

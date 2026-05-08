@@ -32,7 +32,6 @@ class YTAdapter extends PlayerAdapter {
     return new Promise((resolve) => {
       this.player = new YT.Player(this.mountId, {
         videoId: song.ytId,
-        host: 'https://www.youtube-nocookie.com',
         playerVars: {
           autoplay: 1,
           controls: 0,
@@ -43,7 +42,8 @@ class YTAdapter extends PlayerAdapter {
           playsinline: 1,
           fs: 0,
           disablekb: 1,
-          origin: window.location.origin,
+          enablejsapi: 1,
+          origin: 'https://juns9990.github.io',
         },
         events: {
           onReady: (e) => {

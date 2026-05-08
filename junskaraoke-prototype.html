@@ -231,19 +231,22 @@ em { font-style: italic; }
 .stage.active { display: block; }
 
 .video-bg {
-  position: absolute; inset: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 100%;
+  filter: brightness(0.5) blur(1px);
   pointer-events: none;
 }
+.video-bg iframe,
 #yt-player {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 177.78vh;        /* 16:9 cover */
-  height: 56.25vw;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
-  filter: brightness(0.35) blur(2px);
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
 }
 .video-overlay {
   position: absolute; inset: 0;
@@ -303,7 +306,12 @@ em { font-style: italic; }
   line-height: 1.4;
 }
 .lyric.prev    { opacity: 0.35; font-size: 1rem; }
-.lyric.current { color: var(--accent); font-size: clamp(1.6rem, 5vw, 2.25rem); font-weight: 800; }
+.lyric.current {
+  color: #d4a574;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.9);
+}
 .lyric.next    { opacity: 0.5; font-size: 1.1rem; }
 
 .controls {
@@ -446,7 +454,7 @@ em { font-style: italic; }
 
 <header class="masthead">
   <h1 class="wordmark">준스가라오케</h1>
-  <p class="colophon"><span class="vol">VOL.01</span> · 2026 · v0.1.3</p>
+  <p class="colophon"><span class="vol">VOL.01</span> · 2026 · v0.1.4</p>
   <p class="volume-title">심야의 라이너노트</p>
 </header>
 
@@ -464,7 +472,7 @@ em { font-style: italic; }
 <main class="catalog" id="catalog" aria-label="곡 카탈로그"></main>
 
 <footer class="site-footer">
-  <p>준스가라오케 · <span class="v">v0.1.3</span> · VOL.01 심야의 라이너노트</p>
+  <p>준스가라오케 · <span class="v">v0.1.4</span> · VOL.01 심야의 라이너노트</p>
 </footer>
 
 <!-- ─────────── 재생 스테이지 (B안 = magazine) ─────────── -->
