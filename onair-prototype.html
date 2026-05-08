@@ -3,258 +3,376 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
-<title>CINEMA · 무료 영화관</title>
-<meta name="theme-color" content="#0A0907" />
+<title>MEDIA · Time Dial</title>
+<meta name="theme-color" content="#0A0A12" />
 <link rel="manifest" href="./manifest.json" />
 <link rel="icon" href="./icon-192.png" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0A0907;
-    --bg-elev:#15110D;
-    --bg-card:#1B1612;
-    --line:#2A241D;
-    --text:#F5F0E6;
-    --text-dim:#9A9286;
-    --text-muted:#5B5448;
-    --gold:#E8C76E;
-    --gold-bright:#FFD98A;
-    --gold-deep:#A8843D;
-    --red:#E84A4A;
-    --serif:"Cinzel","Noto Serif KR",serif;
-    --hangul:"Noto Serif KR",serif;
+    --bg:#0A0A12;
+    --bg-elev:#12121C;
+    --bg-card:#181826;
+    --line:rgba(255,255,255,0.08);
+    --line-2:rgba(255,255,255,0.16);
+    --text:#F2F0EC;
+    --text-dim:#8C8A9A;
+    --text-muted:#52505E;
+
+    /* default slot accent (overridden per slot) */
+    --accent:#F2C770;
+    --accent-glow:rgba(242,199,112,0.18);
+    --accent-deep:#A8843D;
+
     --mono:"JetBrains Mono",monospace;
-    --sans:"Inter","Noto Serif KR",sans-serif;
+    --sans:"Inter","Noto Sans KR",system-ui,sans-serif;
+    --kr:"Noto Sans KR",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden}
   a{color:inherit;text-decoration:none}
-  button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+  button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit;outline:none}
   img{display:block;max-width:100%}
+
+  /* Slot color background overlay */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(ellipse 1200px 600px at 50% -20%, var(--accent-glow) 0%, transparent 60%),
+      linear-gradient(180deg,#0A0A12 0%,#06060B 100%);
+    transition:background 1.2s ease;
+  }
 
   /* ========== HEADER ========== */
   .hdr{
     position:sticky;top:0;z-index:50;
-    display:flex;align-items:center;gap:24px;
-    padding:14px 32px;
-    background:linear-gradient(180deg,#0A0907 60%,rgba(10,9,7,0.85) 100%);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;
+    background:rgba(10,10,18,0.7);
+    backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);
-    backdrop-filter:blur(8px);
   }
-  .brand{
-    font-family:var(--serif);font-weight:700;font-size:26px;
-    letter-spacing:0.2em;
-    background:linear-gradient(180deg,#FFFAEC 0%,#E8C76E 50%,#A8843D 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 1px 2px rgba(232,199,110,0.3));
-    display:flex;align-items:center;gap:10px;
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand-mark{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent);
+    transition:background .8s, box-shadow .8s;
   }
-  .brand-mark{color:#E8C76E;font-size:18px;-webkit-text-fill-color:#E8C76E}
+  .brand-name{
+    font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:0.32em;
+    color:var(--text);
+  }
   .brand-sub{
-    font-family:var(--mono);font-size:10px;letter-spacing:0.3em;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
     color:var(--text-muted);text-transform:uppercase;
     padding-left:14px;border-left:1px solid var(--line);
   }
-  .hdr-spacer{flex:1}
-  .search-box{
-    position:relative;flex:0 1 360px;max-width:360px;
-  }
-  .search-box input{
-    width:100%;padding:10px 14px 10px 36px;
-    background:var(--bg-elev);border:1px solid var(--line);
-    color:var(--text);font-family:var(--sans);font-size:13px;
-    border-radius:0;outline:none;transition:border-color .15s;
-  }
-  .search-box input:focus{border-color:var(--gold)}
-  .search-box input::placeholder{color:var(--text-muted)}
-  .search-box::before{
-    content:"";position:absolute;left:12px;top:50%;transform:translateY(-50%);
-    width:14px;height:14px;
-    background:radial-gradient(circle at 5px 5px,transparent 3.5px,var(--text-muted) 3.5px,var(--text-muted) 4.5px,transparent 4.5px),linear-gradient(45deg,transparent 8.5px,var(--text-muted) 8.5px,var(--text-muted) 9.5px,transparent 9.5px);
-  }
-  .hdr-btn{
+  .nav-actions{display:flex;gap:6px}
+  .nav-btn{
     font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
     color:var(--text-dim);text-transform:uppercase;
-    padding:8px 14px;border:1px solid transparent;transition:all .15s;
+    padding:8px 14px;border:1px solid transparent;
+    transition:color .15s, border-color .15s;
   }
-  .hdr-btn:hover{color:var(--gold);border-color:var(--line)}
-  .hdr-btn.active{color:var(--gold);border-color:var(--gold)}
+  .nav-btn:hover{color:var(--accent);border-color:var(--line-2)}
+  .nav-btn.active{color:var(--accent);border-color:var(--accent)}
 
-  /* ========== HERO ========== */
+  /* ========== CLOCK SECTION ========== */
+  .clock-sect{
+    padding:60px 28px 30px;
+    text-align:left;
+  }
+  .clock-time{
+    font-family:var(--mono);font-weight:300;
+    font-size:clamp(72px,16vw,200px);
+    line-height:0.95;letter-spacing:-0.04em;
+    color:var(--text);
+    display:flex;align-items:baseline;gap:14px;
+  }
+  .clock-time .colon{
+    color:var(--accent);
+    animation:blink 2s steps(2,end) infinite;
+  }
+  @keyframes blink{50%{opacity:0.4}}
+  .clock-time .secs{
+    font-size:0.32em;color:var(--text-muted);font-weight:300;
+    letter-spacing:0;align-self:flex-end;padding-bottom:0.5em;
+  }
+  .clock-meta{
+    margin-top:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.22em;
+    color:var(--text-dim);text-transform:uppercase;
+  }
+  .clock-meta .dot{color:var(--text-muted);opacity:0.5}
+  .clock-meta .accent{color:var(--accent);font-weight:500}
+  .clock-mood{
+    margin-top:24px;
+    font-family:var(--sans);font-weight:600;
+    font-size:clamp(20px,3.4vw,32px);
+    color:var(--text);letter-spacing:-0.01em;
+    max-width:720px;line-height:1.3;
+  }
+  .clock-mood-ko{
+    margin-top:6px;font-family:var(--kr);font-weight:500;
+    font-size:clamp(13px,1.6vw,16px);
+    color:var(--text-dim);
+  }
+
+  /* ========== TIME STRIP ========== */
+  .strip-wrap{
+    padding:24px 28px 36px;
+    border-bottom:1px solid var(--line);
+  }
+  .strip-label{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
+    color:var(--text-muted);text-transform:uppercase;margin-bottom:18px;
+  }
+  .strip{
+    position:relative;
+    display:grid;grid-template-columns:repeat(8,1fr);gap:8px;
+  }
+  .strip-line{
+    position:absolute;left:0;right:0;top:7px;height:1px;
+    background:var(--line-2);z-index:0;
+  }
+  .strip-slot{
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    padding:0;cursor:pointer;
+    transition:transform .15s;
+  }
+  .strip-slot:hover{transform:translateY(-2px)}
+  .strip-dot{
+    width:14px;height:14px;border-radius:50%;
+    background:var(--bg);
+    border:1px solid var(--line-2);
+    transition:all .25s;
+  }
+  .strip-slot.preview .strip-dot{background:var(--text-dim);border-color:var(--text-dim)}
+  .strip-slot.now .strip-dot{
+    background:var(--accent);
+    border-color:var(--accent);
+    box-shadow:0 0 14px var(--accent),0 0 0 4px var(--accent-glow);
+  }
+  .strip-time{
+    font-family:var(--mono);font-size:11px;font-weight:500;
+    color:var(--text-muted);letter-spacing:0.08em;
+  }
+  .strip-slot.now .strip-time{color:var(--accent);font-weight:600}
+  .strip-slot.preview .strip-time{color:var(--text-dim)}
+  .strip-name{
+    font-family:var(--mono);font-size:9px;
+    color:var(--text-muted);letter-spacing:0.18em;text-transform:uppercase;
+    text-align:center;
+    display:none;
+  }
+
+  /* ========== HERO (NOW PLAYING) ========== */
   .hero{
-    position:relative;height:min(72vh,640px);min-height:440px;
-    overflow:hidden;border-bottom:1px solid var(--line);
-  }
-  .hero-bg{
-    position:absolute;inset:0;
-    background-size:cover;background-position:center;
-    transition:opacity .5s;
-  }
-  .hero-bg::after{
-    content:"";position:absolute;inset:0;
-    background:
-      linear-gradient(180deg,rgba(10,9,7,0.3) 0%,rgba(10,9,7,0.6) 60%,#0A0907 100%),
-      linear-gradient(90deg,rgba(10,9,7,0.85) 0%,rgba(10,9,7,0.4) 50%,transparent 100%);
-  }
-  .hero-content{
-    position:absolute;left:0;right:0;bottom:48px;
-    padding:0 32px;max-width:760px;
-    z-index:2;
+    padding:36px 28px 28px;
+    border-bottom:1px solid var(--line);
   }
   .hero-tag{
-    display:inline-block;padding:4px 12px;
-    font-family:var(--mono);font-size:10px;letter-spacing:0.24em;
-    color:var(--gold);border:1px solid var(--gold);
-    text-transform:uppercase;margin-bottom:18px;
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.32em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:14px;
   }
-  .hero-title{
-    font-family:var(--serif);font-weight:700;font-size:60px;
-    line-height:1.05;letter-spacing:-0.01em;
-    margin-bottom:8px;
-    color:var(--text);
-    text-shadow:0 2px 16px rgba(0,0,0,0.5);
+  .hero-tag::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 10px var(--accent);
+    animation:pulse 2s ease-in-out infinite;
   }
-  .hero-title-ko{
-    font-family:var(--hangul);font-weight:600;font-size:24px;
-    color:var(--text-dim);margin-bottom:18px;
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .hero-card{
+    display:grid;grid-template-columns:minmax(280px,2fr) 3fr;
+    gap:28px;align-items:center;
   }
-  .hero-meta{
-    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    font-family:var(--mono);font-size:12px;letter-spacing:0.16em;
-    color:var(--text-dim);text-transform:uppercase;margin-bottom:18px;
+  .hero-thumb{
+    aspect-ratio:16/9;background:var(--bg-card);
+    border:1px solid var(--line);overflow:hidden;
+    position:relative;
   }
-  .hero-meta .star{color:var(--gold)}
-  .hero-meta .dot{color:var(--text-muted)}
-  .hero-desc{
-    font-size:15px;line-height:1.65;color:var(--text-dim);
-    margin-bottom:28px;max-width:580px;
+  .hero-thumb img{width:100%;height:100%;object-fit:cover}
+  .hero-thumb.no-img{
+    background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-elev) 100%);
+    display:flex;align-items:center;justify-content:center;
   }
-  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-thumb-mark{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.28em;
+    color:var(--accent);text-transform:uppercase;
+  }
+  .hero-info .hero-source{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.22em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:10px;
+  }
+  .hero-info h2{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(22px,3vw,34px);
+    line-height:1.15;letter-spacing:-0.01em;
+    color:var(--text);margin-bottom:8px;
+  }
+  .hero-info .hero-ko{
+    font-family:var(--kr);font-weight:500;font-size:14px;
+    color:var(--text-dim);margin-bottom:14px;
+  }
+  .hero-info .hero-desc{
+    font-size:14px;line-height:1.7;color:var(--text-dim);
+    max-width:520px;margin-bottom:22px;
+  }
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
   .btn-play{
     display:inline-flex;align-items:center;gap:10px;
-    padding:14px 28px;
-    background:var(--gold);color:#0A0907;
-    font-family:var(--mono);font-size:13px;font-weight:600;
-    letter-spacing:0.18em;text-transform:uppercase;
+    padding:13px 22px;
+    background:var(--accent);color:#0A0A12;
+    font-family:var(--mono);font-weight:600;font-size:12px;
+    letter-spacing:0.2em;text-transform:uppercase;
     transition:all .15s;
   }
-  .btn-play:hover{background:var(--gold-bright);transform:translateY(-1px)}
+  .btn-play:hover{filter:brightness(1.15)}
   .btn-play .triangle{
     width:0;height:0;
     border-top:6px solid transparent;border-bottom:6px solid transparent;
-    border-left:9px solid #0A0907;
+    border-left:9px solid #0A0A12;
   }
-  .btn-fav{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:14px 22px;
-    border:1px solid var(--line);color:var(--text);
-    font-family:var(--mono);font-size:12px;letter-spacing:0.18em;
-    text-transform:uppercase;transition:all .15s;
+  .btn-ghost{
+    padding:13px 18px;
+    border:1px solid var(--line-2);color:var(--text);
+    font-family:var(--mono);font-weight:500;font-size:11px;
+    letter-spacing:0.2em;text-transform:uppercase;
+    transition:all .15s;
   }
-  .btn-fav:hover{border-color:var(--gold);color:var(--gold)}
-  .btn-fav.faved{color:var(--gold);border-color:var(--gold)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-  /* ========== ROWS / CAROUSELS ========== */
-  .row{padding:32px 0 8px;position:relative}
+  /* ========== ROW (slot grid) ========== */
+  .row{padding:30px 28px}
   .row-head{
-    display:flex;align-items:baseline;gap:16px;
-    padding:0 32px 14px;
+    display:flex;align-items:baseline;gap:14px;
+    margin-bottom:18px;flex-wrap:wrap;
   }
   .row-title{
-    font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:0.02em;
-    color:var(--text);
+    font-family:var(--sans);font-weight:700;font-size:20px;
+    color:var(--text);letter-spacing:-0.005em;
   }
-  .row-sub{
-    font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
+  .row-meta{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.24em;
     color:var(--text-muted);text-transform:uppercase;
   }
-  .row-track{
-    display:flex;gap:16px;
-    padding:0 32px 8px;
-    overflow-x:auto;overflow-y:hidden;
-    scroll-behavior:smooth;scroll-snap-type:x proximity;
-    -webkit-overflow-scrolling:touch;
+  .row-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:16px;
   }
-  .row-track::-webkit-scrollbar{height:6px}
-  .row-track::-webkit-scrollbar-track{background:transparent}
-  .row-track::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
-  .row-track::-webkit-scrollbar-thumb:hover{background:var(--gold-deep)}
 
-  /* ========== POSTER CARD ========== */
+  /* ========== CARD ========== */
   .card{
-    flex:0 0 auto;width:200px;
-    scroll-snap-align:start;
     cursor:pointer;
-    transition:transform .25s ease;
-    position:relative;
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    overflow:hidden;
+    transition:transform .2s, border-color .2s;
+    text-align:left;
+    display:flex;flex-direction:column;
   }
-  .card:hover{transform:translateY(-4px)}
-  .poster{
-    width:200px;aspect-ratio:2/3;
-    background:var(--bg-card);border:1px solid var(--line);
+  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .card-thumb{
+    aspect-ratio:16/9;background:var(--bg-elev);
     position:relative;overflow:hidden;
-    transition:border-color .2s;
   }
-  .card:hover .poster{border-color:var(--gold)}
-  .poster img{
+  .card-thumb img{
     width:100%;height:100%;object-fit:cover;
-    transition:opacity .3s;
+    transition:transform .35s;
   }
-  .poster.no-img{
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    padding:24px;
+  .card:hover .card-thumb img{transform:scale(1.04)}
+  .card-thumb.no-img{
+    background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-elev) 100%);
+    display:flex;align-items:center;justify-content:center;
   }
-  .poster.no-img .pno-title{
-    font-family:var(--serif);font-style:italic;font-weight:500;font-size:22px;
-    line-height:1.15;letter-spacing:-0.01em;color:var(--text);
+  .card-thumb.no-img .card-mark{
+    font-family:var(--mono);font-size:24px;font-weight:300;
+    color:var(--accent);letter-spacing:-0.02em;
   }
-  .poster-overlay{
-    position:absolute;left:0;right:0;bottom:0;
-    padding:14px 12px 10px;
-    background:linear-gradient(0deg,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.6) 60%,transparent 100%);
-    transform:translateY(100%);transition:transform .25s ease;
-  }
-  .card:hover .poster-overlay{transform:translateY(0)}
-  .card-badge{
+  .card-type-badge{
     position:absolute;top:8px;left:8px;
-    padding:3px 8px;
-    font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
-    background:rgba(0,0,0,0.7);color:var(--gold);
-    border:1px solid var(--gold);text-transform:uppercase;
+    padding:3px 7px;
+    font-family:var(--mono);font-size:9px;font-weight:500;
+    letter-spacing:0.16em;text-transform:uppercase;
+    background:rgba(0,0,0,0.65);color:var(--accent);
+    border:1px solid var(--accent);
+    backdrop-filter:blur(4px);
   }
-  .card-rating{
+  .card-live-dot{
     position:absolute;top:8px;right:8px;
-    padding:3px 8px;
-    font-family:var(--mono);font-size:11px;font-weight:600;
-    background:rgba(0,0,0,0.8);color:var(--gold);
+    display:flex;align-items:center;gap:5px;
+    padding:3px 7px;
+    font-family:var(--mono);font-size:9px;font-weight:600;
+    background:rgba(228,64,74,0.85);color:#fff;
+    letter-spacing:0.18em;text-transform:uppercase;
   }
-  .card-info{
-    padding:10px 4px 4px;
+  .card-live-dot::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:#fff;
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  .card-body{padding:14px 14px 16px}
+  .card-source{
+    font-family:var(--mono);font-size:9px;letter-spacing:0.22em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:6px;
   }
   .card-title{
-    font-family:var(--serif);font-style:italic;font-weight:500;font-size:15px;
-    line-height:1.2;color:var(--text);
+    font-family:var(--sans);font-weight:600;font-size:14px;
+    line-height:1.3;color:var(--text);margin-bottom:4px;
     overflow:hidden;display:-webkit-box;
     -webkit-line-clamp:2;-webkit-box-orient:vertical;
   }
-  .card-title-ko{
-    font-family:var(--hangul);font-weight:500;font-size:12px;
-    color:var(--text-dim);margin-top:3px;
+  .card-ko{
+    font-family:var(--kr);font-weight:400;font-size:11px;
+    color:var(--text-dim);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
-  .card-meta{
-    margin-top:6px;
-    font-family:var(--mono);font-size:10px;letter-spacing:0.14em;
-    color:var(--text-muted);text-transform:uppercase;
+
+  /* ========== OTHER TIMES PREVIEW ========== */
+  .other-wrap{
+    padding:30px 28px 60px;
+    border-top:1px solid var(--line);
+  }
+  .other-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:12px;margin-top:18px;
+  }
+  .other-card{
+    cursor:pointer;
+    padding:18px 16px;
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    transition:all .2s;
+    text-align:left;
+  }
+  .other-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .other-card.now{border-color:var(--accent);background:var(--bg-elev)}
+  .other-emoji{font-size:22px;margin-bottom:10px;display:block}
+  .other-time{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.22em;
+    color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;
+  }
+  .other-card.now .other-time{color:var(--accent)}
+  .other-name{
+    font-family:var(--sans);font-weight:600;font-size:13px;
+    color:var(--text);margin-bottom:2px;
+  }
+  .other-name-ko{
+    font-family:var(--kr);font-weight:400;font-size:11px;
+    color:var(--text-dim);
   }
 
   /* ========== MODAL PLAYER ========== */
   .modal-bg{
     position:fixed;inset:0;z-index:100;
-    background:rgba(5,4,3,0.92);
+    background:rgba(2,2,8,0.92);
     backdrop-filter:blur(8px);
     display:none;align-items:center;justify-content:center;
     padding:24px;
@@ -262,108 +380,87 @@
   .modal-bg.open{display:flex}
   .modal{
     width:100%;max-width:1080px;
-    background:var(--bg-elev);border:1px solid var(--line);
+    background:var(--bg-elev);
+    border:1px solid var(--line-2);
     box-shadow:0 24px 80px rgba(0,0,0,0.6);
     display:flex;flex-direction:column;
     max-height:92vh;
   }
   .modal-head{
     display:flex;align-items:center;gap:14px;
-    padding:14px 20px;
+    padding:14px 18px;
     border-bottom:1px solid var(--line);
   }
+  .modal-source{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.24em;
+    color:var(--accent);text-transform:uppercase;
+  }
   .modal-title{
-    flex:1;font-family:var(--serif);font-style:italic;font-weight:600;
-    font-size:18px;line-height:1.2;
+    flex:1;font-family:var(--sans);font-weight:600;
+    font-size:15px;line-height:1.3;color:var(--text);
   }
   .modal-close{
-    font-family:var(--mono);font-size:12px;letter-spacing:0.18em;
-    color:var(--text-dim);padding:6px 12px;
-    border:1px solid var(--line);transition:all .15s;
+    font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
+    color:var(--text-dim);padding:6px 10px;
+    border:1px solid var(--line-2);transition:all .15s;
   }
-  .modal-close:hover{color:var(--gold);border-color:var(--gold)}
+  .modal-close:hover{color:var(--accent);border-color:var(--accent)}
   .modal-player{
     width:100%;aspect-ratio:16/9;
     background:#000;position:relative;
   }
-  .modal-player iframe,.modal-player video{
-    width:100%;height:100%;border:0;
+  .modal-player iframe,.modal-player video,.modal-player audio{
+    width:100%;height:100%;border:0;background:#000;
   }
-  .modal-fallback{
+  .modal-fb{
     width:100%;height:100%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;padding:32px;gap:14px;
     color:var(--text-dim);
   }
-  .modal-fallback-title{
-    font-family:var(--serif);font-style:italic;font-size:24px;color:var(--text);
+  .modal-fb-title{
+    font-family:var(--sans);font-weight:600;font-size:18px;color:var(--text);
   }
-  .modal-fallback-link{
-    font-family:var(--mono);font-size:12px;color:var(--gold);
-    border:1px solid var(--gold);padding:10px 20px;letter-spacing:0.18em;
-    text-transform:uppercase;
-  }
-  .modal-fallback-link:hover{background:rgba(232,199,110,0.1)}
   .modal-meta{
-    padding:18px 20px;border-top:1px solid var(--line);
+    padding:16px 18px;border-top:1px solid var(--line);
     overflow-y:auto;
   }
-  .modal-meta-row{
-    display:flex;gap:14px;flex-wrap:wrap;
-    font-family:var(--mono);font-size:11px;letter-spacing:0.14em;
-    color:var(--text-dim);text-transform:uppercase;margin-bottom:14px;
+  .modal-desc{font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:14px}
+  .modal-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .modal-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
+    color:var(--accent);border:1px solid var(--accent);
+    padding:9px 16px;text-transform:uppercase;
+    transition:background .15s;
   }
-  .modal-meta-row .star{color:var(--gold)}
-  .modal-desc{font-size:13px;line-height:1.7;color:var(--text-dim)}
-  .modal-actions{
-    margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;
-  }
-
-  /* ========== EMPTY / FOOTER ========== */
-  .empty{
-    padding:60px 32px;text-align:center;
-    color:var(--text-muted);font-family:var(--mono);
-    font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
-  }
-  .footer{
-    margin-top:60px;padding:24px 32px;
-    border-top:1px solid var(--line);
-    display:flex;justify-content:space-between;align-items:center;
-    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
-    color:var(--text-muted);text-transform:uppercase;
-    flex-wrap:wrap;gap:12px;
-  }
+  .modal-link:hover{background:var(--accent-glow)}
 
   /* ========== RESPONSIVE ========== */
-  @media (max-width: 980px){
-    .hero{height:min(60vh,520px)}
-    .hero-title{font-size:42px}
-    .hero-title-ko{font-size:18px}
-    .card,.poster{width:160px}
+  @media (max-width: 880px){
+    .clock-sect{padding:40px 20px 20px}
+    .strip-wrap{padding:20px 20px 28px}
+    .hero{padding:28px 20px 20px}
+    .hero-card{grid-template-columns:1fr;gap:18px}
+    .row{padding:24px 20px}
+    .other-wrap{padding:24px 20px 40px}
   }
-  @media (max-width: 640px){
-    .hdr{padding:12px 16px;gap:12px;flex-wrap:wrap}
-    .brand{font-size:20px}
+  @media (max-width: 580px){
+    .hdr{padding:14px 16px}
     .brand-sub{display:none}
-    .search-box{flex:1 1 100%;order:3;max-width:none}
-    .hero{height:auto;min-height:auto;padding-bottom:24px}
-    .hero-content{position:relative;padding:24px 16px;bottom:auto;max-width:none}
-    .hero-title{font-size:32px}
-    .hero-title-ko{font-size:16px;margin-bottom:12px}
-    .hero-meta{font-size:10px;gap:10px}
-    .hero-desc{font-size:13px;margin-bottom:18px}
-    .btn-play{padding:11px 20px;font-size:11px}
-    .btn-fav{padding:11px 16px;font-size:10px}
-    .row{padding:20px 0 4px}
-    .row-head{padding:0 16px 10px}
-    .row-title{font-size:18px}
-    .row-sub{font-size:10px}
-    .row-track{padding:0 16px 8px;gap:10px}
-    .card,.poster{width:130px}
-    .card-title{font-size:13px}
-    .card-title-ko{font-size:11px}
+    .nav-btn{padding:6px 10px;font-size:10px}
+    .clock-sect{padding:32px 16px 16px}
+    .strip-wrap{padding:18px 16px 24px}
+    .strip{gap:4px}
+    .strip-time{font-size:9px;letter-spacing:0.04em}
+    .hero{padding:24px 16px 18px}
+    .row{padding:20px 16px}
+    .row-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+    .other-wrap{padding:20px 16px 32px}
+    .other-grid{grid-template-columns:repeat(2,1fr)}
     .modal-bg{padding:0}
     .modal{max-height:100vh;height:100vh;border:0}
+    .clock-time .secs{display:none}
   }
 </style>
 </head>
@@ -371,601 +468,722 @@
 
 <header class="hdr">
   <div class="brand">
-    <span class="brand-mark">❖</span>
-    <span>CINEMA</span>
+    <div class="brand-mark"></div>
+    <div class="brand-name">MEDIA</div>
+    <div class="brand-sub" id="brand-sub">TIME · DIAL</div>
   </div>
-  <div class="brand-sub">무료 영화관 · GLOBAL FREE FILMS</div>
-  <div class="hdr-spacer"></div>
-  <div class="search-box">
-    <input id="search" type="search" placeholder="영화 검색 (제목·감독·연도)" autocomplete="off" />
-  </div>
-  <button class="hdr-btn" id="filter-fav" title="즐겨찾기 보기">★ 즐겨찾기</button>
+  <nav class="nav-actions">
+    <button class="nav-btn active" id="nav-now" title="현재 시각으로">● NOW</button>
+    <button class="nav-btn" id="nav-all" title="모든 시간대 보기">≡ ALL</button>
+  </nav>
 </header>
 
-<section class="hero" id="hero">
-  <div class="hero-bg" id="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-tag" id="hero-tag">오늘의 추천</div>
-    <h1 class="hero-title" id="hero-title">Loading…</h1>
-    <div class="hero-title-ko" id="hero-title-ko"></div>
-    <div class="hero-meta" id="hero-meta"></div>
-    <p class="hero-desc" id="hero-desc"></p>
-    <div class="hero-cta">
-      <button class="btn-play" id="hero-play">
-        <span class="triangle"></span>
-        <span>지금 재생</span>
-      </button>
-      <button class="btn-fav" id="hero-fav">+ 즐겨찾기</button>
+<section class="clock-sect">
+  <div class="clock-time" id="clock-time">
+    <span id="hh">--</span><span class="colon">:</span><span id="mm">--</span><span class="secs" id="ss">--</span>
+  </div>
+  <div class="clock-meta">
+    <span id="weekday">···</span>
+    <span class="dot">·</span>
+    <span id="date">···</span>
+    <span class="dot">·</span>
+    <span class="accent" id="slot-name">····</span>
+  </div>
+  <div class="clock-mood" id="slot-mood">Loading…</div>
+  <div class="clock-mood-ko" id="slot-mood-ko"></div>
+</section>
+
+<section class="strip-wrap">
+  <div class="strip-label">24-HOUR DIAL · TAP TO PREVIEW</div>
+  <div class="strip" id="strip">
+    <div class="strip-line"></div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-tag">NOW PLAYING · 지금 추천</div>
+  <div class="hero-card">
+    <div class="hero-thumb" id="hero-thumb"></div>
+    <div class="hero-info">
+      <div class="hero-source" id="hero-source">···</div>
+      <h2 id="hero-title">Loading…</h2>
+      <div class="hero-ko" id="hero-ko"></div>
+      <div class="hero-desc" id="hero-desc"></div>
+      <div class="hero-cta">
+        <button class="btn-play" id="hero-play"><span class="triangle"></span><span>지금 재생</span></button>
+        <button class="btn-ghost" id="hero-skip">↻ 다른 추천</button>
+      </div>
     </div>
   </div>
 </section>
 
-<main id="rows-container"></main>
+<section class="row">
+  <div class="row-head">
+    <div class="row-title" id="grid-title">····</div>
+    <div class="row-meta" id="grid-meta">····</div>
+  </div>
+  <div class="row-grid" id="grid"></div>
+</section>
 
-<footer class="footer">
-  <div>CINEMA · 무료 영화관 · v0.20.0</div>
-  <div>POWERED BY INTERNET ARCHIVE · KOFA · YOUTUBE</div>
-</footer>
+<section class="other-wrap">
+  <div class="row-head">
+    <div class="row-title">다른 시간대 둘러보기</div>
+    <div class="row-meta">8 SLOTS · 24H</div>
+  </div>
+  <div class="other-grid" id="other"></div>
+</section>
 
 <div class="modal-bg" id="modal" role="dialog" aria-modal="true">
   <div class="modal" role="document">
     <div class="modal-head">
-      <div class="modal-title" id="modal-title"></div>
-      <button class="modal-close" id="modal-close" aria-label="닫기">✕ ESC</button>
+      <div class="modal-source" id="m-source"></div>
+      <div class="modal-title" id="m-title"></div>
+      <button class="modal-close" id="m-close">✕ ESC</button>
     </div>
-    <div class="modal-player" id="modal-player"></div>
+    <div class="modal-player" id="m-player"></div>
     <div class="modal-meta">
-      <div class="modal-meta-row" id="modal-meta-row"></div>
-      <div class="modal-desc" id="modal-desc"></div>
-      <div class="modal-actions" id="modal-actions"></div>
+      <div class="modal-desc" id="m-desc"></div>
+      <div class="modal-actions" id="m-actions"></div>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
-  /* ============================================================
-     CINEMA · 무료 영화관 · v0.20.0
-     소스 정책 (전부 합법·무료·임베드 가능):
-       - "archive"  : Internet Archive 퍼블릭 도메인 영화 (직접 임베드)
-       - "youtube"  : YouTube 채널 또는 영상 ID (KOFA / FilmRise / Omeleto 등)
-       - "search"   : YouTube 검색 결과로 외부 이동 (큐레이터가 video ID 미확정시)
-     모든 카드는 항상 "유튜브에서 보기" 외부 링크 폴백 제공.
-     ============================================================ */
+/* ============================================================
+   MEDIA · Time Dial · v1.0.0
+   하루를 8개 시간대로 나눠 글로벌 미디어를 자동 큐레이션.
+   소스 정책 (전부 합법·임베드 가능):
+     - hls       : HLS 라이브 (BBC / NHK / Al Jazeera 등)
+     - yt-live   : YouTube live_stream 임베드 (24/7 채널)
+     - yt-channel: YouTube 채널 search 임베드 (최신 업로드 자동)
+     - yt-video  : YouTube 특정 영상 ID
+     - archive   : Internet Archive 직접 임베드
+     - radio     : radio.garden 외부 임베드 (iframe)
+     - link      : 외부 이동 (Spotify 팟캐스트 등)
+   ============================================================ */
 
-  const $ = (s,r=document)=>r.querySelector(s);
-  const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 
-  /* ============ 영화 데이터 (60편) ============ */
-  /* 한국 영화 우선 (24편) → 고전 명작 (12편) → 인디·단편 (10편) → 액션·B (8편) → 다큐 (6편) */
+/* ============ 시간대 8 슬롯 ============ */
+const SLOTS = [
+  { id:"morning",  start:6,  end:9,  emoji:"☀️", label:"MORNING",  labelKo:"모닝",
+    accent:"#FFB85C", glow:"rgba(255,184,92,0.22)", deep:"#B47A2C",
+    mood:"Awaken with the world.",
+    moodKo:"세상이 깨어난다 · 아침 뉴스와 라디오로 하루를 시작" },
+  { id:"forenoon", start:9,  end:12, emoji:"☕", label:"FORENOON", labelKo:"오전",
+    accent:"#A8D8EA", glow:"rgba(168,216,234,0.18)", deep:"#5C92A8",
+    mood:"Time for ideas.",
+    moodKo:"집중의 시간 · TED·Vox·Aeon 으로 생각의 폭을 넓힌다" },
+  { id:"lunch",    start:12, end:14, emoji:"🍱", label:"LUNCH",    labelKo:"점심",
+    accent:"#FFD66E", glow:"rgba(255,214,110,0.2)", deep:"#B0902C",
+    mood:"Light & quick.",
+    moodKo:"가볍게 한 입 · 짧은 코미디·예능·트렌디한 클립" },
+  { id:"afternoon",start:14, end:17, emoji:"🌤️", label:"AFTERNOON",labelKo:"오후",
+    accent:"#F0A878", glow:"rgba(240,168,120,0.2)", deep:"#A8703C",
+    mood:"Slow learn.",
+    moodKo:"천천히 배우는 시간 · 다큐·교양·Lo-fi 스터디" },
+  { id:"commute",  start:17, end:19, emoji:"🚇", label:"COMMUTE",  labelKo:"퇴근",
+    accent:"#FF8B5C", glow:"rgba(255,139,92,0.22)", deep:"#B85A30",
+    mood:"Voices for the road.",
+    moodKo:"길 위의 동행 · 팟캐스트와 통근 BGM" },
+  { id:"evening",  start:19, end:22, emoji:"🛋️", label:"EVENING",  labelKo:"저녁",
+    accent:"#B894D1", glow:"rgba(184,148,209,0.2)", deep:"#6E5286",
+    mood:"Settle into a story.",
+    moodKo:"몰입의 저녁 · BBC Earth, NatGeo, 시네마틱 다큐" },
+  { id:"night",    start:22, end:26, emoji:"🌙", label:"NIGHT",    labelKo:"밤",
+    accent:"#7BA8D6", glow:"rgba(123,168,214,0.2)", deep:"#456892",
+    mood:"Drift.",
+    moodKo:"흐르는 사운드 · Lo-fi·앰비언트·심야 라디오" },
+  { id:"dawn",     start:2,  end:6,  emoji:"😴", label:"DAWN",     labelKo:"새벽",
+    accent:"#C5A0D6", glow:"rgba(197,160,214,0.2)", deep:"#7A5286",
+    mood:"Quiet hours.",
+    moodKo:"고요의 시간 · ASMR·빗소리·클래식·백색소음" },
+];
 
-  const MOVIES = [
-    /* ===== 🇰🇷 K-시네마 클래식 (KOFA 한국영상자료원) ===== */
-    { id:"kr-hanyo-1960", title:"Hanyo", titleKo:"하녀", year:1960, director:"김기영", genre:"스릴러",
-      runtime:"108분", rating:8.7, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"하녀 김기영 1960 한국고전영화", channel:"@KoreanFilm",
-      desc:"한 음악 교사 가정에 들어온 가정부가 가족을 파멸로 이끄는 한국 누아르의 정점. 박찬욱·봉준호 감독이 인생작으로 꼽는 김기영의 걸작." },
-    { id:"kr-obaltan-1961", title:"Aimless Bullet", titleKo:"오발탄", year:1961, director:"유현목", genre:"드라마",
-      runtime:"110분", rating:8.5, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"오발탄 유현목 1961 한국고전영화",
-      desc:"한국전쟁 직후 서울. 가난과 절망 속에서 무너져 가는 한 가족의 초상. 한국 리얼리즘 영화의 출발점." },
-    { id:"kr-mateo-1966", title:"Late Autumn", titleKo:"만추", year:1966, director:"이만희", genre:"멜로",
-      runtime:"94분", rating:8.3, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"만추 이만희 1966 한국고전영화",
-      desc:"3일간 외출이 허락된 여죄수와 도망자의 짧고 깊은 사랑. 김태용 감독 〈만추〉의 원작." },
-    { id:"kr-babo-1975", title:"March of Fools", titleKo:"바보들의 행진", year:1975, director:"하길종", genre:"청춘",
-      runtime:"105분", rating:8.1, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"바보들의 행진 하길종 1975",
-      desc:"유신 시대 청춘들의 절망과 방황을 그린 한국 청춘 영화의 고전. 송창식 〈고래사냥〉 OST." },
-    { id:"kr-yeongja-1975", title:"Yeong-ja's Heydays", titleKo:"영자의 전성시대", year:1975, director:"김호선", genre:"드라마",
-      runtime:"103분", rating:7.9, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"영자의 전성시대 김호선 1975",
-      desc:"산업화 시기 도시로 상경한 시골 처녀의 비극을 그린 호스티스 영화의 정점." },
-    { id:"kr-pippari-1980", title:"The Pollen of Flowers", titleKo:"피막", year:1980, director:"이두용", genre:"공포",
-      runtime:"99분", rating:7.8, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"피막 이두용 1980 한국고전영화",
-      desc:"전통 무속과 죽음의 공간 '피막'을 다룬 한국 공포 영화의 수작." },
-    { id:"kr-mandala-1981", title:"Mandala", titleKo:"만다라", year:1981, director:"임권택", genre:"드라마",
-      runtime:"112분", rating:8.2, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"만다라 임권택 1981",
-      desc:"두 승려가 깨달음을 찾아 떠나는 구도의 여정. 임권택 감독의 정신적 출발점." },
-    { id:"kr-gilsoddeum-1985", title:"Gilsoddeum", titleKo:"길소뜸", year:1985, director:"임권택", genre:"드라마",
-      runtime:"104분", rating:8.0, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"길소뜸 임권택 1985",
-      desc:"이산가족 찾기를 통해 분단의 상처를 그린 임권택의 사회파 멜로." },
-    { id:"kr-seopyeonje-1993", title:"Seopyeonje", titleKo:"서편제", year:1993, director:"임권택", genre:"드라마",
-      runtime:"112분", rating:8.6, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"서편제 임권택 1993",
-      desc:"판소리 한 가락에 인생을 던진 부녀 소리꾼 이야기. 한국 영화 최초 100만 관객." },
-    { id:"kr-sopyonje-1996", title:"A Petal", titleKo:"꽃잎", year:1996, director:"장선우", genre:"드라마",
-      runtime:"100분", rating:8.0, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"꽃잎 장선우 1996",
-      desc:"광주를 잃고 떠도는 한 소녀의 정신적 여정. 5·18 을 정면으로 다룬 첫 한국 영화." },
-    { id:"kr-301-302-1995", title:"301, 302", titleKo:"301, 302", year:1995, director:"박철수", genre:"심리",
-      runtime:"100분", rating:7.6, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"301 302 박철수 1995",
-      desc:"이웃한 두 여자, 폭식과 거식 사이. 한국 페미니즘 호러의 컬트." },
-    { id:"kr-dreamingfrogs-1990", title:"Black Republic", titleKo:"그들도 우리처럼", year:1990, director:"박광수", genre:"드라마",
-      runtime:"100분", rating:7.7, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"그들도 우리처럼 박광수 1990",
-      desc:"수배자가 흘러든 강원도 탄광 마을. 한국 사회파 영화의 새 흐름을 연 작품." },
-    { id:"kr-changgo-1993", title:"Two Cops", titleKo:"투캅스", year:1993, director:"강우석", genre:"코미디",
-      runtime:"104분", rating:7.4, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"투캅스 강우석 1993 풀버전",
-      desc:"부패 형사와 신참 형사가 만난 본격 한국형 버디 무비. 안성기·박중훈 콤비." },
-    { id:"kr-greenfish-1997", title:"Green Fish", titleKo:"초록 물고기", year:1997, director:"이창동", genre:"누아르",
-      runtime:"111분", rating:8.0, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"초록 물고기 이창동 1997",
-      desc:"군대를 마치고 돌아온 청년이 휘말린 조직의 세계. 이창동 감독 데뷔작." },
-    { id:"kr-shiri-1999", title:"Shiri", titleKo:"쉬리", year:1999, director:"강제규", genre:"액션",
-      runtime:"125분", rating:7.5, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"쉬리 강제규 1999 풀버전",
-      desc:"북한 특수부대원과 한국 비밀요원의 대결. 한국형 블록버스터 시대 개막." },
-    { id:"kr-jsa-2000", title:"JSA: Joint Security Area", titleKo:"공동경비구역 JSA", year:2000, director:"박찬욱", genre:"드라마",
-      runtime:"110분", rating:8.5, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"공동경비구역 JSA 박찬욱 2000 풀버전",
-      desc:"판문점 총격 사건의 진실. 박찬욱 감독을 세계에 알린 분단 드라마." },
-    { id:"kr-virgin-2000", title:"Barking Dogs Never Bite", titleKo:"플란다스의 개", year:2000, director:"봉준호", genre:"코미디",
-      runtime:"110분", rating:7.0, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"플란다스의 개 봉준호 2000 풀버전",
-      desc:"개 짖는 소리에 미친 시간강사와 아파트 경리. 봉준호 감독 장편 데뷔작." },
-    { id:"kr-sympathy-2002", title:"Sympathy for Mr. Vengeance", titleKo:"복수는 나의 것", year:2002, director:"박찬욱", genre:"스릴러",
-      runtime:"129분", rating:7.6, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"복수는 나의 것 박찬욱 2002 풀버전",
-      desc:"누이의 신장 이식을 위해 유괴를 결심한 청각장애 노동자. 박찬욱 복수 3부작 1편." },
-    { id:"kr-memories-2003", title:"Memories of Murder", titleKo:"살인의 추억", year:2003, director:"봉준호", genre:"스릴러",
-      runtime:"131분", rating:8.7, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"살인의 추억 봉준호 2003 풀버전",
-      desc:"1986년 화성 연쇄살인 사건을 모티브로 한 봉준호의 두 번째 장편. 한국 형사물의 정점." },
-    { id:"kr-oasis-2002", title:"Oasis", titleKo:"오아시스", year:2002, director:"이창동", genre:"드라마",
-      runtime:"133분", rating:8.2, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"오아시스 이창동 2002 풀버전",
-      desc:"전과자 종두와 뇌성마비 공주의 사랑. 베니스 영화제 감독상." },
-    { id:"kr-untold-1996", title:"A Hot Roof", titleKo:"개같은 날의 오후", year:1995, director:"이민용", genre:"코미디",
-      runtime:"110분", rating:7.5, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"개같은 날의 오후 이민용 1995",
-      desc:"한 여름 옥상에서 벌어진 여성들의 봉기. 한국 페미니즘 코미디의 효시." },
-    { id:"kr-3iron-2004", title:"3-Iron", titleKo:"빈 집", year:2004, director:"김기덕", genre:"드라마",
-      runtime:"88분", rating:7.9, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"빈 집 김기덕 2004 풀버전",
-      desc:"빈 집을 떠도는 청년과 한 여자의 침묵의 동거. 베니스 감독상." },
-    { id:"kr-old-2003", title:"Oldboy", titleKo:"올드보이", year:2003, director:"박찬욱", genre:"스릴러",
-      runtime:"120분", rating:8.4, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"올드보이 박찬욱 2003 풀버전",
-      desc:"15년간 갇혔다 풀려난 남자의 복수극. 칸 심사위원대상." },
-    { id:"kr-host-2006", title:"The Host", titleKo:"괴물", year:2006, director:"봉준호", genre:"괴수",
-      runtime:"120분", rating:7.9, country:"🇰🇷", cat:"k-classic",
-      source:"search", query:"괴물 봉준호 2006 풀버전",
-      desc:"한강 괴수가 납치한 딸을 찾아 나선 가족. 한국 괴수영화의 정점." },
-
-    /* ===== 🎭 흑백의 명작 (Internet Archive · 퍼블릭 도메인 검증됨) ===== */
-    { id:"ia-night-1968", title:"Night of the Living Dead", titleKo:"살아있는 시체들의 밤", year:1968, director:"George A. Romero", genre:"공포",
-      runtime:"96분", rating:7.8, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"night_of_the_living_dead",
-      desc:"좀비 영화의 시조. 한 농가에 갇힌 사람들이 죽지 않는 시체들의 습격에서 살아남으려 한다." },
-    { id:"ia-nosferatu-1922", title:"Nosferatu", titleKo:"노스페라투", year:1922, director:"F.W. Murnau", genre:"공포",
-      runtime:"94분", rating:7.9, country:"🇩🇪", cat:"classic",
-      source:"archive", archiveId:"nosferatu_1922",
-      desc:"드라큘라를 모티브로 한 무성영화 호러의 절대 고전. 표현주의 영화의 정점." },
-    { id:"ia-metropolis-1927", title:"Metropolis", titleKo:"메트로폴리스", year:1927, director:"Fritz Lang", genre:"SF",
-      runtime:"153분", rating:8.3, country:"🇩🇪", cat:"classic",
-      source:"archive", archiveId:"Metropolis-1927",
-      desc:"디스토피아 SF의 원형. 자본가의 도시 위, 노동자의 도시 아래." },
-    { id:"ia-cabinet-1920", title:"The Cabinet of Dr. Caligari", titleKo:"칼리가리 박사의 밀실", year:1920, director:"Robert Wiene", genre:"공포",
-      runtime:"77분", rating:8.0, country:"🇩🇪", cat:"classic",
-      source:"archive", archiveId:"TheCabinetofDr.Caligari1920",
-      desc:"독일 표현주의 영화의 출발점. 일그러진 세계, 미친 의사, 몽유병자." },
-    { id:"ia-general-1926", title:"The General", titleKo:"제너럴", year:1926, director:"Buster Keaton", genre:"코미디",
-      runtime:"75분", rating:8.1, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"TheGeneral_201408",
-      desc:"버스터 키튼의 무성 코미디 결작. 남북전쟁 시대 기관차 추격." },
-    { id:"ia-charade-1963", title:"Charade", titleKo:"샤레이드", year:1963, director:"Stanley Donen", genre:"스릴러",
-      runtime:"113분", rating:7.9, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"Charade_1963",
-      desc:"오드리 헵번 + 캐리 그랜트. 파리, 사라진 25만 달러, 의심스런 남자들." },
-    { id:"ia-detour-1945", title:"Detour", titleKo:"디투어", year:1945, director:"Edgar G. Ulmer", genre:"누아르",
-      runtime:"68분", rating:7.2, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"Detour_1945",
-      desc:"히치하이커, 시체, 협박녀. B급 누아르의 전설." },
-    { id:"ia-his-girl-1940", title:"His Girl Friday", titleKo:"여비서 프라이데이", year:1940, director:"Howard Hawks", genre:"코미디",
-      runtime:"92분", rating:7.9, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"His_Girl_Friday_1940",
-      desc:"이혼 직전의 신문 편집장과 전 부인. 스크루볼 코미디의 정점." },
-    { id:"ia-haunted-1959", title:"House on Haunted Hill", titleKo:"하운티드 힐의 저택", year:1959, director:"William Castle", genre:"공포",
-      runtime:"75분", rating:6.8, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"House_on_Haunted_Hill_1959",
-      desc:"빈센트 프라이스. 하룻밤 머무르면 1만 달러를 주는 유령의 집." },
-    { id:"ia-plan9-1959", title:"Plan 9 from Outer Space", titleKo:"외계로부터의 9호 계획", year:1959, director:"Ed Wood", genre:"SF·B급",
-      runtime:"79분", rating:4.0, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"Plan_9_from_Outer_Space_1959",
-      desc:"세상에서 가장 형편없다고 알려진 영화. 그래서 컬트가 되었다." },
-    { id:"ia-carnival-1962", title:"Carnival of Souls", titleKo:"카니발 오브 소울즈", year:1962, director:"Herk Harvey", genre:"공포",
-      runtime:"78분", rating:7.3, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"Carnival_of_Souls_1962",
-      desc:"교회 오르간 연주자가 들른 텅 빈 유원지. 데이비드 린치가 사랑한 영화." },
-    { id:"ia-stranger-1946", title:"The Stranger", titleKo:"이방인", year:1946, director:"Orson Welles", genre:"누아르",
-      runtime:"95분", rating:7.3, country:"🇺🇸", cat:"classic",
-      source:"archive", archiveId:"the-stranger-1946",
-      desc:"오슨 웰스 감독·주연. 미국 시골에 숨어든 나치 전범." },
-
-    /* ===== 🎞️ 인디·단편 (Omeleto / Vimeo Staff Picks) ===== */
-    { id:"sf-omeleto-1", title:"Omeleto Drama", titleKo:"오멜레토 드라마 단편선", year:2024, director:"various", genre:"단편",
-      runtime:"10-30분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Omeleto drama short film",
-      desc:"세계 최대 단편영화 채널 Omeleto 의 드라마 큐레이션. 영화제 수상작 중심." },
-    { id:"sf-omeleto-2", title:"Omeleto Sci-Fi", titleKo:"오멜레토 SF 단편선", year:2024, director:"various", genre:"단편 · SF",
-      runtime:"10-30분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Omeleto sci-fi short film",
-      desc:"미래·AI·외계·시간여행. Omeleto 의 SF 단편영화 컬렉션." },
-    { id:"sf-omeleto-3", title:"Omeleto Horror", titleKo:"오멜레토 호러 단편선", year:2024, director:"various", genre:"단편 · 공포",
-      runtime:"10-30분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Omeleto horror short film",
-      desc:"15분 안에 펼쳐지는 공포의 정수. 영화제 수상 공포 단편." },
-    { id:"sf-omeleto-4", title:"Omeleto Comedy", titleKo:"오멜레토 코미디 단편선", year:2024, director:"various", genre:"단편 · 코미디",
-      runtime:"5-20분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Omeleto comedy short film",
-      desc:"세계 영화제에서 사랑받은 단편 코미디 큐레이션." },
-    { id:"sf-omeleto-5", title:"Omeleto Animation", titleKo:"오멜레토 애니메이션 단편선", year:2024, director:"various", genre:"단편 · 애니",
-      runtime:"5-15분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Omeleto animated short film",
-      desc:"손그림·3D·스톱모션. 단편 애니메이션의 정점들." },
-    { id:"sf-omeleto-6", title:"Oscar-Nominated Shorts", titleKo:"아카데미 후보 단편선", year:2024, director:"various", genre:"단편",
-      runtime:"15-40분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@Omeleto", ytQuery:"Oscar nominated short film",
-      desc:"아카데미 단편영화상 후보작/수상작." },
-    { id:"sf-vimeo-staff", title:"Vimeo Staff Picks", titleKo:"비메오 스태프 픽", year:2024, director:"various", genre:"단편",
-      runtime:"3-20분", rating:0, country:"🌍", cat:"indie",
-      source:"link", url:"https://vimeo.com/channels/staffpicks",
-      desc:"비메오 에디터들이 큐레이션하는 단편 영상. 광고·뮤비·실험·픽션 전반." },
-    { id:"sf-criterion-channel", title:"Criterion Trailers", titleKo:"크라이테리온 예고편 모음", year:2024, director:"various", genre:"트레일러",
-      runtime:"2-3분", rating:0, country:"🌍", cat:"indie",
-      source:"youtube", ytChannel:"@criterioncollection", ytQuery:"Criterion Collection trailers",
-      desc:"세계 영화 명작을 복원·배급하는 크라이테리온의 예고편 모음." },
-    { id:"sf-mubi-trailers", title:"MUBI Notebook", titleKo:"무비 노트북 (MUBI)", year:2024, director:"various", genre:"에세이",
-      runtime:"5-15분", rating:0, country:"🌍", cat:"indie",
-      source:"link", url:"https://mubi.com/notebook",
-      desc:"아트하우스 영화 큐레이션 MUBI 의 비디오 에세이·소개 영상." },
-    { id:"sf-aeon", title:"Aeon Video", titleKo:"이언 비디오", year:2024, director:"various", genre:"에세이",
-      runtime:"10-25분", rating:0, country:"🌍", cat:"indie",
-      source:"link", url:"https://aeon.co/videos",
-      desc:"철학·과학·예술 다큐 단편 큐레이션. 사색하기 좋은 영상." },
-
-    /* ===== 🔥 액션·B무비·컬트 (FilmRise / Cult Cinema Classics) ===== */
-    { id:"fr-action", title:"FilmRise Action", titleKo:"필름라이즈 액션 풀무비", year:1985, director:"various", genre:"액션",
-      runtime:"90-110분", rating:0, country:"🇺🇸", cat:"action",
-      source:"youtube", ytChannel:"@FilmRiseAction", ytQuery:"FilmRise action full movie",
-      desc:"FilmRise 가 합법으로 풀어놓은 80-2010년대 액션 풀무비 채널. 광고 시청으로 무료." },
-    { id:"fr-thriller", title:"FilmRise Thriller", titleKo:"필름라이즈 스릴러 풀무비", year:1995, director:"various", genre:"스릴러",
-      runtime:"95-110분", rating:0, country:"🇺🇸", cat:"action",
-      source:"youtube", ytChannel:"@FilmRiseFreeMovies", ytQuery:"FilmRise thriller full movie",
-      desc:"수많은 스릴러 풀무비를 무료 광고 모델로 공개." },
-    { id:"fr-drama", title:"FilmRise Drama", titleKo:"필름라이즈 드라마 풀무비", year:2000, director:"various", genre:"드라마",
-      runtime:"95-120분", rating:0, country:"🇺🇸", cat:"action",
-      source:"youtube", ytChannel:"@FilmRiseDrama", ytQuery:"FilmRise drama full movie",
-      desc:"인디·드라마 풀무비 큐레이션. 무료." },
-    { id:"cc-cult", title:"Cult Cinema Classics", titleKo:"컬트 시네마 클래식", year:1970, director:"various", genre:"컬트",
-      runtime:"80-110분", rating:0, country:"🌍", cat:"action",
-      source:"youtube", ytChannel:"@CultCinemaClassics", ytQuery:"cult cinema classics full movie",
-      desc:"60-80년대 컬트 영화 풀무비 (호러·SF·익스플로이테이션) 합법 공개 채널." },
-    { id:"pv-paramount", title:"The Paramount Vault", titleKo:"파라마운트 볼트", year:1980, director:"various", genre:"클래식",
-      runtime:"90-130분", rating:0, country:"🇺🇸", cat:"action",
-      source:"youtube", ytChannel:"@ParamountVault", ytQuery:"Paramount Vault full movie",
-      desc:"파라마운트가 직접 운영하는 자사 옛 영화 무료 공개 채널." },
-    { id:"yt-movies-free", title:"YouTube Movies Free", titleKo:"유튜브 무료 영화", year:2024, director:"various", genre:"풀무비",
-      runtime:"90-130분", rating:0, country:"🌍", cat:"action",
-      source:"link", url:"https://www.youtube.com/feed/storefront/free",
-      desc:"광고 시청으로 무료. 외부 이동." },
-    { id:"tubi-free", title:"Tubi Free Movies", titleKo:"투비 무료 영화", year:2024, director:"various", genre:"풀무비",
-      runtime:"90-130분", rating:0, country:"🌍", cat:"action",
-      source:"link", url:"https://tubitv.com/movies",
-      desc:"미국 최대 광고 기반 무료 OTT. 회원가입 없이 무료." },
-    { id:"pluto-free", title:"Pluto TV Movies", titleKo:"플루토 TV 무료 영화", year:2024, director:"various", genre:"풀무비",
-      runtime:"90-130분", rating:0, country:"🌍", cat:"action",
-      source:"link", url:"https://pluto.tv/on-demand/movies",
-      desc:"파라마운트 운영 무료 OTT. 채널/주문형 영화 무료 시청." },
-
-    /* ===== 🎬 다큐·시네마틱 ===== */
-    { id:"doc-bbc-earth", title:"BBC Earth Documentaries", titleKo:"BBC 어스 다큐", year:2024, director:"BBC", genre:"자연",
-      runtime:"45-90분", rating:0, country:"🇬🇧", cat:"docs",
-      source:"youtube", ytChannel:"@bbcearth", ytQuery:"BBC Earth full documentary",
-      desc:"플래닛 어스·블루 플래닛. 세계 최고 자연 다큐멘터리." },
-    { id:"doc-natgeo", title:"National Geographic", titleKo:"내셔널 지오그래픽 다큐", year:2024, director:"NatGeo", genre:"다큐",
-      runtime:"45-90분", rating:0, country:"🇺🇸", cat:"docs",
-      source:"youtube", ytChannel:"@NatGeo", ytQuery:"National Geographic full documentary",
-      desc:"역사·과학·자연·인류. 풀 다큐멘터리 라이브러리." },
-    { id:"doc-vox", title:"Vox Cinematic Docs", titleKo:"Vox 시네마틱 다큐", year:2024, director:"Vox", genre:"다큐",
-      runtime:"15-40분", rating:0, country:"🇺🇸", cat:"docs",
-      source:"youtube", ytChannel:"@Vox", ytQuery:"Vox documentary",
-      desc:"디자인·문화·정치·역사. 짧고 시네마틱한 다큐 시리즈." },
-    { id:"doc-vice", title:"VICE Documentaries", titleKo:"VICE 다큐", year:2024, director:"VICE", genre:"다큐",
-      runtime:"15-60분", rating:0, country:"🇺🇸", cat:"docs",
-      source:"youtube", ytChannel:"@VICE", ytQuery:"VICE documentary",
-      desc:"전쟁터·서브컬처·범죄·약물. 거친 현장 르포 다큐." },
-    { id:"doc-kbs", title:"KBS 다큐", titleKo:"KBS 다큐", year:2024, director:"KBS", genre:"다큐",
-      runtime:"45-50분", rating:0, country:"🇰🇷", cat:"docs",
-      source:"youtube", ytChannel:"@KBSDocumentary", ytQuery:"KBS 다큐 풀버전",
-      desc:"한국 공영방송 KBS 의 다큐멘터리 풀버전 라이브러리." },
-    { id:"doc-sbs", title:"SBS 다큐", titleKo:"SBS 다큐", year:2024, director:"SBS", genre:"다큐",
-      runtime:"45-50분", rating:0, country:"🇰🇷", cat:"docs",
-      source:"youtube", ytChannel:"@SBSCNBC", ytQuery:"SBS 스페셜 다큐 풀버전",
-      desc:"SBS 스페셜·그것이 알고 싶다 등 한국 다큐 풀버전." },
-  ];
-
-  const CATEGORIES = [
-    { id:"k-classic", title:"K-Cinema · 한국 영화", sub:"24 films · KOFA 한국영상자료원 큐레이션" },
-    { id:"classic",   title:"Classic Masterpieces · 흑백의 명작", sub:"12 films · 퍼블릭 도메인 · 임베드 OK" },
-    { id:"indie",     title:"Indie & Shorts · 인디·단편", sub:"10 channels · Omeleto · Vimeo · MUBI" },
-    { id:"action",    title:"Action & Cult · 액션·컬트", sub:"8 channels · FilmRise · Paramount Vault" },
-    { id:"docs",      title:"Documentary · 다큐멘터리", sub:"6 channels · BBC Earth · NatGeo · KBS" },
-  ];
-
-  /* ============ 즐겨찾기 ============ */
-  const FAV_KEY = "cinema-favs-v1";
-  function getFavs(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY)||"[]"); }catch{ return []; } }
-  function isFav(id){ return getFavs().includes(id); }
-  function toggleFav(id){
-    const f = getFavs();
-    const i = f.indexOf(id);
-    if(i>=0) f.splice(i,1); else f.unshift(id);
-    localStorage.setItem(FAV_KEY, JSON.stringify(f));
-    return i<0;
-  }
-
-  /* ============ 포스터 URL 생성 ============ */
-  function posterUrl(m){
-    if(m.poster) return m.poster;
-    if(m.source === "archive") return `https://archive.org/services/img/${encodeURIComponent(m.archiveId)}`;
-    return null;
-  }
-
-  /* ============ 외부 링크 (폴백) ============ */
-  function externalUrl(m){
-    if(m.source === "archive") return `https://archive.org/details/${m.archiveId}`;
-    if(m.source === "youtube" && m.ytQuery) return `https://www.youtube.com/results?search_query=${encodeURIComponent(m.ytQuery)}`;
-    if(m.source === "youtube" && m.ytChannel) return `https://www.youtube.com/${m.ytChannel}`;
-    if(m.source === "search") return `https://www.youtube.com/results?search_query=${encodeURIComponent(m.query)}`;
-    if(m.source === "link") return m.url;
-    return "#";
-  }
-
-  /* ============ 임베드 src 생성 ============ */
-  function embedSrc(m){
-    if(m.source === "archive") return `https://archive.org/embed/${m.archiveId}`;
-    if(m.source === "youtube" && m.videoId) return `https://www.youtube-nocookie.com/embed/${m.videoId}?autoplay=1&playsinline=1`;
-    if(m.source === "youtube" && m.ytChannel){
-      // 채널의 최신 업로드를 검색 임베드로 가져옴
-      return `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(m.ytQuery||m.ytChannel)}&autoplay=1&playsinline=1`;
-    }
-    return null;
-  }
-
-  /* ============ 카드 렌더 ============ */
-  function renderCard(m){
-    const card = document.createElement("button");
-    card.className = "card";
-    card.dataset.id = m.id;
-    card.setAttribute("aria-label", `${m.titleKo} (${m.year}) 재생`);
-
-    const poster = document.createElement("div");
-    const pUrl = posterUrl(m);
-    if(pUrl){
-      poster.className = "poster";
-      const img = document.createElement("img");
-      img.src = pUrl;
-      img.alt = m.title;
-      img.loading = "lazy";
-      img.onerror = ()=>{
-        poster.classList.add("no-img");
-        img.remove();
-        const t = document.createElement("div");
-        t.className = "pno-title";
-        t.textContent = m.title;
-        poster.appendChild(t);
-      };
-      poster.appendChild(img);
+const slotById = id => SLOTS.find(s => s.id === id);
+function getCurrentSlot(){
+  const h = new Date().getHours();
+  // mapping by start..end with wrap (night spans 22-02)
+  for(const s of SLOTS){
+    if(s.start < s.end){
+      if(h >= s.start && h < s.end) return s;
     } else {
-      poster.className = "poster no-img";
-      const t = document.createElement("div");
-      t.className = "pno-title";
-      t.textContent = m.title;
-      poster.appendChild(t);
-    }
-
-    if(m.country){
-      const b = document.createElement("div");
-      b.className = "card-badge";
-      b.textContent = m.country;
-      poster.appendChild(b);
-    }
-    if(m.rating > 0){
-      const r = document.createElement("div");
-      r.className = "card-rating";
-      r.textContent = `★ ${m.rating.toFixed(1)}`;
-      poster.appendChild(r);
-    }
-
-    const info = document.createElement("div");
-    info.className = "card-info";
-    info.innerHTML = `
-      <div class="card-title">${m.title}</div>
-      ${m.titleKo && m.titleKo !== m.title ? `<div class="card-title-ko">${m.titleKo}</div>` : ""}
-      <div class="card-meta">${m.year} · ${m.genre}</div>
-    `;
-
-    card.appendChild(poster);
-    card.appendChild(info);
-    card.addEventListener("click", ()=>openModal(m));
-    return card;
-  }
-
-  /* ============ Row 렌더 ============ */
-  function renderRows(filterFn){
-    const container = $("#rows-container");
-    container.innerHTML = "";
-    let totalShown = 0;
-
-    for(const cat of CATEGORIES){
-      const items = MOVIES.filter(m => m.cat === cat.id && (filterFn ? filterFn(m) : true));
-      if(items.length === 0) continue;
-      totalShown += items.length;
-
-      const row = document.createElement("section");
-      row.className = "row";
-      row.innerHTML = `
-        <div class="row-head">
-          <div class="row-title">${cat.title}</div>
-          <div class="row-sub">${items.length} films</div>
-        </div>
-      `;
-      const track = document.createElement("div");
-      track.className = "row-track";
-      items.forEach(m => track.appendChild(renderCard(m)));
-      row.appendChild(track);
-      container.appendChild(row);
-    }
-
-    if(totalShown === 0){
-      container.innerHTML = `<div class="empty">검색 결과가 없습니다</div>`;
+      // wrap (e.g. night 22-26 → 22..23 or 0..1)
+      if(h >= s.start || h < (s.end-24)) return s;
     }
   }
+  return SLOTS[0];
+}
 
-  /* ============ Hero 렌더 ============ */
-  let heroMovie = null;
-  function renderHero(){
-    // 추천: 한국 영화 + 평점 8.0+ 중에 랜덤
-    const pool = MOVIES.filter(m => m.cat === "k-classic" && m.rating >= 8.0);
-    heroMovie = pool[Math.floor(Math.random()*pool.length)] || MOVIES[0];
+/* ============ 미디어 데이터 (50+ 항목) ============ */
+const MEDIA = [
+  /* ===== 06-09 MORNING (뉴스·라디오) ===== */
+  { id:"m-bbc-news",   slot:"morning", source:"BBC News", title:"BBC News Live",
+    titleKo:"BBC 월드 뉴스 라이브",
+    type:"hls", live:true,
+    hlsUrl:"https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/iptv_hd_abr_v1.m3u8",
+    desc:"전세계에서 가장 신뢰받는 24시간 영문 뉴스 채널. 글로벌 헤드라인을 라이브로." },
+  { id:"m-nhk-world",  slot:"morning", source:"NHK World", title:"NHK World Live",
+    titleKo:"NHK 월드 영문 뉴스",
+    type:"hls", live:true,
+    hlsUrl:"https://nhkwlive-euwe.akamaized.net/hls/live/2003459/nhkwlive-euwe-en/index.m3u8",
+    desc:"일본 NHK 의 24시간 영문 국제 뉴스. 아시아 관점의 글로벌 보도." },
+  { id:"m-dw-en",      slot:"morning", source:"Deutsche Welle", title:"DW News Live",
+    titleKo:"독일 DW 영문 뉴스",
+    type:"yt-live", ytChannel:"UCknLrEdhRCp1aegoMqRaCZg",
+    desc:"독일 공영방송 DW 의 24시간 영문 뉴스 라이브. 유럽 관점의 보도." },
+  { id:"m-aljazeera",  slot:"morning", source:"Al Jazeera", title:"Al Jazeera English",
+    titleKo:"알자지라 영문 뉴스",
+    type:"yt-live", ytChannel:"UCNye-wNBqNL5ZzHSJj3l8Bg",
+    desc:"중동·글로벌 사우스 시각의 영문 24시간 뉴스." },
+  { id:"m-france24",   slot:"morning", source:"France 24", title:"France 24 English",
+    titleKo:"프랑스 24 영문 뉴스",
+    type:"yt-live", ytChannel:"UCQfwfsi5VrQ8yKZ-UWmAEFg",
+    desc:"프랑스 공영 24시간 영문 뉴스. 유럽·아프리카 보도 강점." },
+  { id:"m-the-daily",  slot:"morning", source:"NYT The Daily", title:"The Daily Podcast",
+    titleKo:"뉴욕타임스 The Daily 팟캐스트",
+    type:"link", url:"https://www.nytimes.com/column/the-daily",
+    desc:"뉴욕타임스의 매일 30분 시사 팟캐스트. 미국에서 가장 많이 듣는 뉴스 팟캐스트." },
 
-    const m = heroMovie;
-    const bg = $("#hero-bg");
-    const pUrl = posterUrl(m);
-    if(pUrl){
-      bg.style.backgroundImage = `url(${pUrl})`;
-    } else {
-      // gradient fallback
-      bg.style.background = `linear-gradient(135deg, #1B1612 0%, #2A241D 100%)`;
-    }
-    $("#hero-title").textContent = m.title;
-    $("#hero-title-ko").textContent = m.titleKo && m.titleKo !== m.title ? m.titleKo : "";
-    const ratingHtml = m.rating > 0 ? `<span class="star">★ ${m.rating.toFixed(1)}</span><span class="dot">·</span>` : "";
-    $("#hero-meta").innerHTML = `
-      ${ratingHtml}
-      <span>${m.year}</span><span class="dot">·</span>
-      <span>${m.director}</span><span class="dot">·</span>
-      <span>${m.genre}</span><span class="dot">·</span>
-      <span>${m.runtime}</span><span class="dot">·</span>
-      <span>${m.country}</span>
-    `;
-    $("#hero-desc").textContent = m.desc;
-    const favBtn = $("#hero-fav");
-    favBtn.classList.toggle("faved", isFav(m.id));
-    favBtn.textContent = isFav(m.id) ? "★ 즐겨찾기" : "+ 즐겨찾기";
+  /* ===== 09-12 FORENOON (TED·Vox·Aeon·비즈니스) ===== */
+  { id:"f-ted",        slot:"forenoon", source:"TED", title:"TED Talks",
+    titleKo:"TED 강연",
+    type:"yt-channel", ytChannel:"@TED",
+    desc:"퍼져 나갈 가치가 있는 아이디어. 18분 안에 세상을 보는 새 관점." },
+  { id:"f-tedx",       slot:"forenoon", source:"TED-Ed", title:"TED-Ed Animations",
+    titleKo:"TED-Ed 애니메이션",
+    type:"yt-channel", ytChannel:"@TEDEd",
+    desc:"5분 애니메이션으로 배우는 과학·역사·철학. 점심 전에 한 편." },
+  { id:"f-vox",        slot:"forenoon", source:"Vox", title:"Vox Explained",
+    titleKo:"Vox 인포그래픽 영상",
+    type:"yt-channel", ytChannel:"@Vox",
+    desc:"뉴스 뒤의 큰 그림을 시각적으로. 디자인이 뛰어난 설명 영상." },
+  { id:"f-aeon",       slot:"forenoon", source:"Aeon", title:"Aeon Video Essays",
+    titleKo:"Aeon 비디오 에세이",
+    type:"link", url:"https://aeon.co/videos",
+    desc:"철학·과학·예술·인생에 대한 깊이 있는 영상 에세이." },
+  { id:"f-bbc-reel",   slot:"forenoon", source:"BBC Reel", title:"BBC Reel Mini-Docs",
+    titleKo:"BBC Reel 미니 다큐",
+    type:"yt-channel", ytChannel:"@BBCReel",
+    desc:"BBC 가 큐레이션한 5-15분 시네마틱 미니 다큐 시리즈." },
+  { id:"f-bloomberg",  slot:"forenoon", source:"Bloomberg", title:"Bloomberg Quicktake",
+    titleKo:"블룸버그 퀵테이크",
+    type:"yt-live", ytChannel:"UCIALMKvObZNtJ6AmdCLP7Lg",
+    desc:"24시간 글로벌 비즈니스·금융 뉴스 라이브." },
+
+  /* ===== 12-14 LUNCH (코미디·짧은 영상) ===== */
+  { id:"l-snl",        slot:"lunch", source:"SNL", title:"Saturday Night Live",
+    titleKo:"새터데이 나잇 라이브",
+    type:"yt-channel", ytChannel:"@SaturdayNightLive",
+    desc:"미국 코미디의 정수. 5-7분 스케치 클립을 점심에 한 편씩." },
+  { id:"l-conan",      slot:"lunch", source:"Conan", title:"Team Coco Highlights",
+    titleKo:"코난 오브라이언 하이라이트",
+    type:"yt-channel", ytChannel:"@TeamCoco",
+    desc:"코난 오브라이언의 토크쇼 하이라이트와 'Conan Without Borders'." },
+  { id:"l-asianboss",  slot:"lunch", source:"Asian Boss", title:"Asian Boss Street Interviews",
+    titleKo:"아시안 보스 길거리 인터뷰",
+    type:"yt-channel", ytChannel:"@AsianBoss",
+    desc:"한국·일본·동남아 길거리 인터뷰 다큐. 한 끼 곁들이기 좋은 분량." },
+  { id:"l-vox-short",  slot:"lunch", source:"Vox Pop", title:"Vox Pop Stories",
+    titleKo:"Vox 팝 스토리",
+    type:"yt-channel", ytChannel:"@Vox",
+    desc:"5-12분 라이트한 영상 콘텐츠. 식사 시간에 적합." },
+  { id:"l-movieclips", slot:"lunch", source:"Movieclips", title:"Movieclips",
+    titleKo:"무비클립",
+    type:"yt-channel", ytChannel:"@MOVIECLIPS",
+    desc:"명작 영화 명장면 모음. 점심 시간 5분 영화 한 입." },
+  { id:"l-omeleto",    slot:"lunch", source:"Omeleto", title:"Omeleto Short Films",
+    titleKo:"오멜레토 단편영화",
+    type:"yt-channel", ytChannel:"@Omeleto",
+    desc:"15분 안에 끝나는 영화제 수상 단편영화 큐레이션." },
+
+  /* ===== 14-17 AFTERNOON (학습·BGM) ===== */
+  { id:"a-lofi-girl",  slot:"afternoon", source:"Lofi Girl", title:"Lofi hip hop radio · beats to study to",
+    titleKo:"로파이 걸 · 공부할 때 듣는 라디오",
+    type:"yt-live", live:true, ytChannel:"UCSJ4gkVC6NrvII8umztf0Ow",
+    desc:"전세계 학생·직장인이 함께 듣는 24/7 Lofi 라이브 스트림." },
+  { id:"a-chillhop",   slot:"afternoon", source:"Chillhop Music", title:"Chillhop Radio",
+    titleKo:"칠합 24/7 라디오",
+    type:"yt-live", live:true, ytChannel:"UCM9KEEuzacwVlkt9JfJad7g",
+    desc:"인디 비트와 재즈 라이브 스트림. 작업·공부 BGM." },
+  { id:"a-crash-course",slot:"afternoon", source:"Crash Course", title:"Crash Course",
+    titleKo:"크래시 코스",
+    type:"yt-channel", ytChannel:"@crashcourse",
+    desc:"역사·과학·문학·경제. 10분 안에 입문할 수 있는 인문 강의." },
+  { id:"a-khan",       slot:"afternoon", source:"Khan Academy", title:"Khan Academy",
+    titleKo:"칸 아카데미",
+    type:"yt-channel", ytChannel:"@khanacademy",
+    desc:"수학·과학·프로그래밍을 직접 배울 수 있는 무료 강의." },
+  { id:"a-nat-geo",    slot:"afternoon", source:"National Geographic", title:"NatGeo Short Documentaries",
+    titleKo:"내셔널 지오그래픽 짧은 다큐",
+    type:"yt-channel", ytChannel:"@NatGeo",
+    desc:"5-15분 자연·과학·인류 다큐 클립." },
+  { id:"a-smithsonian",slot:"afternoon", source:"Smithsonian", title:"Smithsonian Channel",
+    titleKo:"스미스소니언 채널",
+    type:"yt-channel", ytChannel:"@SmithsonianChannel",
+    desc:"역사·과학·자연. 미국 최고의 박물관이 만든 다큐 채널." },
+
+  /* ===== 17-19 COMMUTE (팟캐스트) ===== */
+  { id:"c-lex",        slot:"commute", source:"Lex Fridman", title:"Lex Fridman Podcast",
+    titleKo:"렉스 프리드먼 팟캐스트",
+    type:"yt-channel", ytChannel:"@lexfridman",
+    desc:"AI·과학·철학·역사 분야 거장과의 2-3시간 심층 대화." },
+  { id:"c-joe-rogan",  slot:"commute", source:"PowerfulJRE", title:"Joe Rogan Experience Clips",
+    titleKo:"조 로건 익스피리언스 클립",
+    type:"yt-channel", ytChannel:"@joerogan",
+    desc:"세계 최대 팟캐스트의 클립 모음. 통근에 적당한 길이." },
+  { id:"c-99pi",       slot:"commute", source:"99% Invisible", title:"99% Invisible",
+    titleKo:"99% 인비저블",
+    type:"link", url:"https://99percentinvisible.org/episodes/",
+    desc:"눈에 보이지 않는 디자인 이야기. 도시·물건·역사 속 디자인 팟캐스트." },
+  { id:"c-radiolab",   slot:"commute", source:"Radiolab", title:"Radiolab",
+    titleKo:"라디오랩",
+    type:"link", url:"https://radiolab.org/podcast",
+    desc:"과학과 철학을 시적으로 풀어내는 미국 NPR 의 대표 팟캐스트." },
+  { id:"c-bbc-r4",     slot:"commute", source:"BBC Radio 4", title:"BBC Radio 4",
+    titleKo:"BBC 라디오 4 (라이브)",
+    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_radio_fourfm",
+    desc:"BBC 의 시사·문학·드라마 라디오 채널. 영어 뉴스 듣기에 최고." },
+  { id:"c-hardcore",   slot:"commute", source:"Hardcore History", title:"Hardcore History",
+    titleKo:"하드코어 히스토리",
+    type:"link", url:"https://www.dancarlin.com/hardcore-history-series/",
+    desc:"댄 칼린의 4-6시간짜리 역사 팟캐스트. 통근 한 달 분량." },
+
+  /* ===== 19-22 EVENING (다큐·시네마틱) ===== */
+  { id:"e-bbc-earth",  slot:"evening", source:"BBC Earth", title:"BBC Earth Documentaries",
+    titleKo:"BBC 어스 자연 다큐",
+    type:"yt-channel", ytChannel:"@bbcearth",
+    desc:"플래닛 어스·블루 플래닛·다이너스티즈. 세계 최고의 자연 다큐 채널." },
+  { id:"e-natgeo-doc", slot:"evening", source:"National Geographic", title:"NatGeo Full Documentaries",
+    titleKo:"내셔널 지오그래픽 풀 다큐",
+    type:"yt-channel", ytChannel:"@NatGeo",
+    desc:"인류·우주·해양. 풀길이 다큐멘터리 컬렉션." },
+  { id:"e-lemmino",    slot:"evening", source:"LEMMiNO", title:"LEMMiNO Mysteries",
+    titleKo:"레미노 미스터리 다큐",
+    type:"yt-channel", ytChannel:"@LEMMiNO",
+    desc:"역사 미스터리·실종·미해결 사건을 시네마틱하게 풀어내는 1인 다큐 채널." },
+  { id:"e-vox-atlas",  slot:"evening", source:"Vox Atlas", title:"Vox Atlas",
+    titleKo:"Vox 아틀라스",
+    type:"yt-channel", ytChannel:"@Vox",
+    desc:"세계 분쟁·지정학·이주. Vox 의 장편 다큐 시리즈." },
+  { id:"e-nyt-opdoc",  slot:"evening", source:"NYT Op-Docs", title:"NYT Op-Docs",
+    titleKo:"NYT 옵-다큐",
+    type:"yt-channel", ytChannel:"@nytopdocs",
+    desc:"뉴욕타임스가 큐레이션하는 단편 시네마틱 다큐 시리즈." },
+  { id:"e-archive-noflivingdead", slot:"evening", source:"Internet Archive", title:"Night of the Living Dead (1968)",
+    titleKo:"살아있는 시체들의 밤 (1968)",
+    type:"archive", archiveId:"night_of_the_living_dead",
+    desc:"좀비 영화의 시조. 조지 로메로의 퍼블릭 도메인 컬트 클래식." },
+  { id:"e-archive-nosferatu", slot:"evening", source:"Internet Archive", title:"Nosferatu (1922)",
+    titleKo:"노스페라투 (1922)",
+    type:"archive", archiveId:"nosferatu_1922",
+    desc:"독일 표현주의 호러의 절대 고전. 무성영화 시대의 드라큘라." },
+  { id:"e-archive-metropolis", slot:"evening", source:"Internet Archive", title:"Metropolis (1927)",
+    titleKo:"메트로폴리스 (1927)",
+    type:"archive", archiveId:"Metropolis-1927",
+    desc:"디스토피아 SF 의 원형. 프리츠 랑의 무성영화 걸작." },
+
+  /* ===== 22-02 NIGHT (Lo-fi · 앰비언트) ===== */
+  { id:"n-lofi-girl",  slot:"night", source:"Lofi Girl", title:"Lofi hip hop · sleepy beats",
+    titleKo:"로파이 걸 · 잠들기 전 비트",
+    type:"yt-live", live:true, ytChannel:"UCSJ4gkVC6NrvII8umztf0Ow",
+    desc:"전세계가 함께 듣는 24/7 Lofi 라이브. 잠들기 전·자는 동안 흘려두기 좋다." },
+  { id:"n-chilled",    slot:"night", source:"Chilled Cow", title:"Synthwave Radio",
+    titleKo:"신스웨이브 라디오",
+    type:"yt-live", live:true, ytChannel:"UCS9uQI-jC3DE0L4IpXyvr6w",
+    desc:"80년대 무드의 신스웨이브 24/7 라이브 스트림. 야간 작업용." },
+  { id:"n-coffee-shop",slot:"night", source:"Cafe Music BGM", title:"Coffee Shop Ambient",
+    titleKo:"카페 앰비언트 BGM",
+    type:"yt-channel", ytChannel:"@cafemusicbgmchannel",
+    desc:"카페 톤의 재즈·보사노바 라이브 스트림. 글 쓰기·독서 BGM." },
+  { id:"n-jazz-radio", slot:"night", source:"Relaxing JAZZ", title:"24/7 Jazz Lounge",
+    titleKo:"24/7 재즈 라운지",
+    type:"yt-channel", ytChannel:"@CafeMusicBGMchannel",
+    desc:"뉴욕 재즈 바 무드의 라이브 BGM 스트림." },
+  { id:"n-bbc-r3",     slot:"night", source:"BBC Radio 3", title:"BBC Radio 3 (Classical)",
+    titleKo:"BBC 라디오 3 (클래식)",
+    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_radio_three",
+    desc:"BBC 의 클래식·재즈·월드뮤직 라디오. 야간에 어울리는 정통 채널." },
+  { id:"n-bbc-ws",     slot:"night", source:"BBC World Service", title:"BBC World Service Radio",
+    titleKo:"BBC 월드 서비스 라디오",
+    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_world_service",
+    desc:"BBC 의 24시간 글로벌 뉴스 라디오. 잠 안 올 때." },
+
+  /* ===== 02-06 DAWN (ASMR · 백색소음 · 클래식) ===== */
+  { id:"d-rain",       slot:"dawn", source:"Rain Sounds", title:"Rain Sounds for Sleeping · 10 Hours",
+    titleKo:"빗소리 10시간 · 수면용",
+    type:"yt-channel", ytChannel:"@TheGuildOfAmbience",
+    desc:"수면·집중에 효과적인 10시간 빗소리 채널 모음." },
+  { id:"d-white",      slot:"dawn", source:"White Noise", title:"White Noise · 10 Hours",
+    titleKo:"백색소음 10시간",
+    type:"yt-channel", ytChannel:"@WhiteNoiseFanClub",
+    desc:"수면·집중에 사용하는 화이트 노이즈·핑크 노이즈 채널." },
+  { id:"d-classical",  slot:"dawn", source:"HALIDONMUSIC", title:"Classical Music for Sleep",
+    titleKo:"수면용 클래식 음악",
+    type:"yt-channel", ytChannel:"@HALIDONMUSIC",
+    desc:"베토벤·드뷔시·바흐. 클래식 음악 라이브러리." },
+  { id:"d-asmr",       slot:"dawn", source:"Gentle Whispering", title:"ASMR · Soft Spoken",
+    titleKo:"ASMR · 소프트 스포큰",
+    type:"yt-channel", ytChannel:"@GentleWhispering",
+    desc:"잠들기 어려운 새벽에 듣는 부드러운 ASMR 채널." },
+  { id:"d-piano",      slot:"dawn", source:"Relaxing Piano", title:"Sleep Piano · 24/7",
+    titleKo:"수면 피아노 24/7",
+    type:"yt-live", live:true, ytChannel:"UCXf5oRmIaNeFDPUu_AZkVcQ",
+    desc:"잔잔한 피아노 라이브 스트림. 새벽 분위기에 맞춤." },
+  { id:"d-coffitivity",slot:"dawn", source:"Coffitivity", title:"Cafe Ambience",
+    titleKo:"카페 환경음",
+    type:"link", url:"https://coffitivity.com/",
+    desc:"카페 환경음을 만들어내는 명상·집중 보조 사이트." },
+];
+
+/* ============ 슬롯 색상 적용 ============ */
+function applySlotTheme(slot){
+  const root = document.documentElement;
+  root.style.setProperty("--accent", slot.accent);
+  root.style.setProperty("--accent-glow", slot.glow);
+  root.style.setProperty("--accent-deep", slot.deep);
+}
+
+/* ============ HLS / 플레이어 ============ */
+let hlsInstance = null;
+function destroyHls(){ if(hlsInstance){ try{ hlsInstance.destroy(); }catch{} hlsInstance = null; } }
+function attachHls(video, url){
+  destroyHls();
+  if(video.canPlayType("application/vnd.apple.mpegurl")){
+    video.src = url;
+    video.play().catch(()=>{});
+    return;
+  }
+  if(window.Hls && Hls.isSupported()){
+    hlsInstance = new Hls({ lowLatencyMode:true });
+    hlsInstance.loadSource(url);
+    hlsInstance.attachMedia(video);
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, ()=>video.play().catch(()=>{}));
+  }
+}
+
+/* ============ 미디어 외부 URL ============ */
+function externalUrl(m){
+  if(m.type === "yt-channel" && m.ytChannel){
+    if(m.ytChannel.startsWith("@")) return `https://www.youtube.com/${m.ytChannel}`;
+    return `https://www.youtube.com/channel/${m.ytChannel}`;
+  }
+  if(m.type === "yt-live" && m.ytChannel) return `https://www.youtube.com/channel/${m.ytChannel}/live`;
+  if(m.type === "yt-video" && m.videoId) return `https://www.youtube.com/watch?v=${m.videoId}`;
+  if(m.type === "archive") return `https://archive.org/details/${m.archiveId}`;
+  if(m.type === "link") return m.url;
+  if(m.type === "hls") return m.hlsUrl;
+  return "#";
+}
+
+/* ============ 카드 썸네일 URL ============ */
+function thumbUrl(m){
+  if(m.poster) return m.poster;
+  if(m.type === "archive") return `https://archive.org/services/img/${encodeURIComponent(m.archiveId)}`;
+  if(m.type === "yt-video" && m.videoId) return `https://i.ytimg.com/vi/${m.videoId}/hqdefault.jpg`;
+  return null;
+}
+
+/* ============ 카드 렌더 ============ */
+function renderCard(m){
+  const card = document.createElement("button");
+  card.className = "card";
+  card.dataset.id = m.id;
+
+  const thumb = document.createElement("div");
+  const tu = thumbUrl(m);
+  if(tu){
+    thumb.className = "card-thumb";
+    const img = document.createElement("img");
+    img.src = tu;
+    img.alt = m.title;
+    img.loading = "lazy";
+    img.onerror = ()=>{
+      thumb.classList.add("no-img");
+      img.remove();
+      const mark = document.createElement("div");
+      mark.className = "card-mark";
+      mark.textContent = "◐ " + (m.source||"MEDIA");
+      thumb.appendChild(mark);
+    };
+    thumb.appendChild(img);
+  } else {
+    thumb.className = "card-thumb no-img";
+    const mark = document.createElement("div");
+    mark.className = "card-mark";
+    mark.textContent = "◐ " + (m.source||"MEDIA");
+    thumb.appendChild(mark);
   }
 
-  /* ============ Modal ============ */
-  function openModal(m){
-    $("#modal-title").textContent = `${m.titleKo || m.title}${m.titleKo && m.titleKo !== m.title ? ` · ${m.title}` : ""}`;
+  const typeLabel = ({
+    "hls":"LIVE",
+    "yt-live":"LIVE",
+    "yt-channel":"YT",
+    "yt-video":"VIDEO",
+    "archive":"ARCHIVE",
+    "link":"EXTERNAL",
+    "radio":"RADIO",
+  })[m.type] || "MEDIA";
+  if(m.live){
+    const ld = document.createElement("div");
+    ld.className = "card-live-dot";
+    ld.textContent = "LIVE";
+    thumb.appendChild(ld);
+  } else {
+    const tb = document.createElement("div");
+    tb.className = "card-type-badge";
+    tb.textContent = typeLabel;
+    thumb.appendChild(tb);
+  }
 
-    const player = $("#modal-player");
-    const src = embedSrc(m);
-    if(src){
-      player.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-    } else {
-      // 검색·외부링크 타입은 외부 이동만 가능
-      const ext = externalUrl(m);
-      player.innerHTML = `
-        <div class="modal-fallback">
-          <div class="modal-fallback-title">${m.country} ${m.title}</div>
-          <div>이 영화는 임베드 정책상 앱 내 재생이 불가합니다.<br>아래 버튼으로 유튜브에서 직접 시청하세요.</div>
-          <a class="modal-fallback-link" href="${ext}" target="_blank" rel="noopener noreferrer">▶ 유튜브에서 보기 ↗</a>
-        </div>`;
-    }
+  const body = document.createElement("div");
+  body.className = "card-body";
+  body.innerHTML = `
+    <div class="card-source">${m.source||""}</div>
+    <div class="card-title">${m.title}</div>
+    ${m.titleKo && m.titleKo !== m.title ? `<div class="card-ko">${m.titleKo}</div>` : ""}
+  `;
 
-    const ratingHtml = m.rating > 0 ? `<span class="star">★ ${m.rating.toFixed(1)}</span>` : `<span>NEW</span>`;
-    $("#modal-meta-row").innerHTML = `
-      ${ratingHtml}
-      <span>${m.year}</span>
-      <span>${m.director}</span>
-      <span>${m.genre}</span>
-      <span>${m.runtime}</span>
-      <span>${m.country}</span>
+  card.appendChild(thumb);
+  card.appendChild(body);
+  card.addEventListener("click", ()=>openMedia(m));
+  return card;
+}
+
+/* ============ 슬롯 렌더 ============ */
+let currentSlotId = null;
+let currentMedia = null;
+let viewMode = "now"; // "now" | "all"
+
+function renderSlot(slotId){
+  const slot = slotById(slotId);
+  if(!slot) return;
+  currentSlotId = slotId;
+  applySlotTheme(slot);
+
+  // brand sub
+  $("#brand-sub").textContent = `${slot.label} · ${slot.start.toString().padStart(2,"0")}-${(slot.end%24).toString().padStart(2,"0")}`;
+  // slot name + mood
+  $("#slot-name").textContent = `${slot.emoji} ${slot.label}`;
+  $("#slot-mood").textContent = slot.mood;
+  $("#slot-mood-ko").textContent = slot.moodKo;
+
+  // strip update
+  $$(".strip-slot").forEach(el => {
+    el.classList.toggle("now", el.dataset.slot === slotId);
+    el.classList.toggle("preview", el.dataset.slot !== slotId);
+  });
+
+  // grid: 해당 슬롯의 미디어
+  const items = MEDIA.filter(m => m.slot === slotId);
+  $("#grid-title").textContent = `${slot.emoji} ${slot.labelKo} 추천`;
+  $("#grid-meta").textContent = `${items.length} ITEMS · ${slot.label}`;
+  const grid = $("#grid");
+  grid.innerHTML = "";
+  items.forEach(m => grid.appendChild(renderCard(m)));
+
+  // hero: 첫번째 라이브 우선, 없으면 첫 항목
+  pickHero(items);
+}
+
+function pickHero(items){
+  if(!items || items.length === 0) return;
+  const live = items.filter(m => m.live);
+  const pool = live.length ? live : items;
+  const m = pool[Math.floor(Math.random()*pool.length)];
+  currentMedia = m;
+  $("#hero-source").textContent = m.source || "";
+  $("#hero-title").textContent = m.title;
+  $("#hero-ko").textContent = m.titleKo && m.titleKo !== m.title ? m.titleKo : "";
+  $("#hero-desc").textContent = m.desc || "";
+
+  const ht = $("#hero-thumb");
+  ht.innerHTML = "";
+  const tu = thumbUrl(m);
+  if(tu){
+    ht.classList.remove("no-img");
+    const img = document.createElement("img");
+    img.src = tu;
+    img.alt = m.title;
+    img.onerror = ()=>{
+      ht.classList.add("no-img");
+      img.remove();
+      const mk = document.createElement("div");
+      mk.className = "hero-thumb-mark";
+      mk.textContent = "◐ " + (m.source||"MEDIA");
+      ht.appendChild(mk);
+    };
+    ht.appendChild(img);
+  } else {
+    ht.classList.add("no-img");
+    const mk = document.createElement("div");
+    mk.className = "hero-thumb-mark";
+    mk.textContent = "◐ " + (m.source||"MEDIA");
+    ht.appendChild(mk);
+  }
+}
+
+/* ============ Time Strip (8 dots) ============ */
+function renderStrip(){
+  const strip = $("#strip");
+  // keep .strip-line; remove other slots
+  $$(".strip-slot", strip).forEach(el => el.remove());
+  for(const s of SLOTS){
+    const el = document.createElement("button");
+    el.className = "strip-slot";
+    el.dataset.slot = s.id;
+    el.innerHTML = `
+      <div class="strip-dot"></div>
+      <div class="strip-time">${s.start.toString().padStart(2,"0")}</div>
+      <div class="strip-name">${s.label}</div>
     `;
-    $("#modal-desc").textContent = m.desc;
+    el.title = `${s.label} · ${s.start}-${s.end%24} · ${s.moodKo}`;
+    el.addEventListener("click", ()=>{
+      viewMode = "preview";
+      $("#nav-now").classList.remove("active");
+      renderSlot(s.id);
+    });
+    strip.appendChild(el);
+  }
+}
 
+/* ============ Other times grid ============ */
+function renderOther(){
+  const wrap = $("#other");
+  wrap.innerHTML = "";
+  const nowSlot = getCurrentSlot();
+  for(const s of SLOTS){
+    const items = MEDIA.filter(m => m.slot === s.id);
+    const el = document.createElement("button");
+    el.className = "other-card" + (s.id === nowSlot.id ? " now" : "");
+    el.innerHTML = `
+      <span class="other-emoji">${s.emoji}</span>
+      <div class="other-time">${s.start.toString().padStart(2,"0")}–${(s.end%24).toString().padStart(2,"0")} · ${items.length} items</div>
+      <div class="other-name">${s.label}</div>
+      <div class="other-name-ko">${s.labelKo} · ${s.moodKo.split("·")[0].trim()}</div>
+    `;
+    el.addEventListener("click", ()=>{
+      viewMode = "preview";
+      $("#nav-now").classList.remove("active");
+      renderSlot(s.id);
+      window.scrollTo({ top:0, behavior:"smooth" });
+    });
+    wrap.appendChild(el);
+  }
+}
+
+/* ============ Modal ============ */
+function openMedia(m){
+  $("#m-source").textContent = m.source || "";
+  $("#m-title").textContent = `${m.title}${m.titleKo && m.titleKo !== m.title ? " · " + m.titleKo : ""}`;
+  const player = $("#m-player");
+  player.innerHTML = "";
+
+  if(m.type === "hls"){
+    const v = document.createElement("video");
+    v.controls = true; v.autoplay = true; v.playsInline = true;
+    player.appendChild(v);
+    attachHls(v, m.hlsUrl);
+  } else if(m.type === "yt-live" && m.ytChannel){
+    const ch = m.ytChannel.startsWith("@") ? m.ytChannel : m.ytChannel;
+    const param = m.ytChannel.startsWith("UC") ? `channel=${m.ytChannel}` : `user=${m.ytChannel.replace("@","")}`;
+    player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/live_stream?${param}&autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  } else if(m.type === "yt-video" && m.videoId){
+    player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${m.videoId}?autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  } else if(m.type === "yt-channel" && m.ytChannel){
+    const q = encodeURIComponent((m.title || m.source || ""));
+    player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=search&list=${q}&autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  } else if(m.type === "archive"){
+    player.innerHTML = `<iframe src="https://archive.org/embed/${m.archiveId}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else {
     const ext = externalUrl(m);
-    const isCurrentlyFav = isFav(m.id);
-    $("#modal-actions").innerHTML = `
-      <a class="modal-fallback-link" href="${ext}" target="_blank" rel="noopener noreferrer">유튜브에서 보기 ↗</a>
-      <button class="modal-fallback-link" id="modal-fav-btn">${isCurrentlyFav ? "★ 즐겨찾기 해제" : "+ 즐겨찾기 추가"}</button>
-    `;
-    $("#modal-fav-btn").addEventListener("click", ()=>{
-      const nowFav = toggleFav(m.id);
-      $("#modal-fav-btn").textContent = nowFav ? "★ 즐겨찾기 해제" : "+ 즐겨찾기 추가";
-      // hero 동기화
-      if(heroMovie && heroMovie.id === m.id) renderHero();
-    });
-
-    $("#modal").classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
-  function closeModal(){
-    $("#modal").classList.remove("open");
-    $("#modal-player").innerHTML = "";
-    document.body.style.overflow = "";
+    player.innerHTML = `
+      <div class="modal-fb">
+        <div class="modal-fb-title">${m.source || m.title}</div>
+        <div>이 미디어는 외부 사이트에서 재생됩니다.<br>아래 버튼으로 이동하세요.</div>
+        <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">▶ ${m.type === "link" ? "외부 사이트 열기" : "유튜브에서 보기"} ↗</a>
+      </div>`;
   }
 
-  /* ============ Init ============ */
-  function init(){
-    renderHero();
-    renderRows();
+  $("#m-desc").textContent = m.desc || "";
+  const ext = externalUrl(m);
+  $("#m-actions").innerHTML = `
+    <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">${m.type === "link" ? "외부에서 열기 ↗" : "원본 ↗"}</a>
+  `;
 
-    $("#hero-play").addEventListener("click", ()=>heroMovie && openModal(heroMovie));
-    $("#hero-fav").addEventListener("click", ()=>{
-      if(!heroMovie) return;
-      toggleFav(heroMovie.id);
-      renderHero();
-    });
+  $("#modal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal(){
+  $("#modal").classList.remove("open");
+  $("#m-player").innerHTML = "";
+  destroyHls();
+  document.body.style.overflow = "";
+}
 
-    $("#modal-close").addEventListener("click", closeModal);
-    $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
-    document.addEventListener("keydown", e=>{ if(e.key === "Escape") closeModal(); });
+/* ============ Clock tick ============ */
+function tickClock(){
+  const d = new Date();
+  $("#hh").textContent = d.getHours().toString().padStart(2,"0");
+  $("#mm").textContent = d.getMinutes().toString().padStart(2,"0");
+  $("#ss").textContent = d.getSeconds().toString().padStart(2,"0");
+  const wd = ["SUN","MON","TUE","WED","THU","FRI","SAT"][d.getDay()];
+  $("#weekday").textContent = wd;
+  $("#date").textContent = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,"0")}.${d.getDate().toString().padStart(2,"0")}`;
+}
 
-    let favMode = false;
-    $("#filter-fav").addEventListener("click", ()=>{
-      favMode = !favMode;
-      $("#filter-fav").classList.toggle("active", favMode);
-      $("#search").value = "";
-      if(favMode){
-        const favs = getFavs();
-        renderRows(m => favs.includes(m.id));
-      } else {
-        renderRows();
-      }
-    });
+/* ============ NOW / ALL nav ============ */
+function goNow(){
+  viewMode = "now";
+  $("#nav-now").classList.add("active");
+  $("#nav-all").classList.remove("active");
+  renderSlot(getCurrentSlot().id);
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+function goAll(){
+  viewMode = "all";
+  $("#nav-all").classList.add("active");
+  $("#nav-now").classList.remove("active");
+  // scroll to other-grid
+  $(".other-wrap").scrollIntoView({ behavior:"smooth", block:"start" });
+}
 
-    let timer;
-    $("#search").addEventListener("input", e=>{
-      clearTimeout(timer);
-      const q = e.target.value.trim().toLowerCase();
-      timer = setTimeout(()=>{
-        favMode = false;
-        $("#filter-fav").classList.remove("active");
-        if(!q){ renderRows(); return; }
-        renderRows(m =>
-          (m.title||"").toLowerCase().includes(q) ||
-          (m.titleKo||"").toLowerCase().includes(q) ||
-          (m.director||"").toLowerCase().includes(q) ||
-          (m.genre||"").toLowerCase().includes(q) ||
-          String(m.year||"").includes(q)
-        );
-      }, 150);
-    });
+/* ============ Init ============ */
+function init(){
+  renderStrip();
+  renderOther();
+  tickClock();
+  setInterval(tickClock, 1000);
 
-    // 서비스워커 (있으면 등록)
-    if("serviceWorker" in navigator){
-      navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  // 자동: 현재 시각 슬롯
+  renderSlot(getCurrentSlot().id);
+
+  // 매 분 현재 슬롯 자동 갱신 (사용자가 'now' 모드일 때만)
+  setInterval(()=>{
+    if(viewMode === "now"){
+      const ns = getCurrentSlot();
+      if(ns.id !== currentSlotId) renderSlot(ns.id);
     }
+  }, 60*1000);
+
+  $("#hero-play").addEventListener("click", ()=>currentMedia && openMedia(currentMedia));
+  $("#hero-skip").addEventListener("click", ()=>{
+    const items = MEDIA.filter(m => m.slot === currentSlotId);
+    pickHero(items);
+  });
+  $("#nav-now").addEventListener("click", goNow);
+  $("#nav-all").addEventListener("click", goAll);
+  $("#m-close").addEventListener("click", closeModal);
+  $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key === "Escape") closeModal(); });
+
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
   }
-  init();
+}
+init();
 </script>
 </body>
 </html>
