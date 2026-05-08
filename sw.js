@@ -1,5 +1,5 @@
-// ON AIR Service Worker v0.19.0-yt-fallback
-const CACHE_NAME = "onair-v0.19.0-yt-fallback";
+// CINEMA Service Worker v0.20.0-cinema-renewal
+const CACHE_NAME = "cinema-v0.20.0-renewal";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
