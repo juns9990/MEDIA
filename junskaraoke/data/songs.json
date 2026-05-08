@@ -1,0 +1,78 @@
+{
+  "version": "0.1.0",
+  "currentVolume": "01",
+  "volumeTitle": "심야의 라이너노트",
+  "volumeDate": "2026",
+  "songs": [
+    {
+      "id": "001",
+      "volume": "01",
+      "issueNumber": "01",
+      "title": "밤편지",
+      "artist": "아이유",
+      "tagline": "이 밤, 그날의 반딧불을",
+      "genre": "발라드",
+      "source": "youtube",
+      "ytId": "Glcf-665ZkM",
+      "ytNote": "TJ노래방 공식 MR (곡번호 48879)",
+      "lrc": "junskaraoke/data/lyrics/001.lrc",
+      "features": ["lyrics"]
+    },
+    {
+      "id": "002",
+      "volume": "01",
+      "issueNumber": "02",
+      "title": "모든 날, 모든 순간",
+      "artist": "폴킴",
+      "tagline": "그대를 향한 시간이 멈춰있다",
+      "genre": "발라드",
+      "source": "youtube",
+      "ytId": "cp1-o4_H4qM",
+      "ytNote": "TJ노래방 공식 MR (yours 앨범 원곡)",
+      "lrc": "junskaraoke/data/lyrics/002.lrc",
+      "features": ["lyrics"]
+    },
+    {
+      "id": "003",
+      "volume": "01",
+      "issueNumber": "03",
+      "title": "서른 즈음에",
+      "artist": "김광석",
+      "tagline": "또 하루 멀어져 간다",
+      "genre": "포크",
+      "source": "youtube",
+      "ytId": "b_BjJ1-EtLw",
+      "ytNote": "TJ노래방 공식 MR (곡번호 2337)",
+      "lrc": "junskaraoke/data/lyrics/003.lrc",
+      "features": ["lyrics"]
+    },
+    {
+      "id": "004",
+      "volume": "01",
+      "issueNumber": "04",
+      "title": "너의 모든 순간",
+      "artist": "성시경",
+      "tagline": "한 사람을 사랑한다는 건",
+      "genre": "발라드",
+      "source": "youtube",
+      "ytId": "cUlDEVp7GIY",
+      "ytNote": "TJ노래방 공식 MR (별그대 OST, 곡번호 38028)",
+      "lrc": "junskaraoke/data/lyrics/004.lrc",
+      "features": ["lyrics"]
+    },
+    {
+      "id": "005",
+      "volume": "01",
+      "issueNumber": "05",
+      "title": "샴푸의 요정",
+      "artist": "빛과 소금",
+      "tagline": "은빛의 환상 심어준 그녀는 나만의 작은 요정",
+      "genre": "시티팝",
+      "source": "youtube",
+      "ytId": "-uNR1iYunLY",
+      "ytNote": "원곡 + 싱크 가사 영상 (MR 아님, 추후 교체 가능)",
+      "lrc": "junskaraoke/data/lyrics/005.lrc",
+      "features": ["lyrics"]
+    }
+  ]
+}

@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#d4a574" />
+<title>준스가라오케 · VOL.01 심야의 라이너노트</title>
+<link rel="manifest" href="junskaraoke-manifest.json" />
+<link rel="icon" type="image/svg+xml" href="junskaraoke-icon.svg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700;1,9..144,900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #0f0e0d;
+  --text: #f5f1ea;
+  --text-mute: #8a8580;
+  --accent: #d4a574;
+  --rule: #2a2724;
+  --serif: 'Fraunces', 'Pretendard', serif;
+  --sans:  'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+button { font-family: inherit; cursor: pointer; }
+em { font-style: italic; }
+
+/* ─────────── 마스트헤드 ─────────── */
+.masthead {
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.masthead::after {
+  content: '';
+  display: block;
+  width: 60px; height: 1px;
+  background: var(--accent);
+  margin: 1.25rem auto 0;
+}
+.wordmark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1;
+}
+.colophon {
+  margin-top: 1rem;
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.colophon .vol { color: var(--accent); font-weight: 700; }
+.volume-title {
+  margin-top: 0.4rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-mute);
+  letter-spacing: 0.05em;
+}
+
+/* ─────────── 검색 바 ─────────── */
+.search-section {
+  max-width: 720px;
+  margin: 2rem auto 1rem;
+  padding: 0 1.5rem;
+}
+.search-input-wrap {
+  position: relative;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.5rem;
+}
+.search-input-wrap::before {
+  content: '🔍';
+  position: absolute;
+  left: 0; top: 0.1rem;
+  font-size: 1rem;
+  opacity: 0.7;
+  filter: grayscale(1);
+}
+.search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  padding: 0.4rem 0 0.4rem 1.8rem;
+  outline: none;
+}
+.search-input::placeholder { color: var(--text-mute); font-style: italic; }
+.search-tabs {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.9rem;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+.search-tab {
+  background: none; border: none; padding: 0.25rem 0;
+  color: var(--text-mute);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  font-size: inherit;
+  font-family: inherit;
+}
+.search-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ─────────── 곡 그리드 ─────────── */
+.catalog {
+  max-width: 880px;
+  margin: 1rem auto 6rem;
+  padding: 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 720px) {
+  .catalog { grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+}
+.song-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background 0.15s;
+  align-items: start;
+}
+.song-card:hover, .song-card:focus {
+  background: rgba(212, 165, 116, 0.04);
+  outline: none;
+}
+.song-card:focus .song-title { color: var(--accent); }
+.song-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--accent);
+  min-width: 2.5ch;
+}
+.song-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0 0 0.15rem;
+  letter-spacing: -0.01em;
+}
+.song-artist {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-mute);
+}
+.song-tagline {
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.78;
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+.song-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.song-meta .song-genre::before { content: '· '; opacity: 0.5; }
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--text-mute);
+  font-size: 1.05rem;
+}
+
+/* ─────────── 푸터 ─────────── */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 2rem 1.5rem 3rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.site-footer .v { color: var(--accent); }
+
+/* ─────────── 재생 스테이지 (B안 = magazine) ─────────── */
+.stage {
+  position: fixed; inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: none;
+  overflow: hidden;
+}
+.stage.active { display: block; }
+
+.video-bg {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+#yt-player {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 177.78vh;        /* 16:9 cover */
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  filter: brightness(0.35) blur(2px);
+  pointer-events: none;
+}
+.video-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(15,14,13,0.7) 0%,
+    rgba(15,14,13,0.4) 50%,
+    rgba(15,14,13,0.85) 100%);
+  z-index: 1;
+}
+
+.stage-header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 3;
+  padding: 1.25rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: opacity 0.4s;
+}
+.stage-header .now-playing {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.stage-header .now-playing .accent { color: var(--accent); }
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--text);
+  padding: 0.4rem 0.9rem;
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+.lyrics-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1.25rem;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 700;
+}
+.lyric {
+  transition: opacity 0.2s, color 0.2s, font-size 0.2s;
+  max-width: 90vw;
+  line-height: 1.4;
+}
+.lyric.prev    { opacity: 0.35; font-size: 1rem; }
+.lyric.current { color: var(--accent); font-size: clamp(1.6rem, 5vw, 2.25rem); font-weight: 800; }
+.lyric.next    { opacity: 0.5; font-size: 1.1rem; }
+
+.controls {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 3;
+  padding: 1.25rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 0.4s;
+  background: linear-gradient(180deg, transparent 0%, rgba(15,14,13,0.6) 70%, rgba(15,14,13,0.85) 100%);
+}
+.controls.hidden { opacity: 0; pointer-events: none; }
+.stage-header.hidden { opacity: 0; pointer-events: none; }
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-play {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  min-width: 6.5rem;
+}
+.btn-play:hover { background: rgba(212,165,116,0.1); }
+.progress {
+  flex: 1;
+  height: 2px;
+  background: rgba(245,241,234,0.15);
+  position: relative;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+.time {
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  color: var(--text-mute);
+  min-width: 7ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.aux-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.aux-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--text-mute);
+  padding: 0.35rem 0.7rem;
+  border-radius: 2px;
+  cursor: not-allowed;
+  opacity: 0.5;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+/* ─────────── 접근성 ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <h1 class="wordmark">준스가라오케</h1>
+  <p class="colophon"><span class="vol">VOL.01</span> · 2026 · v0.1.0</p>
+  <p class="volume-title">심야의 라이너노트</p>
+</header>
+
+<section class="search-section" aria-label="곡 검색">
+  <div class="search-input-wrap">
+    <input type="search" class="search-input" id="searchInput" placeholder="곡을 찾아보세요" autocomplete="off" />
+  </div>
+  <div class="search-tabs" role="tablist">
+    <button class="search-tab active" data-mode="all"    role="tab">전체</button>
+    <button class="search-tab"        data-mode="title"  role="tab">제목</button>
+    <button class="search-tab"        data-mode="artist" role="tab">가수</button>
+  </div>
+</section>
+
+<main class="catalog" id="catalog" aria-label="곡 카탈로그"></main>
+
+<footer class="site-footer">
+  <p>준스가라오케 · <span class="v">v0.1.0</span> · VOL.01 심야의 라이너노트</p>
+</footer>
+
+<!-- ─────────── 재생 스테이지 (B안 = magazine) ─────────── -->
+<section class="stage" id="stage" aria-hidden="true">
+  <div class="video-bg">
+    <div id="yt-player"></div>
+  </div>
+  <div class="video-overlay"></div>
+
+  <div class="stage-header" id="stageHeader">
+    <button class="btn-back" id="btnBack">← 목록으로</button>
+    <div class="now-playing">
+      <span class="accent" id="npVol">VOL.01</span> · <span id="npTitle"></span> — <em id="npArtist"></em>
+    </div>
+  </div>
+
+  <div class="lyrics-stage">
+    <div class="lyric prev"    id="lyricPrev"></div>
+    <div class="lyric current" id="lyricCurrent">― 재생 준비 중 ―</div>
+    <div class="lyric next"    id="lyricNext"></div>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="controls-row">
+      <button class="btn-play" id="btnPlay">재생</button>
+      <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+      <span class="time" id="time">0:00 / 0:00</span>
+    </div>
+    <div class="aux-row" aria-label="MP3 곡 전용 — v0.1 비활성">
+      <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">키 −</button>
+      <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">키 +</button>
+      <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">템포 −</button>
+      <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">템포 +</button>
+      <button class="aux-btn" disabled title="MP3 곡 전용 (v0.4 예정)">점수</button>
+    </div>
+  </div>
+</section>
+
+<script src="junskaraoke/js/player-interface.js"></script>
+<script src="junskaraoke/js/yt-adapter.js"></script>
+<script src="junskaraoke/js/mp3-adapter.js"></script>
+<script src="junskaraoke/js/lrc-parser.js"></script>
+<script src="junskaraoke/js/search.js"></script>
+<script src="junskaraoke/js/catalog.js"></script>
+<script>
+(() => {
+  // ── 상태 ──
+  let allSongs = [];
+  let currentMode = 'all';
+  let currentQuery = '';
+  let player = null;
+  let currentSong = null;
+  let lrcLines = [];
+  let lastLineIdx = -1;
+  let controlsHideTimer = null;
+
+  // ── DOM ──
+  const $catalog = document.getElementById('catalog');
+  const $search = document.getElementById('searchInput');
+  const $tabs = document.querySelectorAll('.search-tab');
+  const $stage = document.getElementById('stage');
+  const $stageHeader = document.getElementById('stageHeader');
+  const $controls = document.getElementById('controls');
+  const $btnBack = document.getElementById('btnBack');
+  const $btnPlay = document.getElementById('btnPlay');
+  const $progress = document.getElementById('progress');
+  const $progressBar = document.getElementById('progressBar');
+  const $time = document.getElementById('time');
+  const $lyricPrev = document.getElementById('lyricPrev');
+  const $lyricCurrent = document.getElementById('lyricCurrent');
+  const $lyricNext = document.getElementById('lyricNext');
+  const $npTitle = document.getElementById('npTitle');
+  const $npArtist = document.getElementById('npArtist');
+  const $npVol = document.getElementById('npVol');
+
+  // ── 카탈로그 로드 ──
+  loadCatalog().then((data) => {
+    allSongs = data.songs || [];
+    document.title = `준스가라오케 · VOL.${data.currentVolume} ${data.volumeTitle || ''}`.trim();
+    renderList();
+  }).catch((err) => {
+    console.error('[junskaraoke] catalog load failed', err);
+    $catalog.innerHTML = '<p class="empty-state">곡 목록을 불러올 수 없습니다.</p>';
+  });
+
+  function renderList() {
+    const filtered = filterSongs(allSongs, currentQuery, currentMode);
+    renderCatalog($catalog, filtered, openStage);
+  }
+
+  // ── 검색 ──
+  const onSearch = debounce((v) => { currentQuery = v; renderList(); }, 150);
+  $search.addEventListener('input', (e) => onSearch(e.target.value));
+  $search.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { $search.value = ''; currentQuery = ''; renderList(); }
+  });
+  $tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      $tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentMode = tab.dataset.mode;
+      renderList();
+    });
+  });
+
+  // ── 스테이지 진입 ──
+  async function openStage(song) {
+    currentSong = song;
+    $stage.classList.add('active');
+    $stage.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    $npTitle.textContent = song.title;
+    $npArtist.textContent = song.artist;
+    $npVol.textContent = `VOL.${song.volume}`;
+
+    // LRC 로드
+    lrcLines = [];
+    lastLineIdx = -1;
+    setLyrics('', '― 재생 준비 중 ―', '');
+    if (song.lrc) {
+      try {
+        const res = await fetch(song.lrc, { cache: 'no-cache' });
+        if (res.ok) {
+          const txt = await res.text();
+          const parsed = parseLRC(txt);
+          lrcLines = parsed.lines;
+        }
+      } catch (e) { console.warn('[junskaraoke] lrc load failed', e); }
+    }
+
+    // 어댑터
+    if (player) { player.destroy(); player = null; }
+    player = new YTAdapter('yt-player');
+    player.setOnTimeUpdate((cur, dur) => {
+      updateProgress(cur, dur);
+      updateLyrics(cur);
+    });
+    player.setOnEnded(() => {
+      $btnPlay.textContent = '재생';
+    });
+    try {
+      await player.load(song);
+      $btnPlay.textContent = '정지';
+    } catch (e) {
+      console.error('[junskaraoke] yt load failed', e);
+      setLyrics('', '― 재생 실패 ―', '');
+    }
+
+    armControlsAutoHide();
+  }
+
+  function closeStage() {
+    $stage.classList.remove('active');
+    $stage.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (player) { player.destroy(); player = null; }
+    if (controlsHideTimer) clearTimeout(controlsHideTimer);
+    $controls.classList.remove('hidden');
+    $stageHeader.classList.remove('hidden');
+  }
+
+  $btnBack.addEventListener('click', closeStage);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && $stage.classList.contains('active')) closeStage();
+  });
+
+  // ── 컨트롤 ──
+  $btnPlay.addEventListener('click', () => {
+    if (!player) return;
+    const current = player.getCurrentTime();
+    const dur = player.getDuration();
+    // 토글: paused 상태 정확히 알 수 없으니 버튼 라벨로 토글
+    if ($btnPlay.textContent === '재생') {
+      player.play();
+      $btnPlay.textContent = '정지';
+    } else {
+      player.pause();
+      $btnPlay.textContent = '재생';
+    }
+  });
+
+  $progress.addEventListener('click', (e) => {
+    if (!player) return;
+    const rect = $progress.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    const dur = player.getDuration();
+    if (dur > 0) player.seek(dur * ratio);
+  });
+
+  function updateProgress(cur, dur) {
+    if (!dur || !isFinite(dur)) return;
+    $progressBar.style.width = (cur / dur * 100) + '%';
+    $time.textContent = `${fmt(cur)} / ${fmt(dur)}`;
+  }
+  function fmt(s) {
+    s = Math.max(0, Math.floor(s || 0));
+    const m = Math.floor(s / 60);
+    const r = String(s % 60).padStart(2, '0');
+    return `${m}:${r}`;
+  }
+
+  // ── 가사 싱크 ──
+  function updateLyrics(cur) {
+    if (!lrcLines.length) return;
+    const idx = findCurrentLine(lrcLines, cur);
+    if (idx === lastLineIdx) return;
+    lastLineIdx = idx;
+    const prev = idx > 0 ? lrcLines[idx - 1].text : '';
+    const curT = idx >= 0 ? lrcLines[idx].text : '';
+    const next = idx + 1 < lrcLines.length ? lrcLines[idx + 1].text : '';
+    setLyrics(prev, curT || '― ―', next);
+  }
+  function setLyrics(prev, cur, next) {
+    $lyricPrev.textContent = prev;
+    $lyricCurrent.textContent = cur;
+    $lyricNext.textContent = next;
+  }
+
+  // ── 컨트롤 자동 숨김 (3초 미사용) ──
+  function armControlsAutoHide() {
+    showControls();
+    const reset = () => showControls();
+    ['mousemove','touchstart','keydown','click'].forEach((ev) => {
+      $stage.addEventListener(ev, reset, { passive: true });
+    });
+  }
+  function showControls() {
+    $controls.classList.remove('hidden');
+    $stageHeader.classList.remove('hidden');
+    if (controlsHideTimer) clearTimeout(controlsHideTimer);
+    controlsHideTimer = setTimeout(() => {
+      $controls.classList.add('hidden');
+      $stageHeader.classList.add('hidden');
+    }, 3000);
+  }
+
+  // ── PWA ──
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('junskaraoke-sw.js').catch((e) => {
+        console.warn('[junskaraoke] sw register failed', e);
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
