@@ -405,6 +405,22 @@ em { font-style: italic; }
 }
 .tap-to-play[hidden] { display: none; }
 
+/* 유튜브 직접 열기 폴백 — 임베드 차단 영상 우회 */
+.yt-fallback {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.35rem 0.75rem;
+  border-radius: 2px;
+  text-decoration: none;
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.yt-fallback:hover { background: rgba(168,216,201,0.1); }
+
 /* ─────────── 접근성 ─────────── */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
@@ -465,6 +481,7 @@ em { font-style: italic; }
       <span class="time" id="time">0:00 / 0:00</span>
     </div>
     <div class="aux-row" aria-label="MP3 곡 전용 — v0.1 비활성">
+      <a class="yt-fallback" id="ytFallback" href="#" target="_blank" rel="noopener">▶ 유튜브에서 듣기 ↗</a>
       <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">키 −</button>
       <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">키 +</button>
       <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">템포 −</button>
@@ -512,6 +529,7 @@ em { font-style: italic; }
   const $npArtist = document.getElementById('npArtist');
   const $npVol = document.getElementById('npVol');
   const $tapToPlay = document.getElementById('tapToPlay');
+  const $ytFallback = document.getElementById('ytFallback');
 
   // ── 카탈로그 로드 ──
   loadCatalog().then((data) => {
@@ -556,6 +574,7 @@ em { font-style: italic; }
     $npTitle.textContent = song.title;
     $npArtist.textContent = song.artist;
     $npVol.textContent = `VOL.${song.volume}`;
+    if (song.ytId) $ytFallback.href = `https://www.youtube.com/watch?v=${song.ytId}`;
 
     lrcLines = [];
     lastLineIdx = -1;
