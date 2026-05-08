@@ -1,5 +1,5 @@
-// CINEMA Service Worker v0.20.0-cinema-renewal
-const CACHE_NAME = "cinema-v0.20.0-renewal";
+// MEDIA · Time Dial Service Worker v1.0.0
+const CACHE_NAME = "media-timedial-v1.0.0";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
