@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#d4a574" />
+<meta name="theme-color" content="#a8d8c9" />
 <title>준스가라오케 · VOL.01 심야의 라이너노트</title>
 <link rel="manifest" href="junskaraoke-manifest.json" />
 <link rel="icon" type="image/svg+xml" href="junskaraoke-icon.svg" />
@@ -18,7 +18,7 @@
   --bg: #0f0e0d;
   --text: #f5f1ea;
   --text-mute: #8a8580;
-  --accent: #d4a574;
+  --accent: #a8d8c9;
   --rule: #2a2724;
   --serif: 'Fraunces', 'Pretendard', serif;
   --sans:  'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -153,7 +153,7 @@ em { font-style: italic; }
   align-items: start;
 }
 .song-card:hover, .song-card:focus {
-  background: rgba(212, 165, 116, 0.04);
+  background: rgba(168, 216, 201, 0.04);
   outline: none;
 }
 .song-card:focus .song-title { color: var(--accent); }
@@ -337,7 +337,7 @@ em { font-style: italic; }
   text-transform: uppercase;
   min-width: 6.5rem;
 }
-.btn-play:hover { background: rgba(212,165,116,0.1); }
+.btn-play:hover { background: rgba(168,216,201,0.1); }
 .progress {
   flex: 1;
   height: 2px;
@@ -573,6 +573,17 @@ em { font-style: italic; }
       // YT.PlayerState: PLAYING=1, PAUSED=2, ENDED=0, BUFFERING=3
       if (state === 1) { setBtnPlayLabel('정지'); $tapToPlay.hidden = true; }
       else if (state === 2) { setBtnPlayLabel('재생'); }
+    });
+    player.setOnError((code) => {
+      console.warn('[junskaraoke] yt error', code, currentSong && currentSong.ytId);
+      let msg;
+      if (code === 101 || code === 150) msg = '― 이 영상은 임베드 차단됨 ―';
+      else if (code === 100)             msg = '― 영상을 찾을 수 없음 ―';
+      else if (code === 2)               msg = '― 잘못된 영상 ID ―';
+      else if (code === 5)               msg = '― 플레이어 오류 ―';
+      else                                msg = `― 재생 오류 (${code}) ―`;
+      setLyrics('', msg, '');
+      $tapToPlay.hidden = true;
     });
 
     // player 생성 후 LRC 백그라운드 로드

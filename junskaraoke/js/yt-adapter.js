@@ -60,10 +60,16 @@ class YTAdapter extends PlayerAdapter {
             }
             if (this._onStateChange) this._onStateChange(e.data);
           },
+          onError: (e) => {
+            // 2: invalid id, 5: HTML5 error, 100: not found, 101/150: embed disabled
+            if (this._onError) this._onError(e.data);
+          },
         },
       });
     });
   }
+
+  setOnError(cb) { this._onError = cb; }
 
   _startTick() {
     const tick = () => {
