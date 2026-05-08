@@ -421,6 +421,21 @@ em { font-style: italic; }
 }
 .yt-fallback:hover { background: rgba(168,216,201,0.1); }
 
+/* 재생 화면 푸터 안내 — 컨트롤 페이드와 무관, 항상 표시 */
+.stage-footer-note {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 11px;
+  color: var(--text-mute);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* ─────────── 접근성 ─────────── */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
@@ -431,7 +446,7 @@ em { font-style: italic; }
 
 <header class="masthead">
   <h1 class="wordmark">준스가라오케</h1>
-  <p class="colophon"><span class="vol">VOL.01</span> · 2026 · v0.1.0</p>
+  <p class="colophon"><span class="vol">VOL.01</span> · 2026 · v0.1.3</p>
   <p class="volume-title">심야의 라이너노트</p>
 </header>
 
@@ -449,7 +464,7 @@ em { font-style: italic; }
 <main class="catalog" id="catalog" aria-label="곡 카탈로그"></main>
 
 <footer class="site-footer">
-  <p>준스가라오케 · <span class="v">v0.1.0</span> · VOL.01 심야의 라이너노트</p>
+  <p>준스가라오케 · <span class="v">v0.1.3</span> · VOL.01 심야의 라이너노트</p>
 </footer>
 
 <!-- ─────────── 재생 스테이지 (B안 = magazine) ─────────── -->
@@ -488,6 +503,10 @@ em { font-style: italic; }
       <button class="aux-btn" disabled title="MP3 곡 전용 (v0.3 예정)">템포 +</button>
       <button class="aux-btn" disabled title="MP3 곡 전용 (v0.4 예정)">점수</button>
     </div>
+  </div>
+
+  <div class="stage-footer-note">
+    가사는 v0.2 AI 자동 생성 도구로 채워질 예정입니다
   </div>
 </section>
 

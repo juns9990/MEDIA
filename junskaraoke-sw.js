@@ -1,7 +1,7 @@
-// 준스가라오케 Service Worker — v0.1.0
+// 준스가라오케 Service Worker — v0.1.3
 // 셸 파일만 캐시 (no-backend, GitHub Pages 정적 PWA)
 
-const CACHE = 'junskaraoke-v0.1.0';
+const CACHE = 'junskaraoke-v0.1.3';
 const SHELL = [
   './junskaraoke-prototype.html',
   './junskaraoke-manifest.json',
