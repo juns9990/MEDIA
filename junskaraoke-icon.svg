@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <rect width="512" height="512" rx="96" fill="#0f0e0d"/>
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#d4a574" stroke-width="2" opacity="0.5"/>
-  <circle cx="256" cy="256" r="148" fill="none" stroke="#d4a574" stroke-width="1" opacity="0.35"/>
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#a8d8c9" stroke-width="2" opacity="0.5"/>
+  <circle cx="256" cy="256" r="148" fill="none" stroke="#a8d8c9" stroke-width="1" opacity="0.35"/>
   <text x="256" y="232" text-anchor="middle"
         font-family="Georgia, 'Times New Roman', serif"
         font-style="italic" font-weight="900" font-size="170"
         fill="#f5f1ea">J</text>
   <text x="256" y="332" text-anchor="middle"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="36" letter-spacing="8" fill="#d4a574">VOL.01</text>
-  <line x1="180" y1="358" x2="332" y2="358" stroke="#d4a574" stroke-width="1.5"/>
+        font-size="36" letter-spacing="8" fill="#a8d8c9">VOL.01</text>
+  <line x1="180" y1="358" x2="332" y2="358" stroke="#a8d8c9" stroke-width="1.5"/>
 </svg>

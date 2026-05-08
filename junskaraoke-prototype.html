@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#d4a574" />
+<meta name="theme-color" content="#a8d8c9" />
 <title>준스가라오케 · VOL.01 심야의 라이너노트</title>
 <link rel="manifest" href="junskaraoke-manifest.json" />
 <link rel="icon" type="image/svg+xml" href="junskaraoke-icon.svg" />
@@ -18,7 +18,7 @@
   --bg: #0f0e0d;
   --text: #f5f1ea;
   --text-mute: #8a8580;
-  --accent: #d4a574;
+  --accent: #a8d8c9;
   --rule: #2a2724;
   --serif: 'Fraunces', 'Pretendard', serif;
   --sans:  'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -153,7 +153,7 @@ em { font-style: italic; }
   align-items: start;
 }
 .song-card:hover, .song-card:focus {
-  background: rgba(212, 165, 116, 0.04);
+  background: rgba(168, 216, 201, 0.04);
   outline: none;
 }
 .song-card:focus .song-title { color: var(--accent); }
@@ -337,7 +337,7 @@ em { font-style: italic; }
   text-transform: uppercase;
   min-width: 6.5rem;
 }
-.btn-play:hover { background: rgba(212,165,116,0.1); }
+.btn-play:hover { background: rgba(168,216,201,0.1); }
 .progress {
   flex: 1;
   height: 2px;
@@ -383,6 +383,27 @@ em { font-style: italic; }
   font-size: inherit;
   letter-spacing: inherit;
 }
+
+/* ─────────── 탭하여 재생 (자동재생 차단 시 fallback) ─────────── */
+.tap-to-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 1.1rem 2.5rem;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.tap-to-play[hidden] { display: none; }
 
 /* ─────────── 접근성 ─────────── */
 @media (prefers-reduced-motion: reduce) {
@@ -435,6 +456,8 @@ em { font-style: italic; }
     <div class="lyric next"    id="lyricNext"></div>
   </div>
 
+  <button class="tap-to-play" id="tapToPlay" hidden>탭하여 재생</button>
+
   <div class="controls" id="controls">
     <div class="controls-row">
       <button class="btn-play" id="btnPlay">재생</button>
@@ -468,6 +491,7 @@ em { font-style: italic; }
   let lrcLines = [];
   let lastLineIdx = -1;
   let controlsHideTimer = null;
+  let wakeLock = null;
 
   // ── DOM ──
   const $catalog = document.getElementById('catalog');
@@ -487,6 +511,7 @@ em { font-style: italic; }
   const $npTitle = document.getElementById('npTitle');
   const $npArtist = document.getElementById('npArtist');
   const $npVol = document.getElementById('npVol');
+  const $tapToPlay = document.getElementById('tapToPlay');
 
   // ── 카탈로그 로드 ──
   loadCatalog().then((data) => {
@@ -519,51 +544,75 @@ em { font-style: italic; }
   });
 
   // ── 스테이지 진입 ──
-  async function openStage(song) {
+  // 사용자 탭 제스처를 잃지 않도록 YT player 생성을 동기적으로 시작.
+  // LRC fetch는 player 생성 후 병렬로.
+  function openStage(song) {
     currentSong = song;
     $stage.classList.add('active');
     $stage.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    $tapToPlay.hidden = true;
 
     $npTitle.textContent = song.title;
     $npArtist.textContent = song.artist;
     $npVol.textContent = `VOL.${song.volume}`;
 
-    // LRC 로드
     lrcLines = [];
     lastLineIdx = -1;
     setLyrics('', '― 재생 준비 중 ―', '');
-    if (song.lrc) {
-      try {
-        const res = await fetch(song.lrc, { cache: 'no-cache' });
-        if (res.ok) {
-          const txt = await res.text();
-          const parsed = parseLRC(txt);
-          lrcLines = parsed.lines;
-        }
-      } catch (e) { console.warn('[junskaraoke] lrc load failed', e); }
-    }
+    setBtnPlayLabel('재생');
 
-    // 어댑터
     if (player) { player.destroy(); player = null; }
     player = new YTAdapter('yt-player');
     player.setOnTimeUpdate((cur, dur) => {
       updateProgress(cur, dur);
       updateLyrics(cur);
     });
-    player.setOnEnded(() => {
-      $btnPlay.textContent = '재생';
+    player.setOnEnded(() => setBtnPlayLabel('재생'));
+    player.setOnStateChange((state) => {
+      // YT.PlayerState: PLAYING=1, PAUSED=2, ENDED=0, BUFFERING=3
+      if (state === 1) { setBtnPlayLabel('정지'); $tapToPlay.hidden = true; }
+      else if (state === 2) { setBtnPlayLabel('재생'); }
     });
-    try {
-      await player.load(song);
-      $btnPlay.textContent = '정지';
-    } catch (e) {
+    player.setOnError((code) => {
+      console.warn('[junskaraoke] yt error', code, currentSong && currentSong.ytId);
+      let msg;
+      if (code === 101 || code === 150) msg = '― 이 영상은 임베드 차단됨 ―';
+      else if (code === 100)             msg = '― 영상을 찾을 수 없음 ―';
+      else if (code === 2)               msg = '― 잘못된 영상 ID ―';
+      else if (code === 5)               msg = '― 플레이어 오류 ―';
+      else                                msg = `― 재생 오류 (${code}) ―`;
+      setLyrics('', msg, '');
+      $tapToPlay.hidden = true;
+    });
+
+    // player 생성 후 LRC 백그라운드 로드
+    player.load(song).then(() => {
+      // 자동재생 차단 감지: 1초 뒤에도 PLAYING이 아니면 fallback 노출
+      setTimeout(() => {
+        const s = player && player.getState ? player.getState() : -1;
+        if (s !== 1 && s !== 3 && $stage.classList.contains('active')) {
+          $tapToPlay.hidden = false;
+        }
+      }, 1200);
+    }).catch((e) => {
       console.error('[junskaraoke] yt load failed', e);
       setLyrics('', '― 재생 실패 ―', '');
+      $tapToPlay.hidden = false;
+    });
+
+    if (song.lrc) {
+      fetch(song.lrc, { cache: 'no-cache' })
+        .then((res) => res.ok ? res.text() : Promise.reject(res.status))
+        .then((txt) => { lrcLines = parseLRC(txt).lines; })
+        .catch((e) => console.warn('[junskaraoke] lrc load failed', e));
     }
 
     armControlsAutoHide();
+    requestWakeLock();
   }
+
+  function setBtnPlayLabel(label) { $btnPlay.textContent = label; }
 
   function closeStage() {
     $stage.classList.remove('active');
@@ -573,7 +622,28 @@ em { font-style: italic; }
     if (controlsHideTimer) clearTimeout(controlsHideTimer);
     $controls.classList.remove('hidden');
     $stageHeader.classList.remove('hidden');
+    releaseWakeLock();
   }
+
+  // ── Wake Lock — 재생 중 화면 꺼짐 방지 ──
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) {
+      console.warn('[junskaraoke] wakeLock request failed', e);
+    }
+  }
+  function releaseWakeLock() {
+    if (wakeLock) { try { wakeLock.release(); } catch (_) {} wakeLock = null; }
+  }
+  // 탭이 다시 보이면 Wake Lock 자동 해제됐을 수 있으니 재획득
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && $stage.classList.contains('active') && !wakeLock) {
+      requestWakeLock();
+    }
+  });
 
   $btnBack.addEventListener('click', closeStage);
   document.addEventListener('keydown', (e) => {
@@ -583,16 +653,14 @@ em { font-style: italic; }
   // ── 컨트롤 ──
   $btnPlay.addEventListener('click', () => {
     if (!player) return;
-    const current = player.getCurrentTime();
-    const dur = player.getDuration();
-    // 토글: paused 상태 정확히 알 수 없으니 버튼 라벨로 토글
-    if ($btnPlay.textContent === '재생') {
-      player.play();
-      $btnPlay.textContent = '정지';
-    } else {
-      player.pause();
-      $btnPlay.textContent = '재생';
-    }
+    const s = player.getState ? player.getState() : -1;
+    if (s === 1) player.pause();
+    else        player.play();
+  });
+
+  $tapToPlay.addEventListener('click', () => {
+    $tapToPlay.hidden = true;
+    if (player) player.play();
   });
 
   $progress.addEventListener('click', (e) => {

@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/tv-streaming-app-4xy3t
-      - claude/build-junskaraoke-v0.1-daFnC
   workflow_dispatch:
 
 permissions:
