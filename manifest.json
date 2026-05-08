@@ -1,13 +1,13 @@
 {
-  "name": "온에어 · ON AIR",
-  "short_name": "온에어",
-  "description": "전세계 지상파·뉴스 실시간 라이브 TV",
+  "name": "CINEMA · 무료 영화관",
+  "short_name": "CINEMA",
+  "description": "전세계 무료 영화 큐레이션 — 한국 고전영화 · 퍼블릭 도메인 명작 · 인디·단편",
   "start_url": "./onair-prototype.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#F5F3EE",
-  "theme_color": "#F5F3EE",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
   "lang": "ko",
   "icons": [
     {
