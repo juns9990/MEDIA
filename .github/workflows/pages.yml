@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - claude/tv-streaming-app-4xy3t
+      - claude/build-junskaraoke-v0.1-daFnC
   workflow_dispatch:
 
 permissions:
@@ -29,10 +30,18 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
+          # ── onair (기존, 보존) ──
           cp onair-prototype.html _site/
           cp manifest.json _site/
           cp sw.js _site/
           cp icon-180.png icon-192.png icon-512.png _site/
+          # ── junskaraoke v0.1 ──
+          cp junskaraoke-prototype.html _site/
+          cp junskaraoke-manifest.json _site/
+          cp junskaraoke-sw.js _site/
+          cp junskaraoke-icon.svg _site/
+          mkdir -p _site/junskaraoke
+          cp -R junskaraoke/. _site/junskaraoke/
           # GitHub Pages 진입점 — onair-prototype.html 로 자동 이동
           cat > _site/index.html <<'HTML'
           <!DOCTYPE html><html lang="ko"><head>
