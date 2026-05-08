@@ -32,6 +32,7 @@ class YTAdapter extends PlayerAdapter {
     return new Promise((resolve) => {
       this.player = new YT.Player(this.mountId, {
         videoId: song.ytId,
+        host: 'https://www.youtube-nocookie.com',
         playerVars: {
           autoplay: 1,
           controls: 0,
@@ -42,11 +43,14 @@ class YTAdapter extends PlayerAdapter {
           playsinline: 1,
           fs: 0,
           disablekb: 1,
+          origin: window.location.origin,
         },
         events: {
           onReady: (e) => {
             this._duration = e.target.getDuration();
             this._startTick();
+            // 일부 모바일 브라우저는 autoplay=1만으론 시작 안 함 — 명시적 호출
+            try { e.target.playVideo(); } catch (_) {}
             resolve();
           },
           onStateChange: (e) => {
@@ -54,6 +58,7 @@ class YTAdapter extends PlayerAdapter {
             if (e.data === YT.PlayerState.PLAYING) {
               this._duration = this.player.getDuration();
             }
+            if (this._onStateChange) this._onStateChange(e.data);
           },
         },
       });
@@ -79,6 +84,11 @@ class YTAdapter extends PlayerAdapter {
 
   getCurrentTime() { return this.player ? this.player.getCurrentTime() : 0; }
   getDuration()    { return this.player ? (this.player.getDuration() || this._duration) : 0; }
+  getState() {
+    try { return this.player && this.player.getPlayerState ? this.player.getPlayerState() : -1; }
+    catch (_) { return -1; }
+  }
+  setOnStateChange(cb) { this._onStateChange = cb; }
 
   destroy() {
     if (this._tickHandle) cancelAnimationFrame(this._tickHandle);

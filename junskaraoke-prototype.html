@@ -384,6 +384,27 @@ em { font-style: italic; }
   letter-spacing: inherit;
 }
 
+/* ─────────── 탭하여 재생 (자동재생 차단 시 fallback) ─────────── */
+.tap-to-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 1.1rem 2.5rem;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.tap-to-play[hidden] { display: none; }
+
 /* ─────────── 접근성 ─────────── */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
@@ -434,6 +455,8 @@ em { font-style: italic; }
     <div class="lyric current" id="lyricCurrent">― 재생 준비 중 ―</div>
     <div class="lyric next"    id="lyricNext"></div>
   </div>
+
+  <button class="tap-to-play" id="tapToPlay" hidden>탭하여 재생</button>
 
   <div class="controls" id="controls">
     <div class="controls-row">
@@ -488,6 +511,7 @@ em { font-style: italic; }
   const $npTitle = document.getElementById('npTitle');
   const $npArtist = document.getElementById('npArtist');
   const $npVol = document.getElementById('npVol');
+  const $tapToPlay = document.getElementById('tapToPlay');
 
   // ── 카탈로그 로드 ──
   loadCatalog().then((data) => {
@@ -520,52 +544,64 @@ em { font-style: italic; }
   });
 
   // ── 스테이지 진입 ──
-  async function openStage(song) {
+  // 사용자 탭 제스처를 잃지 않도록 YT player 생성을 동기적으로 시작.
+  // LRC fetch는 player 생성 후 병렬로.
+  function openStage(song) {
     currentSong = song;
     $stage.classList.add('active');
     $stage.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    $tapToPlay.hidden = true;
 
     $npTitle.textContent = song.title;
     $npArtist.textContent = song.artist;
     $npVol.textContent = `VOL.${song.volume}`;
 
-    // LRC 로드
     lrcLines = [];
     lastLineIdx = -1;
     setLyrics('', '― 재생 준비 중 ―', '');
-    if (song.lrc) {
-      try {
-        const res = await fetch(song.lrc, { cache: 'no-cache' });
-        if (res.ok) {
-          const txt = await res.text();
-          const parsed = parseLRC(txt);
-          lrcLines = parsed.lines;
-        }
-      } catch (e) { console.warn('[junskaraoke] lrc load failed', e); }
-    }
+    setBtnPlayLabel('재생');
 
-    // 어댑터
     if (player) { player.destroy(); player = null; }
     player = new YTAdapter('yt-player');
     player.setOnTimeUpdate((cur, dur) => {
       updateProgress(cur, dur);
       updateLyrics(cur);
     });
-    player.setOnEnded(() => {
-      $btnPlay.textContent = '재생';
+    player.setOnEnded(() => setBtnPlayLabel('재생'));
+    player.setOnStateChange((state) => {
+      // YT.PlayerState: PLAYING=1, PAUSED=2, ENDED=0, BUFFERING=3
+      if (state === 1) { setBtnPlayLabel('정지'); $tapToPlay.hidden = true; }
+      else if (state === 2) { setBtnPlayLabel('재생'); }
     });
-    try {
-      await player.load(song);
-      $btnPlay.textContent = '정지';
-    } catch (e) {
+
+    // player 생성 후 LRC 백그라운드 로드
+    player.load(song).then(() => {
+      // 자동재생 차단 감지: 1초 뒤에도 PLAYING이 아니면 fallback 노출
+      setTimeout(() => {
+        const s = player && player.getState ? player.getState() : -1;
+        if (s !== 1 && s !== 3 && $stage.classList.contains('active')) {
+          $tapToPlay.hidden = false;
+        }
+      }, 1200);
+    }).catch((e) => {
       console.error('[junskaraoke] yt load failed', e);
       setLyrics('', '― 재생 실패 ―', '');
+      $tapToPlay.hidden = false;
+    });
+
+    if (song.lrc) {
+      fetch(song.lrc, { cache: 'no-cache' })
+        .then((res) => res.ok ? res.text() : Promise.reject(res.status))
+        .then((txt) => { lrcLines = parseLRC(txt).lines; })
+        .catch((e) => console.warn('[junskaraoke] lrc load failed', e));
     }
 
     armControlsAutoHide();
     requestWakeLock();
   }
+
+  function setBtnPlayLabel(label) { $btnPlay.textContent = label; }
 
   function closeStage() {
     $stage.classList.remove('active');
@@ -606,16 +642,14 @@ em { font-style: italic; }
   // ── 컨트롤 ──
   $btnPlay.addEventListener('click', () => {
     if (!player) return;
-    const current = player.getCurrentTime();
-    const dur = player.getDuration();
-    // 토글: paused 상태 정확히 알 수 없으니 버튼 라벨로 토글
-    if ($btnPlay.textContent === '재생') {
-      player.play();
-      $btnPlay.textContent = '정지';
-    } else {
-      player.pause();
-      $btnPlay.textContent = '재생';
-    }
+    const s = player.getState ? player.getState() : -1;
+    if (s === 1) player.pause();
+    else        player.play();
+  });
+
+  $tapToPlay.addEventListener('click', () => {
+    $tapToPlay.hidden = true;
+    if (player) player.play();
   });
 
   $progress.addEventListener('click', (e) => {
