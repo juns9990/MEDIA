@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
-<title>MEDIA · Time Dial</title>
-<meta name="theme-color" content="#0A0A12" />
+<title>MEDIA · Growth Network</title>
+<meta name="theme-color" content="#0A0A0A" />
 <link rel="manifest" href="./manifest.json" />
 <link rel="icon" href="./icon-192.png" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
@@ -13,19 +13,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0A0A12;
-    --bg-elev:#12121C;
-    --bg-card:#181826;
+    --bg:#0A0A0A;
+    --bg-elev:#141414;
+    --bg-card:#1A1A1A;
     --line:rgba(255,255,255,0.08);
     --line-2:rgba(255,255,255,0.16);
     --text:#F2F0EC;
-    --text-dim:#8C8A9A;
-    --text-muted:#52505E;
-
-    /* default slot accent (overridden per slot) */
-    --accent:#F2C770;
-    --accent-glow:rgba(242,199,112,0.18);
-    --accent-deep:#A8843D;
+    --text-dim:#8C8A85;
+    --text-muted:#52504C;
+    --accent:#F5C84B;
+    --accent-dim:#A8862A;
+    --accent-glow:rgba(245,200,75,0.18);
+    --live:#E4404A;
 
     --mono:"JetBrains Mono",monospace;
     --sans:"Inter","Noto Sans KR",system-ui,sans-serif;
@@ -33,26 +32,27 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden}
-  a{color:inherit;text-decoration:none}
-  button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit;outline:none}
-  img{display:block;max-width:100%}
-
-  /* Slot color background overlay */
   body::before{
     content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
     background:
-      radial-gradient(ellipse 1200px 600px at 50% -20%, var(--accent-glow) 0%, transparent 60%),
-      linear-gradient(180deg,#0A0A12 0%,#06060B 100%);
-    transition:background 1.2s ease;
+      radial-gradient(ellipse 1000px 500px at 30% -20%, var(--accent-glow) 0%, transparent 60%),
+      linear-gradient(180deg,#0A0A0A 0%,#050505 100%);
   }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit;outline:none}
+  img{display:block;max-width:100%}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:0}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.16)}
 
   /* ========== HEADER ========== */
   .hdr{
     position:sticky;top:0;z-index:50;
     display:flex;align-items:center;justify-content:space-between;
     padding:16px 28px;
-    background:rgba(10,10,18,0.7);
-    backdrop-filter:blur(12px);
+    background:rgba(10,10,10,0.78);
+    backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);
   }
   .brand{display:flex;align-items:center;gap:14px}
@@ -60,137 +60,51 @@
     width:8px;height:8px;border-radius:50%;
     background:var(--accent);
     box-shadow:0 0 12px var(--accent);
-    transition:background .8s, box-shadow .8s;
   }
   .brand-name{
     font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:0.32em;
-    color:var(--text);
   }
   .brand-sub{
     font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
     color:var(--text-muted);text-transform:uppercase;
     padding-left:14px;border-left:1px solid var(--line);
   }
-  .nav-actions{display:flex;gap:6px}
+  .hdr-right{display:flex;align-items:center;gap:14px}
+  .onair-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
+    color:var(--live);text-transform:uppercase;
+  }
+  .onair-tag::before{
+    content:"";width:7px;height:7px;border-radius:50%;
+    background:var(--live);box-shadow:0 0 10px var(--live);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
   .nav-btn{
     font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
     color:var(--text-dim);text-transform:uppercase;
     padding:8px 14px;border:1px solid transparent;
     transition:color .15s, border-color .15s;
   }
-  .nav-btn:hover{color:var(--accent);border-color:var(--line-2)}
-  .nav-btn.active{color:var(--accent);border-color:var(--accent)}
+  .nav-btn:hover,.nav-btn.active{color:var(--accent);border-color:var(--accent)}
 
-  /* ========== CLOCK SECTION ========== */
-  .clock-sect{
-    padding:60px 28px 30px;
-    text-align:left;
-  }
-  .clock-time{
-    font-family:var(--mono);font-weight:300;
-    font-size:clamp(72px,16vw,200px);
-    line-height:0.95;letter-spacing:-0.04em;
-    color:var(--text);
-    display:flex;align-items:baseline;gap:14px;
-  }
-  .clock-time .colon{
-    color:var(--accent);
-    animation:blink 2s steps(2,end) infinite;
-  }
-  @keyframes blink{50%{opacity:0.4}}
-  .clock-time .secs{
-    font-size:0.32em;color:var(--text-muted);font-weight:300;
-    letter-spacing:0;align-self:flex-end;padding-bottom:0.5em;
-  }
-  .clock-meta{
-    margin-top:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    font-family:var(--mono);font-size:12px;letter-spacing:0.22em;
-    color:var(--text-dim);text-transform:uppercase;
-  }
-  .clock-meta .dot{color:var(--text-muted);opacity:0.5}
-  .clock-meta .accent{color:var(--accent);font-weight:500}
-  .clock-mood{
-    margin-top:24px;
-    font-family:var(--sans);font-weight:600;
-    font-size:clamp(20px,3.4vw,32px);
-    color:var(--text);letter-spacing:-0.01em;
-    max-width:720px;line-height:1.3;
-  }
-  .clock-mood-ko{
-    margin-top:6px;font-family:var(--kr);font-weight:500;
-    font-size:clamp(13px,1.6vw,16px);
-    color:var(--text-dim);
-  }
-
-  /* ========== TIME STRIP ========== */
-  .strip-wrap{
-    padding:24px 28px 36px;
-    border-bottom:1px solid var(--line);
-  }
-  .strip-label{
-    font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
-    color:var(--text-muted);text-transform:uppercase;margin-bottom:18px;
-  }
-  .strip{
-    position:relative;
-    display:grid;grid-template-columns:repeat(8,1fr);gap:8px;
-  }
-  .strip-line{
-    position:absolute;left:0;right:0;top:7px;height:1px;
-    background:var(--line-2);z-index:0;
-  }
-  .strip-slot{
-    position:relative;z-index:1;
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    padding:0;cursor:pointer;
-    transition:transform .15s;
-  }
-  .strip-slot:hover{transform:translateY(-2px)}
-  .strip-dot{
-    width:14px;height:14px;border-radius:50%;
-    background:var(--bg);
-    border:1px solid var(--line-2);
-    transition:all .25s;
-  }
-  .strip-slot.preview .strip-dot{background:var(--text-dim);border-color:var(--text-dim)}
-  .strip-slot.now .strip-dot{
-    background:var(--accent);
-    border-color:var(--accent);
-    box-shadow:0 0 14px var(--accent),0 0 0 4px var(--accent-glow);
-  }
-  .strip-time{
-    font-family:var(--mono);font-size:11px;font-weight:500;
-    color:var(--text-muted);letter-spacing:0.08em;
-  }
-  .strip-slot.now .strip-time{color:var(--accent);font-weight:600}
-  .strip-slot.preview .strip-time{color:var(--text-dim)}
-  .strip-name{
-    font-family:var(--mono);font-size:9px;
-    color:var(--text-muted);letter-spacing:0.18em;text-transform:uppercase;
-    text-align:center;
-    display:none;
-  }
-
-  /* ========== HERO (NOW PLAYING) ========== */
+  /* ========== HERO ========== */
   .hero{
-    padding:36px 28px 28px;
+    padding:60px 28px 40px;
     border-bottom:1px solid var(--line);
   }
   .hero-tag{
     display:inline-flex;align-items:center;gap:8px;
     font-family:var(--mono);font-size:10px;letter-spacing:0.32em;
-    color:var(--accent);text-transform:uppercase;margin-bottom:14px;
+    color:var(--accent);text-transform:uppercase;margin-bottom:18px;
   }
   .hero-tag::before{
-    content:"";width:6px;height:6px;border-radius:50%;
-    background:var(--accent);
-    box-shadow:0 0 10px var(--accent);
-    animation:pulse 2s ease-in-out infinite;
+    content:"";width:18px;height:1px;background:var(--accent);
   }
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
   .hero-card{
-    display:grid;grid-template-columns:minmax(280px,2fr) 3fr;
-    gap:28px;align-items:center;
+    display:grid;grid-template-columns:minmax(320px,1.2fr) 1fr;
+    gap:36px;align-items:center;
   }
   .hero-thumb{
     aspect-ratio:16/9;background:var(--bg-card);
@@ -201,46 +115,48 @@
   .hero-thumb.no-img{
     background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-elev) 100%);
     display:flex;align-items:center;justify-content:center;
-  }
-  .hero-thumb-mark{
-    font-family:var(--mono);font-size:11px;letter-spacing:0.28em;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.28em;
     color:var(--accent);text-transform:uppercase;
   }
-  .hero-info .hero-source{
+  .hero-info .hero-meta{
+    display:flex;align-items:center;gap:10px;
     font-family:var(--mono);font-size:11px;letter-spacing:0.22em;
-    color:var(--accent);text-transform:uppercase;margin-bottom:10px;
+    color:var(--accent);text-transform:uppercase;margin-bottom:14px;
   }
-  .hero-info h2{
+  .hero-info .hero-meta .pipe{color:var(--text-muted);opacity:0.5}
+  .hero-info h1{
     font-family:var(--sans);font-weight:700;
-    font-size:clamp(22px,3vw,34px);
-    line-height:1.15;letter-spacing:-0.01em;
-    color:var(--text);margin-bottom:8px;
+    font-size:clamp(28px,4vw,48px);
+    line-height:1.1;letter-spacing:-0.015em;
+    color:var(--text);margin-bottom:12px;
   }
   .hero-info .hero-ko{
-    font-family:var(--kr);font-weight:500;font-size:14px;
-    color:var(--text-dim);margin-bottom:14px;
+    font-family:var(--kr);font-weight:500;
+    font-size:clamp(14px,1.7vw,17px);
+    color:var(--text-dim);margin-bottom:20px;
   }
   .hero-info .hero-desc{
-    font-size:14px;line-height:1.7;color:var(--text-dim);
-    max-width:520px;margin-bottom:22px;
+    font-size:15px;line-height:1.7;color:var(--text-dim);
+    max-width:520px;margin-bottom:28px;
+    font-family:var(--kr);
   }
   .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
   .btn-play{
     display:inline-flex;align-items:center;gap:10px;
-    padding:13px 22px;
-    background:var(--accent);color:#0A0A12;
+    padding:14px 26px;
+    background:var(--accent);color:#0A0A0A;
     font-family:var(--mono);font-weight:600;font-size:12px;
-    letter-spacing:0.2em;text-transform:uppercase;
-    transition:all .15s;
+    letter-spacing:0.22em;text-transform:uppercase;
+    transition:filter .15s;
   }
-  .btn-play:hover{filter:brightness(1.15)}
+  .btn-play:hover{filter:brightness(1.12)}
   .btn-play .triangle{
     width:0;height:0;
     border-top:6px solid transparent;border-bottom:6px solid transparent;
-    border-left:9px solid #0A0A12;
+    border-left:9px solid #0A0A0A;
   }
   .btn-ghost{
-    padding:13px 18px;
+    padding:14px 18px;
     border:1px solid var(--line-2);color:var(--text);
     font-family:var(--mono);font-weight:500;font-size:11px;
     letter-spacing:0.2em;text-transform:uppercase;
@@ -248,24 +164,89 @@
   }
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-  /* ========== ROW (slot grid) ========== */
-  .row{padding:30px 28px}
-  .row-head{
-    display:flex;align-items:baseline;gap:14px;
-    margin-bottom:18px;flex-wrap:wrap;
+  /* ========== CHANNEL SWITCHER ========== */
+  .switch-wrap{
+    padding:36px 28px 0;
+    border-bottom:1px solid var(--line);
   }
-  .row-title{
-    font-family:var(--sans);font-weight:700;font-size:20px;
+  .switch-head{
+    display:flex;align-items:baseline;gap:14px;margin-bottom:18px;
+  }
+  .switch-title{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.28em;
+    color:var(--text-dim);text-transform:uppercase;
+  }
+  .switch-count{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
+    color:var(--accent);
+  }
+  .switch-row{
+    display:flex;gap:8px;
+    overflow-x:auto;padding-bottom:24px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  .switch-row::-webkit-scrollbar{height:4px}
+  .ch-chip{
+    flex:0 0 auto;
+    display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+    padding:14px 18px;min-width:170px;
+    background:var(--bg-card);border:1px solid var(--line);
+    transition:all .2s;
+    scroll-snap-align:start;
+    text-align:left;
+  }
+  .ch-chip:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .ch-chip.active{
+    border-color:var(--accent);
+    background:linear-gradient(135deg,rgba(245,200,75,0.1) 0%,rgba(245,200,75,0.02) 100%);
+  }
+  .ch-chip-num{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:0.2em;color:var(--text-muted);
+  }
+  .ch-chip-emoji{font-size:14px;line-height:1}
+  .ch-chip.active .ch-chip-num{color:var(--accent)}
+  .ch-chip-name{
+    font-family:var(--sans);font-weight:600;font-size:13px;
     color:var(--text);letter-spacing:-0.005em;
+    white-space:nowrap;
   }
-  .row-meta{
+  .ch-chip-ko{
+    font-family:var(--kr);font-weight:400;font-size:11px;
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+
+  /* ========== ROW (channel programs) ========== */
+  .row{padding:36px 28px}
+  .row-head{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:14px;margin-bottom:24px;flex-wrap:wrap;
+  }
+  .row-head-l .row-eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.28em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:8px;
+  }
+  .row-head-l h2{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(22px,2.6vw,30px);
+    color:var(--text);letter-spacing:-0.01em;line-height:1.15;
+  }
+  .row-head-l .row-ko{
+    font-family:var(--kr);font-weight:400;font-size:14px;
+    color:var(--text-dim);margin-top:6px;
+  }
+  .row-head-r{
     font-family:var(--mono);font-size:10px;letter-spacing:0.24em;
     color:var(--text-muted);text-transform:uppercase;
   }
   .row-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-    gap:16px;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:18px;
   }
 
   /* ========== CARD ========== */
@@ -293,38 +274,27 @@
     display:flex;align-items:center;justify-content:center;
   }
   .card-thumb.no-img .card-mark{
-    font-family:var(--mono);font-size:24px;font-weight:300;
-    color:var(--accent);letter-spacing:-0.02em;
+    font-family:var(--mono);font-size:13px;font-weight:500;
+    letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--accent);text-align:center;padding:0 14px;
   }
-  .card-type-badge{
-    position:absolute;top:8px;left:8px;
-    padding:3px 7px;
-    font-family:var(--mono);font-size:9px;font-weight:500;
-    letter-spacing:0.16em;text-transform:uppercase;
-    background:rgba(0,0,0,0.65);color:var(--accent);
+  .card-badge{
+    position:absolute;top:10px;left:10px;
+    padding:4px 8px;
+    font-family:var(--mono);font-size:9px;font-weight:600;
+    letter-spacing:0.2em;text-transform:uppercase;
+    background:rgba(0,0,0,0.7);color:var(--accent);
     border:1px solid var(--accent);
     backdrop-filter:blur(4px);
   }
-  .card-live-dot{
-    position:absolute;top:8px;right:8px;
-    display:flex;align-items:center;gap:5px;
-    padding:3px 7px;
-    font-family:var(--mono);font-size:9px;font-weight:600;
-    background:rgba(228,64,74,0.85);color:#fff;
-    letter-spacing:0.18em;text-transform:uppercase;
-  }
-  .card-live-dot::before{
-    content:"";width:6px;height:6px;border-radius:50%;background:#fff;
-    animation:pulse 1.4s ease-in-out infinite;
-  }
   .card-body{padding:14px 14px 16px}
   .card-source{
-    font-family:var(--mono);font-size:9px;letter-spacing:0.22em;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.22em;
     color:var(--accent);text-transform:uppercase;margin-bottom:6px;
   }
   .card-title{
     font-family:var(--sans);font-weight:600;font-size:14px;
-    line-height:1.3;color:var(--text);margin-bottom:4px;
+    line-height:1.32;color:var(--text);margin-bottom:4px;
     overflow:hidden;display:-webkit-box;
     -webkit-line-clamp:2;-webkit-box-orient:vertical;
   }
@@ -334,45 +304,51 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
 
-  /* ========== OTHER TIMES PREVIEW ========== */
-  .other-wrap{
-    padding:30px 28px 60px;
+  /* ========== ALL CHANNELS GRID ========== */
+  .all-wrap{
+    padding:40px 28px 60px;
     border-top:1px solid var(--line);
   }
-  .other-grid{
+  .all-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-    gap:12px;margin-top:18px;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:14px;margin-top:24px;
   }
-  .other-card{
+  .all-card{
     cursor:pointer;
-    padding:18px 16px;
+    padding:22px 18px;
     background:var(--bg-card);
     border:1px solid var(--line);
     transition:all .2s;
     text-align:left;
   }
-  .other-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .other-card.now{border-color:var(--accent);background:var(--bg-elev)}
-  .other-emoji{font-size:22px;margin-bottom:10px;display:block}
-  .other-time{
-    font-family:var(--mono);font-size:11px;letter-spacing:0.22em;
-    color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;
+  .all-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .all-card.active{border-color:var(--accent);background:var(--bg-elev)}
+  .all-card-num{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:0.22em;color:var(--text-muted);text-transform:uppercase;
+    margin-bottom:14px;
   }
-  .other-card.now .other-time{color:var(--accent)}
-  .other-name{
-    font-family:var(--sans);font-weight:600;font-size:13px;
-    color:var(--text);margin-bottom:2px;
+  .all-card.active .all-card-num{color:var(--accent)}
+  .all-card-emoji{font-size:18px;line-height:1}
+  .all-card-name{
+    font-family:var(--sans);font-weight:700;font-size:16px;
+    color:var(--text);letter-spacing:-0.005em;margin-bottom:6px;
   }
-  .other-name-ko{
-    font-family:var(--kr);font-weight:400;font-size:11px;
-    color:var(--text-dim);
+  .all-card-ko{
+    font-family:var(--kr);font-weight:500;font-size:12px;
+    color:var(--text-dim);margin-bottom:12px;
+  }
+  .all-card-meta{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
+    color:var(--text-muted);text-transform:uppercase;
   }
 
-  /* ========== MODAL PLAYER ========== */
+  /* ========== MODAL ========== */
   .modal-bg{
     position:fixed;inset:0;z-index:100;
-    background:rgba(2,2,8,0.92);
+    background:rgba(0,0,0,0.93);
     backdrop-filter:blur(8px);
     display:none;align-items:center;justify-content:center;
     padding:24px;
@@ -393,23 +369,25 @@
   }
   .modal-source{
     font-family:var(--mono);font-size:10px;letter-spacing:0.24em;
-    color:var(--accent);text-transform:uppercase;
+    color:var(--accent);text-transform:uppercase;flex-shrink:0;
   }
   .modal-title{
     flex:1;font-family:var(--sans);font-weight:600;
     font-size:15px;line-height:1.3;color:var(--text);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
   .modal-close{
     font-family:var(--mono);font-size:11px;letter-spacing:0.18em;
     color:var(--text-dim);padding:6px 10px;
     border:1px solid var(--line-2);transition:all .15s;
+    flex-shrink:0;
   }
   .modal-close:hover{color:var(--accent);border-color:var(--accent)}
   .modal-player{
     width:100%;aspect-ratio:16/9;
     background:#000;position:relative;
   }
-  .modal-player iframe,.modal-player video,.modal-player audio{
+  .modal-player iframe,.modal-player video{
     width:100%;height:100%;border:0;background:#000;
   }
   .modal-fb{
@@ -422,10 +400,13 @@
     font-family:var(--sans);font-weight:600;font-size:18px;color:var(--text);
   }
   .modal-meta{
-    padding:16px 18px;border-top:1px solid var(--line);
+    padding:18px 20px;border-top:1px solid var(--line);
     overflow-y:auto;
   }
-  .modal-desc{font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:14px}
+  .modal-desc{
+    font-size:14px;line-height:1.7;color:var(--text-dim);margin-bottom:14px;
+    font-family:var(--kr);
+  }
   .modal-actions{display:flex;gap:10px;flex-wrap:wrap}
   .modal-link{
     display:inline-flex;align-items:center;gap:6px;
@@ -438,29 +419,29 @@
 
   /* ========== RESPONSIVE ========== */
   @media (max-width: 880px){
-    .clock-sect{padding:40px 20px 20px}
-    .strip-wrap{padding:20px 20px 28px}
-    .hero{padding:28px 20px 20px}
-    .hero-card{grid-template-columns:1fr;gap:18px}
-    .row{padding:24px 20px}
-    .other-wrap{padding:24px 20px 40px}
+    .hero{padding:40px 20px 28px}
+    .hero-card{grid-template-columns:1fr;gap:22px}
+    .switch-wrap{padding:28px 20px 0}
+    .row{padding:28px 20px}
+    .all-wrap{padding:32px 20px 40px}
   }
   @media (max-width: 580px){
     .hdr{padding:14px 16px}
     .brand-sub{display:none}
     .nav-btn{padding:6px 10px;font-size:10px}
-    .clock-sect{padding:32px 16px 16px}
-    .strip-wrap{padding:18px 16px 24px}
-    .strip{gap:4px}
-    .strip-time{font-size:9px;letter-spacing:0.04em}
-    .hero{padding:24px 16px 18px}
-    .row{padding:20px 16px}
+    .onair-tag{font-size:9px}
+    .hero{padding:30px 16px 24px}
+    .hero-info h1{font-size:24px}
+    .switch-wrap{padding:24px 16px 0}
+    .switch-row{padding-bottom:20px}
+    .ch-chip{min-width:148px;padding:12px 14px}
+    .row{padding:24px 16px}
     .row-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
-    .other-wrap{padding:20px 16px 32px}
-    .other-grid{grid-template-columns:repeat(2,1fr)}
+    .all-wrap{padding:28px 16px 36px}
+    .all-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .all-card{padding:16px 14px}
     .modal-bg{padding:0}
     .modal{max-height:100vh;height:100vh;border:0}
-    .clock-time .secs{display:none}
   }
 </style>
 </head>
@@ -470,67 +451,65 @@
   <div class="brand">
     <div class="brand-mark"></div>
     <div class="brand-name">MEDIA</div>
-    <div class="brand-sub" id="brand-sub">TIME · DIAL</div>
+    <div class="brand-sub">GROWTH NETWORK</div>
   </div>
-  <nav class="nav-actions">
-    <button class="nav-btn active" id="nav-now" title="현재 시각으로">● NOW</button>
-    <button class="nav-btn" id="nav-all" title="모든 시간대 보기">≡ ALL</button>
-  </nav>
+  <div class="hdr-right">
+    <span class="onair-tag">ON AIR</span>
+    <button class="nav-btn active" id="nav-feat">★ FEATURED</button>
+    <button class="nav-btn" id="nav-all">≡ ALL</button>
+  </div>
 </header>
 
-<section class="clock-sect">
-  <div class="clock-time" id="clock-time">
-    <span id="hh">--</span><span class="colon">:</span><span id="mm">--</span><span class="secs" id="ss">--</span>
-  </div>
-  <div class="clock-meta">
-    <span id="weekday">···</span>
-    <span class="dot">·</span>
-    <span id="date">···</span>
-    <span class="dot">·</span>
-    <span class="accent" id="slot-name">····</span>
-  </div>
-  <div class="clock-mood" id="slot-mood">Loading…</div>
-  <div class="clock-mood-ko" id="slot-mood-ko"></div>
-</section>
-
-<section class="strip-wrap">
-  <div class="strip-label">24-HOUR DIAL · TAP TO PREVIEW</div>
-  <div class="strip" id="strip">
-    <div class="strip-line"></div>
-  </div>
-</section>
-
 <section class="hero">
-  <div class="hero-tag">NOW PLAYING · 지금 추천</div>
+  <div class="hero-tag">FEATURED · 오늘의 추천 방송</div>
   <div class="hero-card">
     <div class="hero-thumb" id="hero-thumb"></div>
     <div class="hero-info">
-      <div class="hero-source" id="hero-source">···</div>
-      <h2 id="hero-title">Loading…</h2>
+      <div class="hero-meta">
+        <span id="hero-ch">CH 01 · TED & IDEAS</span>
+        <span class="pipe">·</span>
+        <span id="hero-source">TED</span>
+      </div>
+      <h1 id="hero-title">Loading…</h1>
       <div class="hero-ko" id="hero-ko"></div>
       <div class="hero-desc" id="hero-desc"></div>
       <div class="hero-cta">
-        <button class="btn-play" id="hero-play"><span class="triangle"></span><span>지금 재생</span></button>
+        <button class="btn-play" id="hero-play"><span class="triangle"></span><span>지금 시청</span></button>
         <button class="btn-ghost" id="hero-skip">↻ 다른 추천</button>
       </div>
     </div>
   </div>
 </section>
 
-<section class="row">
-  <div class="row-head">
-    <div class="row-title" id="grid-title">····</div>
-    <div class="row-meta" id="grid-meta">····</div>
+<section class="switch-wrap">
+  <div class="switch-head">
+    <div class="switch-title">CHANNELS</div>
+    <div class="switch-count" id="switch-count">12 CH</div>
   </div>
-  <div class="row-grid" id="grid"></div>
+  <div class="switch-row" id="switch-row"></div>
 </section>
 
-<section class="other-wrap">
+<section class="row">
   <div class="row-head">
-    <div class="row-title">다른 시간대 둘러보기</div>
-    <div class="row-meta">8 SLOTS · 24H</div>
+    <div class="row-head-l">
+      <div class="row-eyebrow" id="row-eyebrow">CH ·</div>
+      <h2 id="row-title">····</h2>
+      <div class="row-ko" id="row-ko"></div>
+    </div>
+    <div class="row-head-r" id="row-meta">····</div>
   </div>
-  <div class="other-grid" id="other"></div>
+  <div class="row-grid" id="row-grid"></div>
+</section>
+
+<section class="all-wrap">
+  <div class="row-head">
+    <div class="row-head-l">
+      <div class="row-eyebrow">전체 채널 · ALL CHANNELS</div>
+      <h2>모든 자기개발 방송</h2>
+      <div class="row-ko">12개 채널 · 약 70개 프로그램</div>
+    </div>
+  </div>
+  <div class="all-grid" id="all-grid"></div>
 </section>
 
 <div class="modal-bg" id="modal" role="dialog" aria-modal="true">
@@ -551,310 +530,358 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
 /* ============================================================
-   MEDIA · Time Dial · v1.0.0
-   하루를 8개 시간대로 나눠 글로벌 미디어를 자동 큐레이션.
-   소스 정책 (전부 합법·임베드 가능):
-     - hls       : HLS 라이브 (BBC / NHK / Al Jazeera 등)
-     - yt-live   : YouTube live_stream 임베드 (24/7 채널)
-     - yt-channel: YouTube 채널 search 임베드 (최신 업로드 자동)
-     - yt-video  : YouTube 특정 영상 ID
-     - archive   : Internet Archive 직접 임베드
-     - radio     : radio.garden 외부 임베드 (iframe)
-     - link      : 외부 이동 (Spotify 팟캐스트 등)
+   MEDIA · GROWTH NETWORK · v2.0.0
+   자기개발 전문 방송국 — 12 채널 × 평균 6 프로그램
+   소스: 전부 합법·임베드 가능 (YouTube / Internet Archive / 외부)
    ============================================================ */
 
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 
-/* ============ 시간대 8 슬롯 ============ */
-const SLOTS = [
-  { id:"morning",  start:6,  end:9,  emoji:"☀️", label:"MORNING",  labelKo:"모닝",
-    accent:"#FFB85C", glow:"rgba(255,184,92,0.22)", deep:"#B47A2C",
-    mood:"Awaken with the world.",
-    moodKo:"세상이 깨어난다 · 아침 뉴스와 라디오로 하루를 시작" },
-  { id:"forenoon", start:9,  end:12, emoji:"☕", label:"FORENOON", labelKo:"오전",
-    accent:"#A8D8EA", glow:"rgba(168,216,234,0.18)", deep:"#5C92A8",
-    mood:"Time for ideas.",
-    moodKo:"집중의 시간 · TED·Vox·Aeon 으로 생각의 폭을 넓힌다" },
-  { id:"lunch",    start:12, end:14, emoji:"🍱", label:"LUNCH",    labelKo:"점심",
-    accent:"#FFD66E", glow:"rgba(255,214,110,0.2)", deep:"#B0902C",
-    mood:"Light & quick.",
-    moodKo:"가볍게 한 입 · 짧은 코미디·예능·트렌디한 클립" },
-  { id:"afternoon",start:14, end:17, emoji:"🌤️", label:"AFTERNOON",labelKo:"오후",
-    accent:"#F0A878", glow:"rgba(240,168,120,0.2)", deep:"#A8703C",
-    mood:"Slow learn.",
-    moodKo:"천천히 배우는 시간 · 다큐·교양·Lo-fi 스터디" },
-  { id:"commute",  start:17, end:19, emoji:"🚇", label:"COMMUTE",  labelKo:"퇴근",
-    accent:"#FF8B5C", glow:"rgba(255,139,92,0.22)", deep:"#B85A30",
-    mood:"Voices for the road.",
-    moodKo:"길 위의 동행 · 팟캐스트와 통근 BGM" },
-  { id:"evening",  start:19, end:22, emoji:"🛋️", label:"EVENING",  labelKo:"저녁",
-    accent:"#B894D1", glow:"rgba(184,148,209,0.2)", deep:"#6E5286",
-    mood:"Settle into a story.",
-    moodKo:"몰입의 저녁 · BBC Earth, NatGeo, 시네마틱 다큐" },
-  { id:"night",    start:22, end:26, emoji:"🌙", label:"NIGHT",    labelKo:"밤",
-    accent:"#7BA8D6", glow:"rgba(123,168,214,0.2)", deep:"#456892",
-    mood:"Drift.",
-    moodKo:"흐르는 사운드 · Lo-fi·앰비언트·심야 라디오" },
-  { id:"dawn",     start:2,  end:6,  emoji:"😴", label:"DAWN",     labelKo:"새벽",
-    accent:"#C5A0D6", glow:"rgba(197,160,214,0.2)", deep:"#7A5286",
-    mood:"Quiet hours.",
-    moodKo:"고요의 시간 · ASMR·빗소리·클래식·백색소음" },
+/* ============ 12 채널 ============ */
+const CHANNELS = [
+  { id:"ted",        num:"01", emoji:"💡", label:"TED & IDEAS",      labelKo:"TED · 아이디어",
+    desc:"세상을 바꾼 강연들 · 18분의 영감", english:"World-changing talks." },
+  { id:"mindset",    num:"02", emoji:"🧠", label:"MINDSET",          labelKo:"마인드셋 · 태도",
+    desc:"태도와 철학 · 스토아부터 현대까지", english:"Philosophy for living." },
+  { id:"productivity",num:"03",emoji:"⚡", label:"PRODUCTIVITY",     labelKo:"생산성 · 시간 관리",
+    desc:"효율적으로 일하고 살아가는 법", english:"Work less, achieve more." },
+  { id:"deeptalk",   num:"04", emoji:"🎙️", label:"DEEP TALK",        labelKo:"심층 인터뷰",
+    desc:"세계 최고 거장과의 2-3시간 대화", english:"Long-form interviews with masters." },
+  { id:"body",       num:"05", emoji:"🧬", label:"BRAIN & BODY",     labelKo:"뇌과학 · 건강",
+    desc:"수면·운동·영양·집중력의 과학", english:"The science of being human." },
+  { id:"business",   num:"06", emoji:"💼", label:"BUSINESS",         labelKo:"비즈니스 · 창업",
+    desc:"하버드·실리콘밸리에서 배우는 경영", english:"Lessons from Harvard & Silicon Valley." },
+  { id:"finance",    num:"07", emoji:"📈", label:"FINANCE",          labelKo:"투자 · 금융",
+    desc:"투자와 시장을 이해하는 법", english:"Understand markets and money." },
+  { id:"code",       num:"08", emoji:"💻", label:"CODE & TECH",      labelKo:"개발 · 기술",
+    desc:"코딩·수학·기술의 세계", english:"Code, math, and technology." },
+  { id:"books",      num:"09", emoji:"📚", label:"BOOKS & WISDOM",   labelKo:"책 · 지혜",
+    desc:"세계의 명저를 5-15분에 흡수", english:"Distilled wisdom from books." },
+  { id:"korea",      num:"10", emoji:"🇰🇷", label:"한국 자기개발",       labelKo:"한국 셀프헬프",
+    desc:"세바시·김미경TV·신박사·자청 · 한국 1세대 강연", english:"Korean self-development legends." },
+  { id:"learn",      num:"11", emoji:"🌍", label:"LEARN",            labelKo:"학습 · 영어",
+    desc:"영어·언어·교양 학습", english:"Language and lifelong learning." },
+  { id:"creative",   num:"12", emoji:"🎨", label:"CREATIVE",         labelKo:"창작 · 디자인",
+    desc:"디자인·영상·예술의 시선", english:"Design, film, and art." },
 ];
 
-const slotById = id => SLOTS.find(s => s.id === id);
-function getCurrentSlot(){
-  const h = new Date().getHours();
-  // mapping by start..end with wrap (night spans 22-02)
-  for(const s of SLOTS){
-    if(s.start < s.end){
-      if(h >= s.start && h < s.end) return s;
-    } else {
-      // wrap (e.g. night 22-26 → 22..23 or 0..1)
-      if(h >= s.start || h < (s.end-24)) return s;
-    }
-  }
-  return SLOTS[0];
-}
+const channelById = id => CHANNELS.find(c => c.id === id);
 
-/* ============ 미디어 데이터 (50+ 항목) ============ */
-const MEDIA = [
-  /* ===== 06-09 MORNING (뉴스·라디오) ===== */
-  { id:"m-bbc-news",   slot:"morning", source:"BBC News", title:"BBC News Live",
-    titleKo:"BBC 월드 뉴스 라이브",
-    type:"hls", live:true,
-    hlsUrl:"https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/iptv_hd_abr_v1.m3u8",
-    desc:"전세계에서 가장 신뢰받는 24시간 영문 뉴스 채널. 글로벌 헤드라인을 라이브로." },
-  { id:"m-nhk-world",  slot:"morning", source:"NHK World", title:"NHK World Live",
-    titleKo:"NHK 월드 영문 뉴스",
-    type:"hls", live:true,
-    hlsUrl:"https://nhkwlive-euwe.akamaized.net/hls/live/2003459/nhkwlive-euwe-en/index.m3u8",
-    desc:"일본 NHK 의 24시간 영문 국제 뉴스. 아시아 관점의 글로벌 보도." },
-  { id:"m-dw-en",      slot:"morning", source:"Deutsche Welle", title:"DW News Live",
-    titleKo:"독일 DW 영문 뉴스",
-    type:"yt-live", ytChannel:"UCknLrEdhRCp1aegoMqRaCZg",
-    desc:"독일 공영방송 DW 의 24시간 영문 뉴스 라이브. 유럽 관점의 보도." },
-  { id:"m-aljazeera",  slot:"morning", source:"Al Jazeera", title:"Al Jazeera English",
-    titleKo:"알자지라 영문 뉴스",
-    type:"yt-live", ytChannel:"UCNye-wNBqNL5ZzHSJj3l8Bg",
-    desc:"중동·글로벌 사우스 시각의 영문 24시간 뉴스." },
-  { id:"m-france24",   slot:"morning", source:"France 24", title:"France 24 English",
-    titleKo:"프랑스 24 영문 뉴스",
-    type:"yt-live", ytChannel:"UCQfwfsi5VrQ8yKZ-UWmAEFg",
-    desc:"프랑스 공영 24시간 영문 뉴스. 유럽·아프리카 보도 강점." },
-  { id:"m-the-daily",  slot:"morning", source:"NYT The Daily", title:"The Daily Podcast",
-    titleKo:"뉴욕타임스 The Daily 팟캐스트",
-    type:"link", url:"https://www.nytimes.com/column/the-daily",
-    desc:"뉴욕타임스의 매일 30분 시사 팟캐스트. 미국에서 가장 많이 듣는 뉴스 팟캐스트." },
-
-  /* ===== 09-12 FORENOON (TED·Vox·Aeon·비즈니스) ===== */
-  { id:"f-ted",        slot:"forenoon", source:"TED", title:"TED Talks",
-    titleKo:"TED 강연",
+/* ============ 프로그램 큐레이션 (~70개) ============ */
+const PROGRAMS = [
+  /* ===== CH 01 · TED & IDEAS ===== */
+  { id:"ted-main", channel:"ted", source:"TED",
+    title:"TED Talks", titleKo:"TED 강연",
     type:"yt-channel", ytChannel:"@TED",
-    desc:"퍼져 나갈 가치가 있는 아이디어. 18분 안에 세상을 보는 새 관점." },
-  { id:"f-tedx",       slot:"forenoon", source:"TED-Ed", title:"TED-Ed Animations",
-    titleKo:"TED-Ed 애니메이션",
+    desc:"전세계가 듣는 18분 강연. 과학·예술·사회·삶을 보는 새로운 관점을 만난다." },
+  { id:"ted-ed", channel:"ted", source:"TED-Ed",
+    title:"TED-Ed Animations", titleKo:"TED-Ed 애니메이션",
     type:"yt-channel", ytChannel:"@TEDEd",
-    desc:"5분 애니메이션으로 배우는 과학·역사·철학. 점심 전에 한 편." },
-  { id:"f-vox",        slot:"forenoon", source:"Vox", title:"Vox Explained",
-    titleKo:"Vox 인포그래픽 영상",
-    type:"yt-channel", ytChannel:"@Vox",
-    desc:"뉴스 뒤의 큰 그림을 시각적으로. 디자인이 뛰어난 설명 영상." },
-  { id:"f-aeon",       slot:"forenoon", source:"Aeon", title:"Aeon Video Essays",
-    titleKo:"Aeon 비디오 에세이",
-    type:"link", url:"https://aeon.co/videos",
-    desc:"철학·과학·예술·인생에 대한 깊이 있는 영상 에세이." },
-  { id:"f-bbc-reel",   slot:"forenoon", source:"BBC Reel", title:"BBC Reel Mini-Docs",
-    titleKo:"BBC Reel 미니 다큐",
-    type:"yt-channel", ytChannel:"@BBCReel",
-    desc:"BBC 가 큐레이션한 5-15분 시네마틱 미니 다큐 시리즈." },
-  { id:"f-bloomberg",  slot:"forenoon", source:"Bloomberg", title:"Bloomberg Quicktake",
-    titleKo:"블룸버그 퀵테이크",
-    type:"yt-live", ytChannel:"UCIALMKvObZNtJ6AmdCLP7Lg",
-    desc:"24시간 글로벌 비즈니스·금융 뉴스 라이브." },
+    desc:"5분 애니메이션으로 배우는 과학·역사·철학. 호기심을 자극하는 지식 영상." },
+  { id:"tedx", channel:"ted", source:"TEDx Talks",
+    title:"TEDx Talks", titleKo:"TEDx 강연",
+    type:"yt-channel", ytChannel:"@TEDx",
+    desc:"전세계 도시에서 열리는 TEDx 의 다양한 목소리. 더 길고 더 다채로운 강연." },
+  { id:"big-think", channel:"ted", source:"Big Think",
+    title:"Big Think", titleKo:"빅 씽크",
+    type:"yt-channel", ytChannel:"@bigthink",
+    desc:"하버드·노벨상 수상자들이 풀어내는 짧은 통찰 인터뷰." },
+  { id:"rsa", channel:"ted", source:"The RSA",
+    title:"RSA Animate & Talks", titleKo:"RSA 애니메이트 · 강연",
+    type:"yt-channel", ytChannel:"@theRSAorg",
+    desc:"화이트보드 애니메이션으로 풀어내는 사회·경제 사상. 'RSA Animate' 시리즈로 유명." },
 
-  /* ===== 12-14 LUNCH (코미디·짧은 영상) ===== */
-  { id:"l-snl",        slot:"lunch", source:"SNL", title:"Saturday Night Live",
-    titleKo:"새터데이 나잇 라이브",
-    type:"yt-channel", ytChannel:"@SaturdayNightLive",
-    desc:"미국 코미디의 정수. 5-7분 스케치 클립을 점심에 한 편씩." },
-  { id:"l-conan",      slot:"lunch", source:"Conan", title:"Team Coco Highlights",
-    titleKo:"코난 오브라이언 하이라이트",
-    type:"yt-channel", ytChannel:"@TeamCoco",
-    desc:"코난 오브라이언의 토크쇼 하이라이트와 'Conan Without Borders'." },
-  { id:"l-asianboss",  slot:"lunch", source:"Asian Boss", title:"Asian Boss Street Interviews",
-    titleKo:"아시안 보스 길거리 인터뷰",
-    type:"yt-channel", ytChannel:"@AsianBoss",
-    desc:"한국·일본·동남아 길거리 인터뷰 다큐. 한 끼 곁들이기 좋은 분량." },
-  { id:"l-vox-short",  slot:"lunch", source:"Vox Pop", title:"Vox Pop Stories",
-    titleKo:"Vox 팝 스토리",
-    type:"yt-channel", ytChannel:"@Vox",
-    desc:"5-12분 라이트한 영상 콘텐츠. 식사 시간에 적합." },
-  { id:"l-movieclips", slot:"lunch", source:"Movieclips", title:"Movieclips",
-    titleKo:"무비클립",
-    type:"yt-channel", ytChannel:"@MOVIECLIPS",
-    desc:"명작 영화 명장면 모음. 점심 시간 5분 영화 한 입." },
-  { id:"l-omeleto",    slot:"lunch", source:"Omeleto", title:"Omeleto Short Films",
-    titleKo:"오멜레토 단편영화",
-    type:"yt-channel", ytChannel:"@Omeleto",
-    desc:"15분 안에 끝나는 영화제 수상 단편영화 큐레이션." },
+  /* ===== CH 02 · MINDSET ===== */
+  { id:"modern-wisdom", channel:"mindset", source:"Modern Wisdom",
+    title:"Modern Wisdom · Chris Williamson", titleKo:"모던 위즈덤 · 크리스 윌리엄슨",
+    type:"yt-channel", ytChannel:"@ChrisWillx",
+    desc:"심리학·진화생물학·철학의 거장과 대화. 영국 출신 진행자의 깊이 있는 인터뷰 팟캐스트." },
+  { id:"daily-stoic", channel:"mindset", source:"Daily Stoic",
+    title:"Daily Stoic · Ryan Holiday", titleKo:"데일리 스토익 · 라이언 홀리데이",
+    type:"yt-channel", ytChannel:"@DailyStoic",
+    desc:"마르쿠스 아우렐리우스·세네카·에픽테토스. 매일의 스토아 철학 가르침을 5분 영상으로." },
+  { id:"jay-shetty", channel:"mindset", source:"Jay Shetty",
+    title:"Jay Shetty Podcast", titleKo:"제이 셰티 팟캐스트",
+    type:"yt-channel", ytChannel:"@JayShettyPodcast",
+    desc:"전직 승려 출신의 라이프 코치. 마음챙김·관계·목적에 대한 따뜻한 가르침." },
+  { id:"school-of-life", channel:"mindset", source:"The School of Life",
+    title:"The School of Life", titleKo:"인생학교",
+    type:"yt-channel", ytChannel:"@theschooloflifetv",
+    desc:"알랭 드 보통이 만든 채널. 사랑·외로움·일·감정에 대한 철학적 영상." },
+  { id:"einzel", channel:"mindset", source:"Einzelgänger",
+    title:"Einzelgänger Philosophy", titleKo:"아인첼게어 · 철학",
+    type:"yt-channel", ytChannel:"@Einzelgaenger",
+    desc:"스토아·도교·실존주의. 차분한 내레이션으로 풀어내는 철학 영상 에세이." },
+  { id:"jordan-peterson", channel:"mindset", source:"Jordan B Peterson",
+    title:"Jordan B Peterson Lectures", titleKo:"조던 피터슨 강의",
+    type:"yt-channel", ytChannel:"@JordanBPeterson",
+    desc:"심리학·신화·인생의 의미에 대한 토론토 대학 강의 시리즈." },
 
-  /* ===== 14-17 AFTERNOON (학습·BGM) ===== */
-  { id:"a-lofi-girl",  slot:"afternoon", source:"Lofi Girl", title:"Lofi hip hop radio · beats to study to",
-    titleKo:"로파이 걸 · 공부할 때 듣는 라디오",
-    type:"yt-live", live:true, ytChannel:"UCSJ4gkVC6NrvII8umztf0Ow",
-    desc:"전세계 학생·직장인이 함께 듣는 24/7 Lofi 라이브 스트림." },
-  { id:"a-chillhop",   slot:"afternoon", source:"Chillhop Music", title:"Chillhop Radio",
-    titleKo:"칠합 24/7 라디오",
-    type:"yt-live", live:true, ytChannel:"UCM9KEEuzacwVlkt9JfJad7g",
-    desc:"인디 비트와 재즈 라이브 스트림. 작업·공부 BGM." },
-  { id:"a-crash-course",slot:"afternoon", source:"Crash Course", title:"Crash Course",
-    titleKo:"크래시 코스",
-    type:"yt-channel", ytChannel:"@crashcourse",
-    desc:"역사·과학·문학·경제. 10분 안에 입문할 수 있는 인문 강의." },
-  { id:"a-khan",       slot:"afternoon", source:"Khan Academy", title:"Khan Academy",
-    titleKo:"칸 아카데미",
-    type:"yt-channel", ytChannel:"@khanacademy",
-    desc:"수학·과학·프로그래밍을 직접 배울 수 있는 무료 강의." },
-  { id:"a-nat-geo",    slot:"afternoon", source:"National Geographic", title:"NatGeo Short Documentaries",
-    titleKo:"내셔널 지오그래픽 짧은 다큐",
-    type:"yt-channel", ytChannel:"@NatGeo",
-    desc:"5-15분 자연·과학·인류 다큐 클립." },
-  { id:"a-smithsonian",slot:"afternoon", source:"Smithsonian", title:"Smithsonian Channel",
-    titleKo:"스미스소니언 채널",
-    type:"yt-channel", ytChannel:"@SmithsonianChannel",
-    desc:"역사·과학·자연. 미국 최고의 박물관이 만든 다큐 채널." },
+  /* ===== CH 03 · PRODUCTIVITY ===== */
+  { id:"ali-abdaal", channel:"productivity", source:"Ali Abdaal",
+    title:"Ali Abdaal", titleKo:"알리 압달",
+    type:"yt-channel", ytChannel:"@aliabdaal",
+    desc:"케임브리지 의대 출신 유튜버. 공부법·시간관리·생산성을 데이터 기반으로 풀어낸다." },
+  { id:"thomas-frank", channel:"productivity", source:"Thomas Frank",
+    title:"Thomas Frank", titleKo:"토마스 프랭크",
+    type:"yt-channel", ytChannel:"@Thomasfrank",
+    desc:"노트테이킹·옵시디언·노션. 디지털 도구를 활용한 학습·생산성 채널." },
+  { id:"matt-davella", channel:"productivity", source:"Matt D'Avella",
+    title:"Matt D'Avella · Minimalism", titleKo:"맷 다벨라 · 미니멀리즘",
+    type:"yt-channel", ytChannel:"@mattdavella",
+    desc:"넷플릭스 다큐 '미니멀리즘' 감독. 간결한 삶·습관·집중에 대한 시네마틱 영상." },
+  { id:"better-ideas", channel:"productivity", source:"Better Ideas",
+    title:"Better Ideas", titleKo:"베러 아이디어스",
+    type:"yt-channel", ytChannel:"@betterideas",
+    desc:"습관·동기·실행. 솔직하고 위트 있는 자기개발 채널." },
+  { id:"nathaniel-drew", channel:"productivity", source:"Nathaniel Drew",
+    title:"Nathaniel Drew", titleKo:"나타니엘 드류",
+    type:"yt-channel", ytChannel:"@NathanielDrew",
+    desc:"여행·언어·삶의 실험. 시네마틱한 라이프스타일 다큐 채널." },
+  { id:"jeff-su", channel:"productivity", source:"Jeff Su",
+    title:"Jeff Su · Productivity Tips", titleKo:"제프 수 · 생산성 팁",
+    type:"yt-channel", ytChannel:"@JeffSu",
+    desc:"구글 출신 PM 의 실전 업무 팁. Gmail·캘린더·노션 활용법을 짧게." },
 
-  /* ===== 17-19 COMMUTE (팟캐스트) ===== */
-  { id:"c-lex",        slot:"commute", source:"Lex Fridman", title:"Lex Fridman Podcast",
-    titleKo:"렉스 프리드먼 팟캐스트",
+  /* ===== CH 04 · DEEP TALK ===== */
+  { id:"lex", channel:"deeptalk", source:"Lex Fridman",
+    title:"Lex Fridman Podcast", titleKo:"렉스 프리드먼 팟캐스트",
     type:"yt-channel", ytChannel:"@lexfridman",
-    desc:"AI·과학·철학·역사 분야 거장과의 2-3시간 심층 대화." },
-  { id:"c-joe-rogan",  slot:"commute", source:"PowerfulJRE", title:"Joe Rogan Experience Clips",
-    titleKo:"조 로건 익스피리언스 클립",
+    desc:"MIT 출신 AI 연구자가 진행하는 2-4시간 심층 대화. 일론 머스크부터 네이비 실까지." },
+  { id:"tim-ferriss", channel:"deeptalk", source:"Tim Ferriss",
+    title:"The Tim Ferriss Show", titleKo:"팀 페리스 쇼",
+    type:"yt-channel", ytChannel:"@timferriss",
+    desc:"'4시간' 시리즈 저자. 세계 최고 성과자들의 루틴과 도구를 해부한다." },
+  { id:"diary-ceo", channel:"deeptalk", source:"Diary of a CEO",
+    title:"The Diary of a CEO · Steven Bartlett", titleKo:"다이어리 오브 어 CEO",
+    type:"yt-channel", ytChannel:"@TheDiaryOfACEO",
+    desc:"영국 30대 CEO 의 인터뷰 쇼. 비즈니스·심리·관계에 대한 솔직한 대화." },
+  { id:"knowledge-project", channel:"deeptalk", source:"Shane Parrish",
+    title:"The Knowledge Project", titleKo:"노리지 프로젝트",
+    type:"yt-channel", ytChannel:"@FarnamStreet",
+    desc:"Farnam Street 의 셰인 패리시. 멘탈 모델·의사결정의 거장들과 대화." },
+  { id:"impact-theory", channel:"deeptalk", source:"Tom Bilyeu",
+    title:"Impact Theory", titleKo:"임팩트 띠어리",
+    type:"yt-channel", ytChannel:"@TomBilyeu",
+    desc:"Quest Nutrition 창업자 톰 빌류의 마인드셋·성과 인터뷰 쇼." },
+  { id:"joe-rogan-clips", channel:"deeptalk", source:"PowerfulJRE",
+    title:"Joe Rogan Experience", titleKo:"조 로건 익스피리언스",
     type:"yt-channel", ytChannel:"@joerogan",
-    desc:"세계 최대 팟캐스트의 클립 모음. 통근에 적당한 길이." },
-  { id:"c-99pi",       slot:"commute", source:"99% Invisible", title:"99% Invisible",
-    titleKo:"99% 인비저블",
-    type:"link", url:"https://99percentinvisible.org/episodes/",
-    desc:"눈에 보이지 않는 디자인 이야기. 도시·물건·역사 속 디자인 팟캐스트." },
-  { id:"c-radiolab",   slot:"commute", source:"Radiolab", title:"Radiolab",
-    titleKo:"라디오랩",
-    type:"link", url:"https://radiolab.org/podcast",
-    desc:"과학과 철학을 시적으로 풀어내는 미국 NPR 의 대표 팟캐스트." },
-  { id:"c-bbc-r4",     slot:"commute", source:"BBC Radio 4", title:"BBC Radio 4",
-    titleKo:"BBC 라디오 4 (라이브)",
-    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_radio_fourfm",
-    desc:"BBC 의 시사·문학·드라마 라디오 채널. 영어 뉴스 듣기에 최고." },
-  { id:"c-hardcore",   slot:"commute", source:"Hardcore History", title:"Hardcore History",
-    titleKo:"하드코어 히스토리",
-    type:"link", url:"https://www.dancarlin.com/hardcore-history-series/",
-    desc:"댄 칼린의 4-6시간짜리 역사 팟캐스트. 통근 한 달 분량." },
+    desc:"세계 최대 팟캐스트. 과학자·예술가·격투가까지 폭넓은 게스트와의 마라톤 대화." },
 
-  /* ===== 19-22 EVENING (다큐·시네마틱) ===== */
-  { id:"e-bbc-earth",  slot:"evening", source:"BBC Earth", title:"BBC Earth Documentaries",
-    titleKo:"BBC 어스 자연 다큐",
-    type:"yt-channel", ytChannel:"@bbcearth",
-    desc:"플래닛 어스·블루 플래닛·다이너스티즈. 세계 최고의 자연 다큐 채널." },
-  { id:"e-natgeo-doc", slot:"evening", source:"National Geographic", title:"NatGeo Full Documentaries",
-    titleKo:"내셔널 지오그래픽 풀 다큐",
-    type:"yt-channel", ytChannel:"@NatGeo",
-    desc:"인류·우주·해양. 풀길이 다큐멘터리 컬렉션." },
-  { id:"e-lemmino",    slot:"evening", source:"LEMMiNO", title:"LEMMiNO Mysteries",
-    titleKo:"레미노 미스터리 다큐",
-    type:"yt-channel", ytChannel:"@LEMMiNO",
-    desc:"역사 미스터리·실종·미해결 사건을 시네마틱하게 풀어내는 1인 다큐 채널." },
-  { id:"e-vox-atlas",  slot:"evening", source:"Vox Atlas", title:"Vox Atlas",
-    titleKo:"Vox 아틀라스",
-    type:"yt-channel", ytChannel:"@Vox",
-    desc:"세계 분쟁·지정학·이주. Vox 의 장편 다큐 시리즈." },
-  { id:"e-nyt-opdoc",  slot:"evening", source:"NYT Op-Docs", title:"NYT Op-Docs",
-    titleKo:"NYT 옵-다큐",
-    type:"yt-channel", ytChannel:"@nytopdocs",
-    desc:"뉴욕타임스가 큐레이션하는 단편 시네마틱 다큐 시리즈." },
-  { id:"e-archive-noflivingdead", slot:"evening", source:"Internet Archive", title:"Night of the Living Dead (1968)",
-    titleKo:"살아있는 시체들의 밤 (1968)",
-    type:"archive", archiveId:"night_of_the_living_dead",
-    desc:"좀비 영화의 시조. 조지 로메로의 퍼블릭 도메인 컬트 클래식." },
-  { id:"e-archive-nosferatu", slot:"evening", source:"Internet Archive", title:"Nosferatu (1922)",
-    titleKo:"노스페라투 (1922)",
-    type:"archive", archiveId:"nosferatu_1922",
-    desc:"독일 표현주의 호러의 절대 고전. 무성영화 시대의 드라큘라." },
-  { id:"e-archive-metropolis", slot:"evening", source:"Internet Archive", title:"Metropolis (1927)",
-    titleKo:"메트로폴리스 (1927)",
-    type:"archive", archiveId:"Metropolis-1927",
-    desc:"디스토피아 SF 의 원형. 프리츠 랑의 무성영화 걸작." },
+  /* ===== CH 05 · BRAIN & BODY ===== */
+  { id:"huberman", channel:"body", source:"Huberman Lab",
+    title:"Huberman Lab · Andrew Huberman", titleKo:"휴버먼 랩 · 앤드류 휴버먼",
+    type:"yt-channel", ytChannel:"@hubermanlab",
+    desc:"스탠퍼드 신경과학자. 수면·운동·집중·스트레스의 과학을 실용적 프로토콜로." },
+  { id:"rich-roll", channel:"body", source:"Rich Roll",
+    title:"Rich Roll Podcast", titleKo:"리치 롤 팟캐스트",
+    type:"yt-channel", ytChannel:"@richroll",
+    desc:"50대 울트라 운동선수 진행자. 건강·중독 회복·삶의 변화에 대한 인터뷰." },
+  { id:"peter-attia", channel:"body", source:"Peter Attia",
+    title:"The Drive · Peter Attia", titleKo:"피터 아티아 · The Drive",
+    type:"yt-channel", ytChannel:"@PeterAttiaMD",
+    desc:"'Outlive' 저자 의사 피터 아티아. 장수 의학·근력·콜레스테롤의 최첨단." },
+  { id:"foundmyfitness", channel:"body", source:"Rhonda Patrick",
+    title:"FoundMyFitness · Rhonda Patrick", titleKo:"파운드마이피트니스 · 론다 패트릭",
+    type:"yt-channel", ytChannel:"@FoundMyFitness",
+    desc:"세포 생물학자 론다 패트릭. 영양·노화·건강 보충제에 대한 깊은 과학." },
+  { id:"yoga-adriene", channel:"body", source:"Yoga With Adriene",
+    title:"Yoga With Adriene", titleKo:"요가 위드 에이드리언",
+    type:"yt-channel", ytChannel:"@yogawithadriene",
+    desc:"전세계가 함께하는 30일 요가 챌린지. 부드럽고 친근한 가정 요가 채널." },
+  { id:"calm-mind", channel:"body", source:"Tara Brach",
+    title:"Tara Brach · Meditation", titleKo:"타라 브락 · 명상",
+    type:"yt-channel", ytChannel:"@TaraBrach",
+    desc:"심리학자·명상 교사 타라 브락. 마음챙김 가이드 명상과 강연." },
 
-  /* ===== 22-02 NIGHT (Lo-fi · 앰비언트) ===== */
-  { id:"n-lofi-girl",  slot:"night", source:"Lofi Girl", title:"Lofi hip hop · sleepy beats",
-    titleKo:"로파이 걸 · 잠들기 전 비트",
-    type:"yt-live", live:true, ytChannel:"UCSJ4gkVC6NrvII8umztf0Ow",
-    desc:"전세계가 함께 듣는 24/7 Lofi 라이브. 잠들기 전·자는 동안 흘려두기 좋다." },
-  { id:"n-chilled",    slot:"night", source:"Chilled Cow", title:"Synthwave Radio",
-    titleKo:"신스웨이브 라디오",
-    type:"yt-live", live:true, ytChannel:"UCS9uQI-jC3DE0L4IpXyvr6w",
-    desc:"80년대 무드의 신스웨이브 24/7 라이브 스트림. 야간 작업용." },
-  { id:"n-coffee-shop",slot:"night", source:"Cafe Music BGM", title:"Coffee Shop Ambient",
-    titleKo:"카페 앰비언트 BGM",
-    type:"yt-channel", ytChannel:"@cafemusicbgmchannel",
-    desc:"카페 톤의 재즈·보사노바 라이브 스트림. 글 쓰기·독서 BGM." },
-  { id:"n-jazz-radio", slot:"night", source:"Relaxing JAZZ", title:"24/7 Jazz Lounge",
-    titleKo:"24/7 재즈 라운지",
-    type:"yt-channel", ytChannel:"@CafeMusicBGMchannel",
-    desc:"뉴욕 재즈 바 무드의 라이브 BGM 스트림." },
-  { id:"n-bbc-r3",     slot:"night", source:"BBC Radio 3", title:"BBC Radio 3 (Classical)",
-    titleKo:"BBC 라디오 3 (클래식)",
-    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_radio_three",
-    desc:"BBC 의 클래식·재즈·월드뮤직 라디오. 야간에 어울리는 정통 채널." },
-  { id:"n-bbc-ws",     slot:"night", source:"BBC World Service", title:"BBC World Service Radio",
-    titleKo:"BBC 월드 서비스 라디오",
-    type:"link", url:"https://www.bbc.co.uk/sounds/play/live:bbc_world_service",
-    desc:"BBC 의 24시간 글로벌 뉴스 라디오. 잠 안 올 때." },
+  /* ===== CH 06 · BUSINESS ===== */
+  { id:"hbr", channel:"business", source:"Harvard Business Review",
+    title:"Harvard Business Review", titleKo:"하버드 비즈니스 리뷰",
+    type:"yt-channel", ytChannel:"@harvardbusinessreview",
+    desc:"세계 최고 경영대학원의 비즈니스 인사이트. 리더십·전략·조직에 대한 짧은 영상." },
+  { id:"yc", channel:"business", source:"Y Combinator",
+    title:"Y Combinator · Startup School", titleKo:"와이콤비네이터 · 스타트업 스쿨",
+    type:"yt-channel", ytChannel:"@ycombinator",
+    desc:"실리콘밸리 1위 액셀러레이터. 폴 그레이엄·샘 알트만의 창업 강의 시리즈." },
+  { id:"stanford-ecorner", channel:"business", source:"Stanford eCorner",
+    title:"Stanford eCorner", titleKo:"스탠퍼드 이코너",
+    type:"yt-channel", ytChannel:"@ecorner",
+    desc:"스탠퍼드 기업가정신 센터. 실리콘밸리 창업가들의 강의와 대화." },
+  { id:"a16z", channel:"business", source:"a16z",
+    title:"Andreessen Horowitz · a16z", titleKo:"안드레센 호로위츠 · a16z",
+    type:"yt-channel", ytChannel:"@a16z",
+    desc:"실리콘밸리 최대 VC. AI·핀테크·바이오의 최전선 인사이트." },
+  { id:"how-i-built", channel:"business", source:"NPR",
+    title:"How I Built This · Guy Raz", titleKo:"하우 아이 빌트 디스",
+    type:"link", url:"https://www.npr.org/series/490248027/how-i-built-this",
+    desc:"NPR 의 인기 팟캐스트. 에어비앤비·스포티파이·파타고니아 창업자의 진짜 이야기." },
+  { id:"garyvee", channel:"business", source:"GaryVee",
+    title:"Gary Vaynerchuk", titleKo:"게리 바이너척",
+    type:"yt-channel", ytChannel:"@garyvee",
+    desc:"마케팅·주의력 경제의 전도사. 솔직하고 직설적인 비즈니스 동기부여." },
 
-  /* ===== 02-06 DAWN (ASMR · 백색소음 · 클래식) ===== */
-  { id:"d-rain",       slot:"dawn", source:"Rain Sounds", title:"Rain Sounds for Sleeping · 10 Hours",
-    titleKo:"빗소리 10시간 · 수면용",
-    type:"yt-channel", ytChannel:"@TheGuildOfAmbience",
-    desc:"수면·집중에 효과적인 10시간 빗소리 채널 모음." },
-  { id:"d-white",      slot:"dawn", source:"White Noise", title:"White Noise · 10 Hours",
-    titleKo:"백색소음 10시간",
-    type:"yt-channel", ytChannel:"@WhiteNoiseFanClub",
-    desc:"수면·집중에 사용하는 화이트 노이즈·핑크 노이즈 채널." },
-  { id:"d-classical",  slot:"dawn", source:"HALIDONMUSIC", title:"Classical Music for Sleep",
-    titleKo:"수면용 클래식 음악",
-    type:"yt-channel", ytChannel:"@HALIDONMUSIC",
-    desc:"베토벤·드뷔시·바흐. 클래식 음악 라이브러리." },
-  { id:"d-asmr",       slot:"dawn", source:"Gentle Whispering", title:"ASMR · Soft Spoken",
-    titleKo:"ASMR · 소프트 스포큰",
-    type:"yt-channel", ytChannel:"@GentleWhispering",
-    desc:"잠들기 어려운 새벽에 듣는 부드러운 ASMR 채널." },
-  { id:"d-piano",      slot:"dawn", source:"Relaxing Piano", title:"Sleep Piano · 24/7",
-    titleKo:"수면 피아노 24/7",
-    type:"yt-live", live:true, ytChannel:"UCXf5oRmIaNeFDPUu_AZkVcQ",
-    desc:"잔잔한 피아노 라이브 스트림. 새벽 분위기에 맞춤." },
-  { id:"d-coffitivity",slot:"dawn", source:"Coffitivity", title:"Cafe Ambience",
-    titleKo:"카페 환경음",
-    type:"link", url:"https://coffitivity.com/",
-    desc:"카페 환경음을 만들어내는 명상·집중 보조 사이트." },
+  /* ===== CH 07 · FINANCE ===== */
+  { id:"patrick-boyle", channel:"finance", source:"Patrick Boyle",
+    title:"Patrick Boyle on Finance", titleKo:"패트릭 보일 · 금융",
+    type:"yt-channel", ytChannel:"@PBoyle",
+    desc:"전직 헤지펀드 매니저·런던 킹스 칼리지 교수. 금융 시장의 사건을 위트 있게 해부." },
+  { id:"plain-bagel", channel:"finance", source:"The Plain Bagel",
+    title:"The Plain Bagel", titleKo:"플레인 베이글",
+    type:"yt-channel", ytChannel:"@ThePlainBagel",
+    desc:"CFA 자산운용가 진행. 투자 기초·시장 사기·재무 분석을 쉽게 풀어낸다." },
+  { id:"damodaran", channel:"finance", source:"Aswath Damodaran",
+    title:"Aswath Damodaran · Valuation", titleKo:"애즈워스 다모다란 · 기업가치",
+    type:"yt-channel", ytChannel:"@AswathDamodaranonValuation",
+    desc:"NYU 스턴 비즈니스스쿨의 '가치평가의 학장'. 기업 분석의 정통 강의." },
+  { id:"ben-felix", channel:"finance", source:"Ben Felix",
+    title:"Ben Felix · Common Sense Investing", titleKo:"벤 펠릭스 · 상식 투자",
+    type:"yt-channel", ytChannel:"@BenFelixCSI",
+    desc:"포트폴리오 매니저. 학술 연구 기반의 분산투자·인덱스 전략을 정교하게." },
+  { id:"bloomberg-orig", channel:"finance", source:"Bloomberg Originals",
+    title:"Bloomberg Originals", titleKo:"블룸버그 오리지널",
+    type:"yt-channel", ytChannel:"@business",
+    desc:"블룸버그의 깊이 있는 비즈니스 다큐 시리즈. 'Hot Money'·'The Big Take' 등." },
+
+  /* ===== CH 08 · CODE & TECH ===== */
+  { id:"freecodecamp", channel:"code", source:"freeCodeCamp",
+    title:"freeCodeCamp.org", titleKo:"프리코드캠프",
+    type:"yt-channel", ytChannel:"@freecodecamp",
+    desc:"무료로 배우는 프로그래밍. 자바스크립트·파이썬·웹개발 풀코스 강의 라이브러리." },
+  { id:"fireship", channel:"code", source:"Fireship",
+    title:"Fireship", titleKo:"파이어십",
+    type:"yt-channel", ytChannel:"@Fireship",
+    desc:"100초 안에 프레임워크를 설명한다. 빠르고 위트 있는 개발 트렌드 채널." },
+  { id:"primeagen", channel:"code", source:"ThePrimeagen",
+    title:"ThePrimeagen", titleKo:"프라임에이전",
+    type:"yt-channel", ytChannel:"@ThePrimeagen",
+    desc:"넷플릭스 출신 시니어 개발자. Vim·터미널·시스템 프로그래밍 라이브 코딩." },
+  { id:"mit-ocw", channel:"code", source:"MIT OpenCourseWare",
+    title:"MIT OpenCourseWare", titleKo:"MIT 오픈코스웨어",
+    type:"yt-channel", ytChannel:"@mitocw",
+    desc:"MIT 의 정규 강의를 무료로. 알고리즘·선형대수·물리학·머신러닝 풀코스." },
+  { id:"3blue1brown", channel:"code", source:"3Blue1Brown",
+    title:"3Blue1Brown", titleKo:"3블루1브라운",
+    type:"yt-channel", ytChannel:"@3blue1brown",
+    desc:"수학을 시각화하는 천재 채널. 미적분·선형대수·신경망을 그림으로 이해하기." },
+  { id:"computerphile", channel:"code", source:"Computerphile",
+    title:"Computerphile", titleKo:"컴퓨터파일",
+    type:"yt-channel", ytChannel:"@Computerphile",
+    desc:"노팅엄 대학 컴퓨터 과학 교수들. 알고리즘·암호학·AI 의 핵심 개념을 짧게." },
+
+  /* ===== CH 09 · BOOKS & WISDOM ===== */
+  { id:"after-skool", channel:"books", source:"After Skool",
+    title:"After Skool", titleKo:"애프터 스쿨",
+    type:"yt-channel", ytChannel:"@AfterSkool",
+    desc:"위대한 사상가들의 강연을 화이트보드 애니메이션으로. 앨런 와츠·조던 피터슨 인기." },
+  { id:"productivity-game", channel:"books", source:"Productivity Game",
+    title:"Productivity Game · Book Summaries", titleKo:"프로덕티비티 게임 · 책 요약",
+    type:"yt-channel", ytChannel:"@ProductivityGame",
+    desc:"비즈니스·자기개발 베스트셀러를 7-10분 영상 요약으로." },
+  { id:"fightmediocrity", channel:"books", source:"FightMediocrity",
+    title:"FightMediocrity", titleKo:"파이트 미디오크리티",
+    type:"yt-channel", ytChannel:"@FightMediocrity",
+    desc:"고전 자기개발서를 애니메이션 요약으로. 데일 카네기·로버트 그린의 핵심." },
+  { id:"one-percent", channel:"books", source:"OnePercentBetter",
+    title:"OnePercentBetter", titleKo:"원 퍼센트 베러",
+    type:"yt-channel", ytChannel:"@OnePercentBetterOfficial",
+    desc:"애니메이션으로 보는 책 요약 채널. 7습관·아토믹 해빗 등 베스트셀러." },
+  { id:"art-of-improvement", channel:"books", source:"The Art of Improvement",
+    title:"The Art of Improvement", titleKo:"디 아트 오브 임프루브먼트",
+    type:"yt-channel", ytChannel:"@TheArtofImprovement",
+    desc:"시네마틱 영상으로 풀어내는 자기개발 영상 에세이." },
+  { id:"will-schoder", channel:"books", source:"Will Schoder",
+    title:"Will Schoder · Video Essays", titleKo:"윌 쇼더 · 비디오 에세이",
+    type:"yt-channel", ytChannel:"@WillSchoder",
+    desc:"심리학·문학·영화를 결합한 깊이 있는 비디오 에세이 작가." },
+
+  /* ===== CH 10 · 한국 자기개발 ===== */
+  { id:"sebasi", channel:"korea", source:"세바시",
+    title:"세바시 강연 · 세상을 바꾸는 시간 15분", titleKo:"세상을 바꾸는 시간 15분",
+    type:"yt-channel", ytChannel:"@sebasi15",
+    desc:"한국의 TED. 15분 강연으로 만나는 시대의 멘토들. CBS 가 만든 한국 1세대 강연 콘텐츠." },
+  { id:"kimmikyung", channel:"korea", source:"김미경 TV",
+    title:"김미경 TV", titleKo:"김미경 TV",
+    type:"yt-channel", ytChannel:"@kimmikyungTV",
+    desc:"40-50대 여성 중심의 자기개발 강의. 'MKYU' 와 함께하는 한국 1세대 강연자." },
+  { id:"shinparksa", channel:"korea", source:"신박사 TV",
+    title:"신박사 TV", titleKo:"신박사 TV",
+    type:"yt-channel", ytChannel:"@drshintv",
+    desc:"교육학 박사 신영준의 자기개발·독서 채널. '체인지 그라운드' 와 함께하는 채널." },
+  { id:"changeground", channel:"korea", source:"체인지그라운드",
+    title:"체인지그라운드", titleKo:"체인지그라운드 · ChangeGround",
+    type:"yt-channel", ytChannel:"@changeground",
+    desc:"신영준·고영성의 자기개발 채널. '완벽한 공부법' 등 베스트셀러 저자의 강연." },
+  { id:"jacheong", channel:"korea", source:"자청",
+    title:"자청 · 역행자", titleKo:"자청 · 역행자",
+    type:"yt-channel", ytChannel:"@jacheong",
+    desc:"'역행자' 저자 자청. 메타인지·실행력·글쓰기에 대한 한국 자기개발 베스트셀러 작가." },
+  { id:"shuka", channel:"korea", source:"슈카월드",
+    title:"슈카월드", titleKo:"슈카월드",
+    type:"yt-channel", ytChannel:"@syukaworld",
+    desc:"전직 펀드매니저 슈카의 경제·시사 채널. 한국 최대 경제 유튜브 중 하나." },
+
+  /* ===== CH 11 · LEARN ===== */
+  { id:"bbc-learning", channel:"learn", source:"BBC Learning English",
+    title:"BBC Learning English", titleKo:"BBC 러닝 잉글리시",
+    type:"yt-channel", ytChannel:"@bbclearningenglish",
+    desc:"BBC 가 만든 영어 학습 공식 채널. 6 Minute English, English at Work 등 시리즈." },
+  { id:"voa-learning", channel:"learn", source:"VOA Learning English",
+    title:"VOA Learning English", titleKo:"VOA 러닝 잉글리시",
+    type:"yt-channel", ytChannel:"@voalearningenglish",
+    desc:"미국의 소리(VOA) 영어 학습 채널. 느린 속도의 미국 영어 뉴스로 듣기 연습." },
+  { id:"easy-langs", channel:"learn", source:"Easy Languages",
+    title:"Easy Languages", titleKo:"이지 랭귀지스",
+    type:"yt-channel", ytChannel:"@EasyLanguages",
+    desc:"길거리 인터뷰로 배우는 진짜 영어·독일어·스페인어 등. 자막으로 듣기·말하기." },
+  { id:"khan", channel:"learn", source:"Khan Academy",
+    title:"Khan Academy", titleKo:"칸 아카데미",
+    type:"yt-channel", ytChannel:"@khanacademy",
+    desc:"무료 온라인 강의의 시조. 수학·과학·경제·역사를 차근차근 배운다." },
+  { id:"crashcourse", channel:"learn", source:"Crash Course",
+    title:"Crash Course", titleKo:"크래시 코스",
+    type:"yt-channel", ytChannel:"@crashcourse",
+    desc:"존 그린 형제의 빠르고 재밌는 인문 강의. 세계사·문학·심리학·경제학." },
+  { id:"crashcourse-kids", channel:"learn", source:"Numberphile",
+    title:"Numberphile", titleKo:"넘버파일",
+    type:"yt-channel", ytChannel:"@numberphile",
+    desc:"세계 최고 수학자들이 풀어내는 흥미로운 수학 이야기." },
+
+  /* ===== CH 12 · CREATIVE ===== */
+  { id:"the-futur", channel:"creative", source:"The Futur",
+    title:"The Futur · Chris Do", titleKo:"더 퓨처 · 크리스 도",
+    type:"yt-channel", ytChannel:"@thefuturishere",
+    desc:"디자이너 크리스 도. 디자인·브랜딩·프리랜싱 비즈니스의 실전 강의." },
+  { id:"art-assignment", channel:"creative", source:"The Art Assignment",
+    title:"The Art Assignment", titleKo:"디 아트 어사인먼트",
+    type:"yt-channel", ytChannel:"@theartassignment",
+    desc:"PBS 의 미술 다큐 시리즈. 현대미술과 미술사의 관계를 풀어준다." },
+  { id:"cinema-cartography", channel:"creative", source:"The Cinema Cartography",
+    title:"The Cinema Cartography", titleKo:"더 시네마 카토그래피",
+    type:"yt-channel", ytChannel:"@TheCinemaCartography",
+    desc:"영화의 시각언어를 분석하는 시네마틱 비디오 에세이 채널." },
+  { id:"every-frame", channel:"creative", source:"Every Frame a Painting",
+    title:"Every Frame a Painting", titleKo:"에브리 프레임 어 페인팅",
+    type:"yt-channel", ytChannel:"@everyframeapainting",
+    desc:"영화의 연출·편집을 해부한 전설적인 채널 (아카이브). 영화광의 필수 시청." },
+  { id:"abstract", channel:"creative", source:"Adobe",
+    title:"Abstract · Designer Series", titleKo:"애브스트랙트 · 디자이너",
+    type:"yt-channel", ytChannel:"@adobe",
+    desc:"세계 최고 디자이너들의 작업 철학을 담은 다큐 시리즈." },
+  { id:"struthless", channel:"creative", source:"Struthless",
+    title:"Struthless", titleKo:"스트러스리스",
+    type:"yt-channel", ytChannel:"@struthless69",
+    desc:"호주 일러스트레이터 캠퍼스. 창작자의 삶·습관·자기수용에 대한 위트 있는 영상." },
 ];
 
-/* ============ 슬롯 색상 적용 ============ */
-function applySlotTheme(slot){
-  const root = document.documentElement;
-  root.style.setProperty("--accent", slot.accent);
-  root.style.setProperty("--accent-glow", slot.glow);
-  root.style.setProperty("--accent-deep", slot.deep);
-}
-
-/* ============ HLS / 플레이어 ============ */
+/* ============ HLS 플레이어 (재사용) ============ */
 let hlsInstance = null;
 function destroyHls(){ if(hlsInstance){ try{ hlsInstance.destroy(); }catch{} hlsInstance = null; } }
 function attachHls(video, url){
   destroyHls();
   if(video.canPlayType("application/vnd.apple.mpegurl")){
-    video.src = url;
-    video.play().catch(()=>{});
-    return;
+    video.src = url; video.play().catch(()=>{}); return;
   }
   if(window.Hls && Hls.isSupported()){
     hlsInstance = new Hls({ lowLatencyMode:true });
@@ -864,253 +891,202 @@ function attachHls(video, url){
   }
 }
 
-/* ============ 미디어 외부 URL ============ */
-function externalUrl(m){
-  if(m.type === "yt-channel" && m.ytChannel){
-    if(m.ytChannel.startsWith("@")) return `https://www.youtube.com/${m.ytChannel}`;
-    return `https://www.youtube.com/channel/${m.ytChannel}`;
+/* ============ URL 헬퍼 ============ */
+function externalUrl(p){
+  if(p.type === "yt-channel" && p.ytChannel){
+    return p.ytChannel.startsWith("@")
+      ? `https://www.youtube.com/${p.ytChannel}`
+      : `https://www.youtube.com/channel/${p.ytChannel}`;
   }
-  if(m.type === "yt-live" && m.ytChannel) return `https://www.youtube.com/channel/${m.ytChannel}/live`;
-  if(m.type === "yt-video" && m.videoId) return `https://www.youtube.com/watch?v=${m.videoId}`;
-  if(m.type === "archive") return `https://archive.org/details/${m.archiveId}`;
-  if(m.type === "link") return m.url;
-  if(m.type === "hls") return m.hlsUrl;
+  if(p.type === "yt-video" && p.videoId) return `https://www.youtube.com/watch?v=${p.videoId}`;
+  if(p.type === "archive") return `https://archive.org/details/${p.archiveId}`;
+  if(p.type === "link") return p.url;
   return "#";
 }
 
-/* ============ 카드 썸네일 URL ============ */
-function thumbUrl(m){
-  if(m.poster) return m.poster;
-  if(m.type === "archive") return `https://archive.org/services/img/${encodeURIComponent(m.archiveId)}`;
-  if(m.type === "yt-video" && m.videoId) return `https://i.ytimg.com/vi/${m.videoId}/hqdefault.jpg`;
-  return null;
-}
-
 /* ============ 카드 렌더 ============ */
-function renderCard(m){
+function renderCard(p){
   const card = document.createElement("button");
   card.className = "card";
-  card.dataset.id = m.id;
 
   const thumb = document.createElement("div");
-  const tu = thumbUrl(m);
-  if(tu){
-    thumb.className = "card-thumb";
+  thumb.className = "card-thumb no-img";
+  const mark = document.createElement("div");
+  mark.className = "card-mark";
+  mark.textContent = `◐ ${p.source || "MEDIA"}`;
+  thumb.appendChild(mark);
+
+  // YouTube 비디오 ID 가 있으면 ytimg 시도
+  if(p.type === "yt-video" && p.videoId){
     const img = document.createElement("img");
-    img.src = tu;
-    img.alt = m.title;
-    img.loading = "lazy";
-    img.onerror = ()=>{
-      thumb.classList.add("no-img");
-      img.remove();
-      const mark = document.createElement("div");
-      mark.className = "card-mark";
-      mark.textContent = "◐ " + (m.source||"MEDIA");
-      thumb.appendChild(mark);
-    };
+    img.src = `https://i.ytimg.com/vi/${p.videoId}/hqdefault.jpg`;
+    img.alt = p.title; img.loading = "lazy";
+    img.onerror = ()=>{ img.remove(); };
+    img.onload = ()=>{ thumb.classList.remove("no-img"); mark.remove(); };
     thumb.appendChild(img);
-  } else {
-    thumb.className = "card-thumb no-img";
-    const mark = document.createElement("div");
-    mark.className = "card-mark";
-    mark.textContent = "◐ " + (m.source||"MEDIA");
-    thumb.appendChild(mark);
   }
 
-  const typeLabel = ({
-    "hls":"LIVE",
-    "yt-live":"LIVE",
-    "yt-channel":"YT",
-    "yt-video":"VIDEO",
-    "archive":"ARCHIVE",
-    "link":"EXTERNAL",
-    "radio":"RADIO",
-  })[m.type] || "MEDIA";
-  if(m.live){
-    const ld = document.createElement("div");
-    ld.className = "card-live-dot";
-    ld.textContent = "LIVE";
-    thumb.appendChild(ld);
-  } else {
-    const tb = document.createElement("div");
-    tb.className = "card-type-badge";
-    tb.textContent = typeLabel;
-    thumb.appendChild(tb);
-  }
+  const badge = document.createElement("div");
+  badge.className = "card-badge";
+  const badgeMap = { "yt-channel":"YT", "yt-video":"VIDEO", "yt-live":"LIVE", "archive":"ARCHIVE", "link":"PODCAST", "hls":"LIVE" };
+  badge.textContent = badgeMap[p.type] || "MEDIA";
+  thumb.appendChild(badge);
 
   const body = document.createElement("div");
   body.className = "card-body";
   body.innerHTML = `
-    <div class="card-source">${m.source||""}</div>
-    <div class="card-title">${m.title}</div>
-    ${m.titleKo && m.titleKo !== m.title ? `<div class="card-ko">${m.titleKo}</div>` : ""}
+    <div class="card-source">${p.source || ""}</div>
+    <div class="card-title">${p.title}</div>
+    ${p.titleKo && p.titleKo !== p.title ? `<div class="card-ko">${p.titleKo}</div>` : ""}
   `;
 
   card.appendChild(thumb);
   card.appendChild(body);
-  card.addEventListener("click", ()=>openMedia(m));
+  card.addEventListener("click", ()=>openProgram(p));
   return card;
 }
 
-/* ============ 슬롯 렌더 ============ */
-let currentSlotId = null;
-let currentMedia = null;
-let viewMode = "now"; // "now" | "all"
+/* ============ 채널 렌더 ============ */
+let currentChannelId = "ted";
+let currentFeatured = null;
 
-function renderSlot(slotId){
-  const slot = slotById(slotId);
-  if(!slot) return;
-  currentSlotId = slotId;
-  applySlotTheme(slot);
+function renderChannel(chId){
+  const ch = channelById(chId);
+  if(!ch) return;
+  currentChannelId = chId;
 
-  // brand sub
-  $("#brand-sub").textContent = `${slot.label} · ${slot.start.toString().padStart(2,"0")}-${(slot.end%24).toString().padStart(2,"0")}`;
-  // slot name + mood
-  $("#slot-name").textContent = `${slot.emoji} ${slot.label}`;
-  $("#slot-mood").textContent = slot.mood;
-  $("#slot-mood-ko").textContent = slot.moodKo;
+  // 채널 칩 active 상태
+  $$(".ch-chip").forEach(el => el.classList.toggle("active", el.dataset.id === chId));
+  // 전체 그리드 active 상태
+  $$(".all-card").forEach(el => el.classList.toggle("active", el.dataset.id === chId));
 
-  // strip update
-  $$(".strip-slot").forEach(el => {
-    el.classList.toggle("now", el.dataset.slot === slotId);
-    el.classList.toggle("preview", el.dataset.slot !== slotId);
-  });
+  // 헤더
+  $("#row-eyebrow").textContent = `CH ${ch.num} · ${ch.label}`;
+  $("#row-title").textContent = `${ch.emoji} ${ch.labelKo}`;
+  $("#row-ko").textContent = ch.desc;
 
-  // grid: 해당 슬롯의 미디어
-  const items = MEDIA.filter(m => m.slot === slotId);
-  $("#grid-title").textContent = `${slot.emoji} ${slot.labelKo} 추천`;
-  $("#grid-meta").textContent = `${items.length} ITEMS · ${slot.label}`;
-  const grid = $("#grid");
+  const items = PROGRAMS.filter(p => p.channel === chId);
+  $("#row-meta").textContent = `${items.length} PROGRAMS`;
+
+  const grid = $("#row-grid");
   grid.innerHTML = "";
-  items.forEach(m => grid.appendChild(renderCard(m)));
-
-  // hero: 첫번째 라이브 우선, 없으면 첫 항목
-  pickHero(items);
+  items.forEach(p => grid.appendChild(renderCard(p)));
 }
 
-function pickHero(items){
-  if(!items || items.length === 0) return;
-  const live = items.filter(m => m.live);
-  const pool = live.length ? live : items;
-  const m = pool[Math.floor(Math.random()*pool.length)];
-  currentMedia = m;
-  $("#hero-source").textContent = m.source || "";
-  $("#hero-title").textContent = m.title;
-  $("#hero-ko").textContent = m.titleKo && m.titleKo !== m.title ? m.titleKo : "";
-  $("#hero-desc").textContent = m.desc || "";
+/* ============ Featured 픽 ============ */
+function pickFeatured(){
+  // 모든 프로그램에서 랜덤 1개
+  const p = PROGRAMS[Math.floor(Math.random() * PROGRAMS.length)];
+  currentFeatured = p;
+  const ch = channelById(p.channel);
+  $("#hero-ch").textContent = `CH ${ch.num} · ${ch.label}`;
+  $("#hero-source").textContent = p.source || "";
+  $("#hero-title").textContent = p.title;
+  $("#hero-ko").textContent = p.titleKo && p.titleKo !== p.title ? p.titleKo : "";
+  $("#hero-desc").textContent = p.desc || "";
 
   const ht = $("#hero-thumb");
   ht.innerHTML = "";
-  const tu = thumbUrl(m);
-  if(tu){
+  if(p.type === "yt-video" && p.videoId){
     ht.classList.remove("no-img");
     const img = document.createElement("img");
-    img.src = tu;
-    img.alt = m.title;
+    img.src = `https://i.ytimg.com/vi/${p.videoId}/hqdefault.jpg`;
+    img.alt = p.title;
     img.onerror = ()=>{
       ht.classList.add("no-img");
       img.remove();
-      const mk = document.createElement("div");
-      mk.className = "hero-thumb-mark";
-      mk.textContent = "◐ " + (m.source||"MEDIA");
-      ht.appendChild(mk);
+      ht.textContent = `◐ ${p.source}`;
     };
     ht.appendChild(img);
   } else {
     ht.classList.add("no-img");
-    const mk = document.createElement("div");
-    mk.className = "hero-thumb-mark";
-    mk.textContent = "◐ " + (m.source||"MEDIA");
-    ht.appendChild(mk);
+    ht.textContent = `◐ ${p.source}`;
   }
 }
 
-/* ============ Time Strip (8 dots) ============ */
-function renderStrip(){
-  const strip = $("#strip");
-  // keep .strip-line; remove other slots
-  $$(".strip-slot", strip).forEach(el => el.remove());
-  for(const s of SLOTS){
+/* ============ 채널 칩 + 전체 채널 그리드 ============ */
+function renderSwitcher(){
+  const row = $("#switch-row");
+  row.innerHTML = "";
+  for(const ch of CHANNELS){
+    const items = PROGRAMS.filter(p => p.channel === ch.id);
     const el = document.createElement("button");
-    el.className = "strip-slot";
-    el.dataset.slot = s.id;
+    el.className = "ch-chip";
+    el.dataset.id = ch.id;
     el.innerHTML = `
-      <div class="strip-dot"></div>
-      <div class="strip-time">${s.start.toString().padStart(2,"0")}</div>
-      <div class="strip-name">${s.label}</div>
-    `;
-    el.title = `${s.label} · ${s.start}-${s.end%24} · ${s.moodKo}`;
-    el.addEventListener("click", ()=>{
-      viewMode = "preview";
-      $("#nav-now").classList.remove("active");
-      renderSlot(s.id);
-    });
-    strip.appendChild(el);
-  }
-}
-
-/* ============ Other times grid ============ */
-function renderOther(){
-  const wrap = $("#other");
-  wrap.innerHTML = "";
-  const nowSlot = getCurrentSlot();
-  for(const s of SLOTS){
-    const items = MEDIA.filter(m => m.slot === s.id);
-    const el = document.createElement("button");
-    el.className = "other-card" + (s.id === nowSlot.id ? " now" : "");
-    el.innerHTML = `
-      <span class="other-emoji">${s.emoji}</span>
-      <div class="other-time">${s.start.toString().padStart(2,"0")}–${(s.end%24).toString().padStart(2,"0")} · ${items.length} items</div>
-      <div class="other-name">${s.label}</div>
-      <div class="other-name-ko">${s.labelKo} · ${s.moodKo.split("·")[0].trim()}</div>
+      <div class="ch-chip-num"><span class="ch-chip-emoji">${ch.emoji}</span>CH ${ch.num} · ${items.length}</div>
+      <div class="ch-chip-name">${ch.label}</div>
+      <div class="ch-chip-ko">${ch.labelKo}</div>
     `;
     el.addEventListener("click", ()=>{
-      viewMode = "preview";
-      $("#nav-now").classList.remove("active");
-      renderSlot(s.id);
-      window.scrollTo({ top:0, behavior:"smooth" });
+      renderChannel(ch.id);
+      window.scrollTo({ top: $(".row").offsetTop - 80, behavior:"smooth" });
     });
-    wrap.appendChild(el);
+    row.appendChild(el);
+  }
+  $("#switch-count").textContent = `${CHANNELS.length} CH · ${PROGRAMS.length} PROGRAMS`;
+}
+
+function renderAllChannels(){
+  const grid = $("#all-grid");
+  grid.innerHTML = "";
+  for(const ch of CHANNELS){
+    const items = PROGRAMS.filter(p => p.channel === ch.id);
+    const el = document.createElement("button");
+    el.className = "all-card";
+    el.dataset.id = ch.id;
+    el.innerHTML = `
+      <div class="all-card-num"><span class="all-card-emoji">${ch.emoji}</span>CH ${ch.num}</div>
+      <div class="all-card-name">${ch.label}</div>
+      <div class="all-card-ko">${ch.labelKo}</div>
+      <div class="all-card-meta">${items.length} PROGRAMS</div>
+    `;
+    el.addEventListener("click", ()=>{
+      renderChannel(ch.id);
+      window.scrollTo({ top: $(".row").offsetTop - 80, behavior:"smooth" });
+    });
+    grid.appendChild(el);
   }
 }
 
-/* ============ Modal ============ */
-function openMedia(m){
-  $("#m-source").textContent = m.source || "";
-  $("#m-title").textContent = `${m.title}${m.titleKo && m.titleKo !== m.title ? " · " + m.titleKo : ""}`;
+/* ============ 모달 ============ */
+function openProgram(p){
+  $("#m-source").textContent = p.source || "";
+  $("#m-title").textContent = `${p.title}${p.titleKo && p.titleKo !== p.title ? " · " + p.titleKo : ""}`;
   const player = $("#m-player");
   player.innerHTML = "";
 
-  if(m.type === "hls"){
+  if(p.type === "hls"){
     const v = document.createElement("video");
     v.controls = true; v.autoplay = true; v.playsInline = true;
     player.appendChild(v);
-    attachHls(v, m.hlsUrl);
-  } else if(m.type === "yt-live" && m.ytChannel){
-    const ch = m.ytChannel.startsWith("@") ? m.ytChannel : m.ytChannel;
-    const param = m.ytChannel.startsWith("UC") ? `channel=${m.ytChannel}` : `user=${m.ytChannel.replace("@","")}`;
+    attachHls(v, p.hlsUrl);
+  } else if(p.type === "yt-live" && p.ytChannel){
+    const param = p.ytChannel.startsWith("UC")
+      ? `channel=${p.ytChannel}`
+      : `user=${p.ytChannel.replace("@","")}`;
     player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/live_stream?${param}&autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-  } else if(m.type === "yt-video" && m.videoId){
-    player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${m.videoId}?autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-  } else if(m.type === "yt-channel" && m.ytChannel){
-    const q = encodeURIComponent((m.title || m.source || ""));
+  } else if(p.type === "yt-video" && p.videoId){
+    player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${p.videoId}?autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  } else if(p.type === "yt-channel" && p.ytChannel){
+    const q = encodeURIComponent(p.title || p.source || "");
     player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=search&list=${q}&autoplay=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-  } else if(m.type === "archive"){
-    player.innerHTML = `<iframe src="https://archive.org/embed/${m.archiveId}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else if(p.type === "archive"){
+    player.innerHTML = `<iframe src="https://archive.org/embed/${p.archiveId}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   } else {
-    const ext = externalUrl(m);
+    const ext = externalUrl(p);
     player.innerHTML = `
       <div class="modal-fb">
-        <div class="modal-fb-title">${m.source || m.title}</div>
-        <div>이 미디어는 외부 사이트에서 재생됩니다.<br>아래 버튼으로 이동하세요.</div>
-        <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">▶ ${m.type === "link" ? "외부 사이트 열기" : "유튜브에서 보기"} ↗</a>
+        <div class="modal-fb-title">${p.source || p.title}</div>
+        <div>이 콘텐츠는 외부에서 재생됩니다.<br>아래 버튼으로 이동하세요.</div>
+        <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">▶ 외부 사이트 열기 ↗</a>
       </div>`;
   }
 
-  $("#m-desc").textContent = m.desc || "";
-  const ext = externalUrl(m);
+  $("#m-desc").textContent = p.desc || "";
+  const ext = externalUrl(p);
   $("#m-actions").innerHTML = `
-    <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">${m.type === "link" ? "외부에서 열기 ↗" : "원본 ↗"}</a>
+    <a class="modal-link" href="${ext}" target="_blank" rel="noopener noreferrer">${p.type === "link" ? "외부에서 열기 ↗" : "원본 채널 ↗"}</a>
   `;
 
   $("#modal").classList.add("open");
@@ -1123,58 +1099,27 @@ function closeModal(){
   document.body.style.overflow = "";
 }
 
-/* ============ Clock tick ============ */
-function tickClock(){
-  const d = new Date();
-  $("#hh").textContent = d.getHours().toString().padStart(2,"0");
-  $("#mm").textContent = d.getMinutes().toString().padStart(2,"0");
-  $("#ss").textContent = d.getSeconds().toString().padStart(2,"0");
-  const wd = ["SUN","MON","TUE","WED","THU","FRI","SAT"][d.getDay()];
-  $("#weekday").textContent = wd;
-  $("#date").textContent = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,"0")}.${d.getDate().toString().padStart(2,"0")}`;
-}
-
-/* ============ NOW / ALL nav ============ */
-function goNow(){
-  viewMode = "now";
-  $("#nav-now").classList.add("active");
-  $("#nav-all").classList.remove("active");
-  renderSlot(getCurrentSlot().id);
-  window.scrollTo({ top:0, behavior:"smooth" });
-}
-function goAll(){
-  viewMode = "all";
-  $("#nav-all").classList.add("active");
-  $("#nav-now").classList.remove("active");
-  // scroll to other-grid
-  $(".other-wrap").scrollIntoView({ behavior:"smooth", block:"start" });
-}
-
 /* ============ Init ============ */
 function init(){
-  renderStrip();
-  renderOther();
-  tickClock();
-  setInterval(tickClock, 1000);
+  renderSwitcher();
+  renderAllChannels();
+  pickFeatured();
+  renderChannel("ted");
 
-  // 자동: 현재 시각 슬롯
-  renderSlot(getCurrentSlot().id);
+  $("#hero-play").addEventListener("click", ()=>currentFeatured && openProgram(currentFeatured));
+  $("#hero-skip").addEventListener("click", pickFeatured);
 
-  // 매 분 현재 슬롯 자동 갱신 (사용자가 'now' 모드일 때만)
-  setInterval(()=>{
-    if(viewMode === "now"){
-      const ns = getCurrentSlot();
-      if(ns.id !== currentSlotId) renderSlot(ns.id);
-    }
-  }, 60*1000);
-
-  $("#hero-play").addEventListener("click", ()=>currentMedia && openMedia(currentMedia));
-  $("#hero-skip").addEventListener("click", ()=>{
-    const items = MEDIA.filter(m => m.slot === currentSlotId);
-    pickHero(items);
+  $("#nav-feat").addEventListener("click", ()=>{
+    $("#nav-feat").classList.add("active");
+    $("#nav-all").classList.remove("active");
+    window.scrollTo({ top:0, behavior:"smooth" });
   });
-  $("#nav-now").addEventListener("click", goNow);
-  $("#nav-all").addEventListener("click", goAll);
+  $("#nav-all").addEventListener("click", ()=>{
+    $("#nav-all").classList.add("active");
+    $("#nav-feat").classList.remove("active");
+    $(".all-wrap").scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
   $("#m-close").addEventListener("click", closeModal);
   $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
   document.addEventListener("keydown", e=>{ if(e.key === "Escape") closeModal(); });
