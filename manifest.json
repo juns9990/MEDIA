@@ -1,13 +1,13 @@
 {
-  "name": "MEDIA · Time Dial",
+  "name": "MEDIA · Growth Network",
   "short_name": "MEDIA",
-  "description": "시간이 큐레이션한다 — 글로벌 미디어 다이얼",
+  "description": "성장하는 사람들을 위한 방송국 — 12채널 자기개발 미디어 네트워크",
   "start_url": "./onair-prototype.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0A0A12",
-  "theme_color": "#0A0A12",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
   "lang": "ko",
   "icons": [
     {

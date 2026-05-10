@@ -1,5 +1,5 @@
-// MEDIA · Time Dial Service Worker v1.0.0
-const CACHE_NAME = "media-timedial-v1.0.0";
+// MEDIA · Growth Network Service Worker v2.0.0
+const CACHE_NAME = "media-growth-v2.0.0";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
