@@ -1,7 +1,7 @@
 {
-  "name": "MEDIA · Growth Network",
+  "name": "MEDIA · 한국 지식 방송",
   "short_name": "MEDIA",
-  "description": "성장하는 사람들을 위한 방송국 — 12채널 자기개발 미디어 네트워크",
+  "description": "한국 지식·시사·교양·자기개발 방송 네트워크 — 12채널 70+ 프로그램",
   "start_url": "./onair-prototype.html",
   "scope": "./",
   "display": "standalone",

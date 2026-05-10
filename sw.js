@@ -1,5 +1,5 @@
-// MEDIA · Growth Network Service Worker v2.0.0
-const CACHE_NAME = "media-growth-v2.0.0";
+// MEDIA · 한국 지식 방송 Service Worker v3.0.0
+const CACHE_NAME = "media-kknowledge-v3.0.0";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
