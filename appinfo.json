@@ -1,6 +1,6 @@
 {
   "id": "com.media.knowledge.kr",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "vendor": "MEDIA",
   "type": "web",
   "main": "onair-prototype.html",
@@ -9,12 +9,12 @@
   "largeIcon": "icon-512.png",
   "iconColor": "#0A0A0A",
   "bgColor": "#0A0A0A",
-  "appDescription": "한국 지식·시사·교양·자기개발 방송 네트워크 — 14채널 78 프로그램 (지식인사이드·교양이를부탁해 검증된 채널 ID 임베드)",
+  "appDescription": "한국 지식·시사·교양·자기개발 방송 네트워크 — 14채널 75 프로그램 (16개 핵심 채널은 검증된 채널 ID 임베드, 나머지는 외부 시청 폴백)",
   "resolution": "1920x1080",
   "splashBackground": "icon-512.png",
   "disableBackHistoryAPI": true,
   "supportTouchMode": "full",
   "handlesRelaunch": false,
-  "uiRevision": 8,
+  "uiRevision": 9,
   "requiredPermissions": []
 }

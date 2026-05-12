@@ -1,5 +1,5 @@
-// MEDIA · 한국 지식 방송 Service Worker v3.1.1
-const CACHE_NAME = "media-kknowledge-v3.1.1";
+// MEDIA · 한국 지식 방송 Service Worker v3.2.0
+const CACHE_NAME = "media-kknowledge-v3.2.0";
 const ASSETS = [
   "./onair-prototype.html",
   "./manifest.json",
